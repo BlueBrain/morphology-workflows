@@ -1,0 +1,7 @@
+Most morphologies taken from https://github.com/BlueBrain/MorphIO/tree/master/tests/data
+
+Additional morphologies:
+- /gpfs/bbp.cscs.ch/project/proj81/InputData/Morphologies/Neurons/Mouse/SSCx/WholeBrain/mouselight_isocortex_ASCII_Files/AA0319.ASC
+- /gpfs/bbp.cscs.ch/project/proj82/home/gevaert/morphology_release/mouse-scaled/scaled_output/04_ZeroDiameterFix-asc/C270106A.asc
+- /gpfs/bbp.cscs.ch/project/proj82/home/gevaert/morphology_release/mouse-scaled/scaled_output/04_ZeroDiameterFix-asc/rp100427-123_idC.asc
+

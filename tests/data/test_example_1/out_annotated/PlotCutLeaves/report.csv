@@ -1,0 +1,28 @@
+__index_label__,is_valid,ret_code,comment,exception,cut_leaves_path,cut_qualities,morph_path,plot_cut_leaves_path
+C060114A5,True,0,,,,,out_annotated/CollectCurated/data/C060114A5.asc,
+C270106A,True,0,,,,,out_annotated/CollectCurated/data/C270106A.asc,
+astrocyte,True,0,,,,,out_annotated/CollectCurated/data/astrocyte.h5,
+circle_contour,True,0,,,,,out_annotated/CollectCurated/data/circle_contour.asc,
+complexe,True,0,,,,,out_annotated/CollectCurated/data/complexe.swc,
+disconnected_neurite,True,0,,,,,out_annotated/CollectCurated/data/disconnected_neurite.swc,
+iterators,True,0,,,,,out_annotated/CollectCurated/data/iterators.asc,
+mono-type,True,0,,,,,out_annotated/CollectCurated/data/mono-type.asc,
+multiple_point_section,True,0,,,,,out_annotated/CollectCurated/data/multiple_point_section.asc,
+nested_single_children,True,0,,,,,out_annotated/CollectCurated/data/nested_single_children.asc,
+neurite_wrong_root_point,True,0,,,,,out_annotated/CollectCurated/data/neurite_wrong_root_point.swc,
+nrn-order-already-sorted,True,0,,,out_annotated/CutLeaves/data/nrn-order-already-sorted.yaml,"[{""axis"": ""Z"", ""side"": -1, ""quality"": 6.0}]",out_annotated/CollectCurated/data/nrn-order-already-sorted.h5,out_annotated/PlotCutLeaves/data/nrn-order-already-sorted.html
+nrn_ordering,True,0,,,out_annotated/CutLeaves/data/nrn_ordering.yaml,"[{""axis"": ""Z"", ""side"": 1, ""quality"": 14.8}]",out_annotated/CollectCurated/data/nrn_ordering.swc,out_annotated/PlotCutLeaves/data/nrn_ordering.html
+pia,True,0,,,,,out_annotated/CollectCurated/data/pia.asc,
+reversed_NRN_neurite_order,True,0,,,,,out_annotated/CollectCurated/data/reversed_NRN_neurite_order.swc,
+rp100427-123_idC,True,0,,,out_annotated/CutLeaves/data/rp100427-123_idC.yaml,"[{""axis"": ""Z"", ""side"": 1, ""quality"": 28.6}]",out_annotated/CollectCurated/data/rp100427-123_idC.asc,out_annotated/PlotCutLeaves/data/rp100427-123_idC.html
+sections-block,True,0,,,,,out_annotated/CollectCurated/data/sections-block.asc,
+simple,True,0,,,,,out_annotated/CollectCurated/data/simple.asc,
+simple-with-font,True,0,,,,,out_annotated/CollectCurated/data/simple-with-font.asc,
+simple-with-image-coord,True,0,,,,,out_annotated/CollectCurated/data/simple-with-image-coord.asc,
+simple2,True,0,,,,,out_annotated/CollectCurated/data/simple2.asc,
+soma_cylinders,False,1,,,,,out_annotated/CollectCurated/data/soma_cylinders.swc,
+soma_multiple_frustums,False,1,,,,,out_annotated/CollectCurated/data/soma_multiple_frustums.swc,
+soma_single_frustum,False,1,,,,,out_annotated/CollectCurated/data/soma_single_frustum.swc,
+soma_three_points_cylinder,False,1,,,,,out_annotated/CollectCurated/data/soma_three_points_cylinder.swc,
+spine,True,0,,,,,out_annotated/CollectCurated/data/spine.asc,
+three_point_soma,True,0,,,,,out_annotated/CollectCurated/data/three_point_soma.swc,

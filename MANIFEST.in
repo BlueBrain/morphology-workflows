@@ -1,0 +1,2 @@
+recursive-include src/morphology_workflows/_templates *.cfg *.py
+prune .github

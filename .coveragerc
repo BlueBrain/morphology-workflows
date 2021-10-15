@@ -1,0 +1,4 @@
+[paths]
+source =
+	src/morphology_workflows
+	*/site-packages/morphology_workflows

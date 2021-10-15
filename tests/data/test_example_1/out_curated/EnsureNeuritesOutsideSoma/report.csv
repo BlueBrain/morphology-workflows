@@ -1,0 +1,29 @@
+__index_label__,is_valid,ret_code,comment,exception,morph_path
+C060114A5,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/C060114A5.asc
+C270106A,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/C270106A.asc
+astrocyte,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/astrocyte.h5
+circle_contour,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/circle_contour.asc
+complexe,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/complexe.swc
+disconnected_neurite,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/disconnected_neurite.swc
+iterators,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/iterators.asc
+mono-type,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/mono-type.asc
+multiple_point_section,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/multiple_point_section.asc
+multiple_soma,False,1,,,
+nested_single_children,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/nested_single_children.asc
+neurite_wrong_root_point,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/neurite_wrong_root_point.swc
+nrn-order-already-sorted,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/nrn-order-already-sorted.h5
+nrn_ordering,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/nrn_ordering.swc
+pia,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/pia.asc
+reversed_NRN_neurite_order,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/reversed_NRN_neurite_order.swc
+rp100427-123_idC,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/rp100427-123_idC.asc
+sections-block,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/sections-block.asc
+simple,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/simple.asc
+simple-with-font,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/simple-with-font.asc
+simple-with-image-coord,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/simple-with-image-coord.asc
+simple2,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/simple2.asc
+soma_cylinders,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/soma_cylinders.swc
+soma_multiple_frustums,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/soma_multiple_frustums.swc
+soma_single_frustum,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/soma_single_frustum.swc
+soma_three_points_cylinder,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/soma_three_points_cylinder.swc
+spine,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/spine.asc
+three_point_soma,True,0,Skipped by user.,,out_curated/EnsureNeuritesOutsideSoma/data/three_point_soma.swc
