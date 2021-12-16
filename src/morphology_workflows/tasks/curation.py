@@ -50,10 +50,6 @@ class ExtractMarkers(SkippableMixin(), ElementValidationTask):
     output_columns = {"marker_path": None}
     validation_function = extract_marker
 
-    def kwargs(self):
-        """ """
-        return {"skip": self.skip}
-
     def inputs(self):
         """ """
         return {Collect(): {"morph_path": "morph_path"}}
@@ -72,7 +68,7 @@ class PlotMarkers(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """
@@ -170,10 +166,6 @@ class Recenter(SkippableMixin(), ElementValidationTask):
     output_columns = {"morph_path": None, "soma_location": ""}
     validation_function = recenter
 
-    def kwargs(self):
-        """ """
-        return {"skip": self.skip}
-
     def inputs(self):
         """ """
         return {Sanitize(): {"morph_path": "morph_path"}}
@@ -236,7 +228,6 @@ class Align(SkippableMixin(True), ElementValidationTask):
             "method": self.method,
             "neurite_type": self.neurite_type,
             "direction": self.direction,
-            "skip": self.skip,
         }
 
     def inputs(self):
@@ -249,10 +240,6 @@ class EnsureNeuritesOutsideSoma(SkippableMixin(True), ElementValidationTask):
 
     output_columns = {"morph_path": None}
     validation_function = fix_neurites_in_soma
-
-    def kwargs(self):
-        """ """
-        return {"skip": self.skip}
 
     def inputs(self):
         """ """
@@ -278,7 +265,11 @@ class DetectErrors(SkippableMixin(), ElementValidationTask):
     and a MarkerSet container of the errors, for later plotting.
     """
 
-    output_columns = {"error_marker_path": "", "error_annotated_path": "", "error_summary": ""}
+    output_columns = {
+        "error_marker_path": None,
+        "error_annotated_path": None,
+        "error_summary": None,
+    }
     validation_function = detect_errors
 
     min_range = luigi.FloatParameter(
@@ -287,7 +278,7 @@ class DetectErrors(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"skip": self.skip, "min_range": self.min_range}
+        return {"min_range": self.min_range}
 
     def inputs(self):
         """ """
@@ -307,7 +298,7 @@ class PlotErrors(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """
@@ -351,7 +342,7 @@ class Resample(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"linear_density": self.linear_density, "skip": self.skip}
+        return {"linear_density": self.linear_density}
 
     def inputs(self):
         """ """
@@ -378,7 +369,6 @@ class PlotMorphologies(SkippableMixin(), ElementValidationTask):
         return {
             "with_plotly": self.with_plotly,
             "realistic_diameters": self.with_realistic_diameters,
-            "skip": self.skip,
         }
 
     def inputs(self):

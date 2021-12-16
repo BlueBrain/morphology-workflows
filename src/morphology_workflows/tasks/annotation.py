@@ -111,7 +111,7 @@ class PlotHardLimit(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """
@@ -137,7 +137,7 @@ class ApicalPoint(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"tuft_percent": self.tuft_percent, "skip": self.skip}
+        return {"tuft_percent": self.tuft_percent}
 
     def inputs(self):
         """ """
@@ -157,7 +157,7 @@ class PlotApicalPoint(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """
@@ -209,7 +209,7 @@ class PlotCutLeaves(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """

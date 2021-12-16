@@ -34,7 +34,6 @@ from plotly_helper.neuron_viewer import NeuronBuilder
 
 from morphology_workflows.marker_helper import Marker
 from morphology_workflows.marker_helper import MarkerSet
-from morphology_workflows.utils import SKIP_COMMENT
 from morphology_workflows.utils import is_morphology
 
 L = logging.getLogger(__name__)
@@ -84,11 +83,8 @@ def _get_markers(row, morph):
     return markers
 
 
-def extract_marker(row, data_dir, skip=False):
+def extract_marker(row, data_dir):
     """Extract marker data from morphology files."""
-    if skip:
-        return ValidationResult(is_valid=True, marker_path=None, comment=SKIP_COMMENT)
-
     markers = _get_markers(row, Morphology(row.morph_path))
     marker_path = None
     if len(markers) > 0:
@@ -97,10 +93,8 @@ def extract_marker(row, data_dir, skip=False):
     return ValidationResult(is_valid=True, marker_path=marker_path)
 
 
-def plot_markers(row, data_dir, with_plotly=True, skip=False):
+def plot_markers(row, data_dir, with_plotly=True):
     """Plot markers on morphologies."""
-    if skip:
-        return ValidationResult(is_valid=True, plot_marker_path=None, comment=SKIP_COMMENT)
     plot_path = None
     if not row.isnull()["marker_path"]:
         neuron = load_morphology(row.morph_path)
@@ -280,7 +274,7 @@ def fix_soma_radius(morph):
     return morph.soma.radius, None
 
 
-def fix_neurites_in_soma(row, data_dir, skip=False):
+def fix_neurites_in_soma(row, data_dir):
     """Fix neurites whose points are located inside the soma.
 
     Method:
@@ -292,9 +286,7 @@ def fix_neurites_in_soma(row, data_dir, skip=False):
     ret_code = 0
     comment = None
     morph = load_morphology(row.morph_path)
-    if skip:
-        comment = SKIP_COMMENT
-    elif isinstance(morph.soma, SomaSinglePoint):
+    if isinstance(morph.soma, SomaSinglePoint):
         former_radius, new_radius = fix_soma_radius(morph)
         if new_radius is not None:
             ret_code = 2
@@ -319,19 +311,10 @@ def fix_neurites_in_soma(row, data_dir, skip=False):
     )
 
 
-def recenter(row, data_dir, skip=False):
+def recenter(row, data_dir):
     """Recenter morphologies to place soma at [0, 0, 0]."""
     new_morph_path = data_dir / Path(row.morph_path).name
     morph = Morphology(row.morph_path)
-
-    if skip:
-        morph.write(new_morph_path)
-        return ValidationResult(
-            is_valid=True,
-            morph_path=new_morph_path,
-            soma_location=None,
-            comment=SKIP_COMMENT,
-        )
 
     location = morph.soma.center
     transform.translate(morph, -1 * location)
@@ -353,14 +336,10 @@ def orient(row, data_dir, pia_direction="y"):
     return ValidationResult(is_valid=True, morph_path=new_morph_path)
 
 
-def align(row, data_dir, method="whole", neurite_type="apical", direction=None, skip=False):
+def align(row, data_dir, method="whole", neurite_type="apical", direction=None):
     """Align a morphology."""
     new_morph_path = data_dir / Path(row.morph_path).name
     morph = Morphology(row.morph_path)
-
-    if skip:
-        morph.write(new_morph_path)
-        return ValidationResult(is_valid=True, morph_path=new_morph_path, comment=SKIP_COMMENT)
 
     rotation_matrix = align_morphology(
         morph, method=method, neurite_type=neurite_type, direction=direction
@@ -408,19 +387,11 @@ def z_range(neuron, min_range=50):
     return CheckResult(abs(_max - _min) > min_range, [min_id, max_id])
 
 
-def detect_errors(row, data_dir, min_range=50, skip=False):
+def detect_errors(row, data_dir, min_range=50):
     """Detect errors in morphologies.
 
     TODO: bypass dangling if only one axon/neurite
     """
-    if skip:
-        return ValidationResult(
-            is_valid=True,
-            error_marker_path=None,
-            error_annotated_path=None,
-            error_summary=None,
-            comment=SKIP_COMMENT,
-        )
     checkers = {
         nc.has_no_fat_ends: {"name": "fat end", "label": "Circle3", "color": "Blue"},
         partial(nc.has_no_jumps, axis="z"): {
@@ -465,10 +436,8 @@ def detect_errors(row, data_dir, min_range=50, skip=False):
     )
 
 
-def plot_errors(row, data_dir, with_plotly=True, skip=False):
+def plot_errors(row, data_dir, with_plotly=True):
     """Plot error markers."""
-    if skip:
-        return ValidationResult(is_valid=True, plot_errors_path=None, comment=SKIP_COMMENT)
     plot_path = None
     if not row.isnull()["error_marker_path"]:
         if with_plotly:
@@ -493,23 +462,17 @@ def make_error_report(df, data_dir, error_report_path="error_report.csv"):
     markers_df.to_csv(data_dir.parent.parent / error_report_path)
 
 
-def resample(row, data_dir, linear_density=1.0, skip=False):
+def resample(row, data_dir, linear_density=1.0):
     """Resample morphologies with fixed linear density."""
     new_morph_path = data_dir / Path(row.morph_path).name
     morph = Morphology(row.morph_path)
-    if skip:
-        morph.write(new_morph_path)
-        return ValidationResult(is_valid=True, morph_path=new_morph_path, comment=SKIP_COMMENT)
 
     resample_linear_density(morph, linear_density).write(new_morph_path)
     return ValidationResult(is_valid=True, morph_path=new_morph_path)
 
 
-def plot_morphology(row, data_dir, with_plotly=True, realistic_diameters=True, skip=False):
+def plot_morphology(row, data_dir, with_plotly=True, realistic_diameters=True):
     """Plot a morphology."""
-    if skip:
-        return ValidationResult(is_valid=True, plot_path=None, comment=SKIP_COMMENT)
-
     neuron = load_morphology(row.morph_path)
 
     if with_plotly:

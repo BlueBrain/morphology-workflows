@@ -206,7 +206,7 @@ class PlotRepair(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """
@@ -227,10 +227,6 @@ class SmoothDiameters(SkippableMixin(True), ElementValidationTask):
     output_columns = {"morph_path": None}
     validation_function = smooth_diameters
 
-    def kwargs(self):
-        """ """
-        return {"skip": self.skip}
-
     def inputs(self):
         """ """
         return {
@@ -244,10 +240,6 @@ class PlotSmoothDiameters(SkippableMixin(), ElementValidationTask):
 
     output_columns = {"plot_smooth_path": None}
     validation_function = plot_smooth_diameters
-
-    def kwargs(self):
-        """ """
-        return {"skip": self.skip}
 
     def inputs(self):
         """ """
