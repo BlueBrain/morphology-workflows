@@ -2,15 +2,24 @@
 from functools import partial
 
 from data_validation_framework.result import ValidationResult
+from data_validation_framework.task import ElementValidationTask
+from data_validation_framework.task import SetValidationTask
 from luigi_tools.parameter import BoolParameter
 
 from morphology_workflows.utils import SKIP_COMMENT
 
 
-def _skippable_validation_function(validation_function, skip, *args, **kwargs):
+def _skippable_element_validation_function(validation_function, skip, *args, **kwargs):
     if skip:
         return ValidationResult(is_valid=True, comment=SKIP_COMMENT)
     return validation_function(*args, **kwargs)
+
+
+def _skippable_set_validation_function(validation_function, skip, df, *args, **kwargs):
+    if skip:
+        df.loc[df["is_valid"], "comment"] = SKIP_COMMENT
+    else:
+        validation_function(df, *args, **kwargs)
 
 
 def SkippableMixin(default_value=False):
@@ -22,8 +31,6 @@ def SkippableMixin(default_value=False):
 
     .. todo::
         * Move this class into the ``data-validation-framework`` package?
-        * Make it also work for :class:`data_validation_framework.SetValidationTask`?
-        * Change it into a class decorator?
 
     Args:
         default_value (bool): The default value for the ``skip`` argument.
@@ -39,10 +46,22 @@ def SkippableMixin(default_value=False):
             super().__init__(*args, **kwargs)
 
             self._skippable_validation_function = self.validation_function
-            self.validation_function = partial(
-                _skippable_validation_function,
-                self._skippable_validation_function,
-                self.skip,
-            )
+            if isinstance(self, ElementValidationTask):
+                self.validation_function = partial(
+                    _skippable_element_validation_function,
+                    self._skippable_validation_function,
+                    self.skip,
+                )
+            elif isinstance(self, SetValidationTask):
+                self.validation_function = partial(
+                    _skippable_set_validation_function,
+                    self._skippable_validation_function,
+                    self.skip,
+                )
+            else:
+                raise TypeError(
+                    "The SkippableMixin can only be associated with childs of ElementValidationTask"
+                    " or SetValidationTask"
+                )
 
     return Mixin
