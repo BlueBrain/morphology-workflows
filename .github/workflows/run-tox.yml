@@ -30,6 +30,6 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         fail_ci_if_error: false
-        files: ./coverage-py38.xml
+        files: ./reports/coverage-py38.xml
         flags: pytest
-        name: "diameter-synthesis-py38"
+        name: "morphology-workflows-py38"

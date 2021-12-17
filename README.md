@@ -10,11 +10,11 @@
 This project contains several workflows for processing morphologies:
 - **Curate:** from raw morphologies, ensures that morphologies can be used with the rest of
   BBP codes
-  ![](autoapi/tasks/workflows/Curate.png)
+  [![](autoapi/tasks/workflows/Curate.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Curate)
 - **Annotate:** create various annotations on morphologies needed by specific BBP codes
-  ![](autoapi/tasks/workflows/Annotate.png)
+  [![](autoapi/tasks/workflows/Annotate.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Annotate)
 - **Repair:** process morphologies to correct for artifacts of in-vitro reconstruction
-  ![](autoapi/tasks/workflows/Repair.png)
+  [![](autoapi/tasks/workflows/Repair.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Repair)
 
 
 In a nutshell, the user provides a list of morphologies in a ``.csv`` file, with their names and
