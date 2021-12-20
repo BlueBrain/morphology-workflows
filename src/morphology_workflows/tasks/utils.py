@@ -4,6 +4,7 @@ from functools import partial
 from data_validation_framework.result import ValidationResult
 from data_validation_framework.task import ElementValidationTask
 from data_validation_framework.task import SetValidationTask
+from data_validation_framework.task import ValidationWorkflow
 from luigi_tools.parameter import BoolParameter
 
 from morphology_workflows.utils import SKIP_COMMENT
@@ -27,7 +28,8 @@ def SkippableMixin(default_value=False):
 
     This mixin must be applied to a :class:`data_validation_framework.ElementValidationTask`.
     It will create a ``skip`` parameter and wrap the validation function to just skip it if the
-    ``skip`` argument is set to ``True``.
+    ``skip`` argument is set to ``True``. If skipped, it will keep the ``is_valid`` values as is and
+    add a specific comment to inform the user.
 
     .. todo::
         * Move this class into the ``data-validation-framework`` package?
@@ -45,17 +47,16 @@ def SkippableMixin(default_value=False):
 
             super().__init__(*args, **kwargs)
 
-            self._skippable_validation_function = self.validation_function
             if isinstance(self, ElementValidationTask):
-                self.validation_function = partial(
+                new_validation_function = partial(
                     _skippable_element_validation_function,
-                    self._skippable_validation_function,
+                    self.validation_function,
                     self.skip,
                 )
-            elif isinstance(self, SetValidationTask):
-                self.validation_function = partial(
+            elif isinstance(self, SetValidationTask) and not isinstance(self, ValidationWorkflow):
+                new_validation_function = partial(
                     _skippable_set_validation_function,
-                    self._skippable_validation_function,
+                    self.validation_function,
                     self.skip,
                 )
             else:
@@ -63,5 +64,7 @@ def SkippableMixin(default_value=False):
                     "The SkippableMixin can only be associated with childs of ElementValidationTask"
                     " or SetValidationTask"
                 )
+            self._skippable_validation_function = self.validation_function
+            self.validation_function = new_validation_function
 
     return Mixin
