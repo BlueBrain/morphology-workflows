@@ -25,10 +25,14 @@ from morphology_workflows.tasks import cli
 
 project = "morphology-workflows"
 
-# The X.Y.Z version
-version = get_distribution(project).version
+rtd_version = os.environ.get("READTHEDOCS_VERSION", None)
+if rtd_version is not None:
+    os.environ["SETUPTOOLS_SCM_PRETEND_VERSION"] = rtd_version
 
 # The full version, including alpha/beta/rc tags
+version = get_distribution(project).version
+
+# The X.Y.Z version
 release = version
 
 
