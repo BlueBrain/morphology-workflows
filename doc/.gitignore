@@ -1,0 +1,3 @@
+# The environment.yml file might be updated during readthedocs build which will interact wuth
+# setuptool_scm, so it should be ignored
+environment.yml
