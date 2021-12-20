@@ -9,9 +9,10 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-
 import importlib
+import os
 import re
+from pathlib import Path
 
 import luigi
 from pkg_resources import get_distribution
@@ -200,6 +201,25 @@ def maybe_skip_member(app, what, name, obj, skip, options):
     return skip
 
 
+def generate_images(*args, **kwargs):
+    """Generate images of the workflows."""
+    old_cwd = os.getcwd()
+    try:
+        os.environ["LUIGI_CONFIG_PATH"] = str(
+            Path(*Path(__file__).parts[:-3]) / "tests/data/test_example_1/luigi.cfg"
+        )
+        cur_cwd = Path(__file__).parent
+        cli.main(["-dg", str(cur_cwd / "autoapi/tasks/workflows/Curate.dot"), "Curate"])
+        cli.main(["-dg", str(cur_cwd / "autoapi/tasks/workflows/Curate.png"), "Curate"])
+        cli.main(["-dg", str(cur_cwd / "autoapi/tasks/workflows/Annotate.dot"), "Annotate"])
+        cli.main(["-dg", str(cur_cwd / "autoapi/tasks/workflows/Annotate.png"), "Annotate"])
+        cli.main(["-dg", str(cur_cwd / "autoapi/tasks/workflows/Repair.dot"), "Repair"])
+        cli.main(["-dg", str(cur_cwd / "autoapi/tasks/workflows/Repair.png"), "Repair"])
+    finally:
+        os.chdir(old_cwd)
+
+
 def setup(app):
     """Setup Sphinx by connecting functions to events."""
+    app.connect("builder-inited", generate_images)
     app.connect("autoapi-skip-member", maybe_skip_member)

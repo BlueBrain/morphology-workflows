@@ -243,7 +243,7 @@ def main(arguments=None):
             node_kwargs[child] = {"URL": "../../" + url.as_posix() + anchor}
         dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs)
         render_dependency_graph(dot, args.create_dependency_graph)
-        sys.exit()
+        return
 
     # Run the luigi task
     luigi.build([WORKFLOW_TASKS[args.workflow](**args_dict)], **luigi_config)
