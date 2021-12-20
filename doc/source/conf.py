@@ -25,7 +25,7 @@ from morphology_workflows.tasks import cli
 
 project = "morphology-workflows"
 
-# The short X.Y version
+# The X.Y.Z version
 version = get_distribution(project).version
 
 # The full version, including alpha/beta/rc tags
@@ -52,7 +52,6 @@ autoapi_dirs = [
     "../../src/morphology_workflows/tasks",
 ]
 autoapi_ignore = [
-    "*version.py",
     "*_templates/**",
 ]
 autoapi_python_use_implicit_namespaces = True
