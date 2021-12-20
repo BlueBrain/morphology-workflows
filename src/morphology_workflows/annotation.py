@@ -23,7 +23,6 @@ from neuror.cut_plane.cut_leaves import find_cut_leaves
 
 from morphology_workflows.marker_helper import Marker
 from morphology_workflows.marker_helper import MarkerSet
-from morphology_workflows.utils import SKIP_COMMENT
 
 logger = logging.getLogger(__name__)
 matplotlib.use("Agg")
@@ -128,13 +127,11 @@ def _labeled_line(ax, name, y_pos, color, pos="center"):
     return line, anno
 
 
-def plot_hard_limits(row, data_dir, with_plotly=True, skip=False):
+def plot_hard_limits(row, data_dir, with_plotly=True):
     """Plotting placement annotations on morphologies.
 
     TODO: update the ploting without plotly.
     """
-    if skip:
-        return ValidationResult(is_valid=True, plot_hard_limit_path=None, comment=SKIP_COMMENT)
     plot_path = None
     if not row.isnull()["hard_limit_path"]:
         if with_plotly:
@@ -159,12 +156,8 @@ def plot_hard_limits(row, data_dir, with_plotly=True, skip=False):
     return ValidationResult(is_valid=True, plot_hard_limit_path=plot_path)
 
 
-def find_apical_point(  # pylint: disable=unused-argument
-    row, data_dir, tuft_percent=20, skip=False
-):
+def find_apical_point(row, data_dir, tuft_percent=20):  # pylint: disable=unused-argument
     """Find apical point."""
-    if skip:
-        return ValidationResult(is_valid=True, apical_point_path=None, comment=SKIP_COMMENT)
     if row.has_apical:
         neuron = Morphology(row.morph_path)
         apical_point = apical_point_position(neuron, tuft_percent=tuft_percent)
@@ -183,10 +176,8 @@ def find_apical_point(  # pylint: disable=unused-argument
     return ValidationResult(is_valid=True, apical_point_path=None)
 
 
-def plot_apical_point(row, data_dir, with_plotly=True, skip=False):
+def plot_apical_point(row, data_dir, with_plotly=True):
     """Plotting apical points on morphologies."""
-    if skip:
-        return ValidationResult(is_valid=True, plot_apical_point_path=None, comment=SKIP_COMMENT)
     plot_path = None
     if row.has_apical and not row.isnull()["apical_point_path"]:
         if with_plotly:
@@ -251,11 +242,8 @@ def detect_cut_leaves(row, data_dir, bin_width=15, percentile_threshold=75):
     )
 
 
-def plot_cut_leaves(row, data_dir, with_plotly=True, skip=False):
+def plot_cut_leaves(row, data_dir, with_plotly=True):
     """Plotting cut leaves on morphologies."""
-    if skip:
-        return ValidationResult(is_valid=True, plot_cut_leaves_path=None, comment=SKIP_COMMENT)
-
     markers = None
     if not row.isnull()["cut_leaves_path"]:
         markers = MarkerSet.from_file(row.cut_leaves_path)

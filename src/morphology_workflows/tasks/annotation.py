@@ -3,6 +3,7 @@ import logging
 
 import luigi
 from data_validation_framework.task import ElementValidationTask
+from data_validation_framework.task import SkippableMixin
 from luigi_tools.parameter import BoolParameter
 
 from morphology_workflows.annotation import assign_mtypes
@@ -13,7 +14,6 @@ from morphology_workflows.annotation import plot_apical_point
 from morphology_workflows.annotation import plot_cut_leaves
 from morphology_workflows.annotation import plot_hard_limits
 from morphology_workflows.curation import collect
-from morphology_workflows.tasks.utils import SkippableMixin
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +111,7 @@ class PlotHardLimit(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """
@@ -137,7 +137,7 @@ class ApicalPoint(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"tuft_percent": self.tuft_percent, "skip": self.skip}
+        return {"tuft_percent": self.tuft_percent}
 
     def inputs(self):
         """ """
@@ -157,7 +157,7 @@ class PlotApicalPoint(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """
@@ -209,7 +209,7 @@ class PlotCutLeaves(SkippableMixin(), ElementValidationTask):
 
     def kwargs(self):
         """ """
-        return {"with_plotly": self.with_plotly, "skip": self.skip}
+        return {"with_plotly": self.with_plotly}
 
     def inputs(self):
         """ """

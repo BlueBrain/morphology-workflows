@@ -23,7 +23,6 @@ from scipy.spatial.ckdtree import cKDTree
 from tqdm import tqdm
 
 from morphology_workflows.marker_helper import MarkerSet
-from morphology_workflows.utils import SKIP_COMMENT
 
 L = logging.getLogger(__name__)
 matplotlib.use("Agg")
@@ -129,11 +128,8 @@ def repair(row, data_dir, with_plot=False, repair_params=None):
     return ValidationResult(is_valid=True, morph_path=morph_path)
 
 
-def plot_repair(row, data_dir, with_plotly=True, skip=False):
+def plot_repair(row, data_dir, with_plotly=True):
     """Plotting cut leaves on morphologies."""
-    if skip:
-        return ValidationResult(is_valid=True, plot_repair_path=None, comment=SKIP_COMMENT)
-
     markers = None
     if not row.isnull()["cut_leaves_path"]:
         markers = MarkerSet.from_file(row.cut_leaves_path)
@@ -172,13 +168,9 @@ def plot_repair(row, data_dir, with_plotly=True, skip=False):
     return ValidationResult(is_valid=True, plot_repair_path=plot_path)
 
 
-def smooth_diameters(row, data_dir, skip=False):
+def smooth_diameters(row, data_dir):
     """Smooth diameters using diameter-synthesis."""
     morph = Morphology(row.morph_path)
-    if skip:
-        morph_path = data_dir / Path(row.morph_path).name
-        morph.write(morph_path)
-        return ValidationResult(is_valid=True, morph_path=morph_path)
 
     config = {
         "model": {
@@ -206,11 +198,8 @@ def smooth_diameters(row, data_dir, skip=False):
     return ValidationResult(is_valid=True, morph_path=morph_path)
 
 
-def plot_smooth_diameters(row, data_dir, skip=False, shift=200):
+def plot_smooth_diameters(row, data_dir, shift=200):
     """Plot original morphology and smoother one next to each other."""
-    if skip:
-        return ValidationResult(is_valid=True, plot_smooth_path=None, comment=SKIP_COMMENT)
-
     orig_neuron = load_morphology(row.morph_path)
     smooth_neuron = load_morphology(row.smooth_morph_path)
     plt.figure()
