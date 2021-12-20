@@ -3,6 +3,7 @@ import logging
 
 import luigi
 from data_validation_framework.task import ElementValidationTask
+from data_validation_framework.task import SkippableMixin
 from luigi_tools.parameter import BoolParameter
 
 from morphology_workflows.annotation import assign_mtypes
@@ -13,7 +14,6 @@ from morphology_workflows.annotation import plot_apical_point
 from morphology_workflows.annotation import plot_cut_leaves
 from morphology_workflows.annotation import plot_hard_limits
 from morphology_workflows.curation import collect
-from morphology_workflows.tasks.utils import SkippableMixin
 
 logger = logging.getLogger(__name__)
 

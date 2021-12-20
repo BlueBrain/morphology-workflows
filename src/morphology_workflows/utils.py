@@ -7,7 +7,6 @@ from tqdm import tqdm
 tqdm.pandas()
 
 EXTS = {".asc", ".h5", ".swc"}  # allowed extensions
-SKIP_COMMENT = "Skipped by user."
 
 
 def is_morphology(filename):

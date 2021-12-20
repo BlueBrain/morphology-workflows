@@ -4,6 +4,7 @@ import logging
 import luigi
 from data_validation_framework.task import ElementValidationTask
 from data_validation_framework.task import SetValidationTask
+from data_validation_framework.task import SkippableMixin
 from luigi_tools.parameter import BoolParameter
 
 from morphology_workflows.curation import collect
@@ -15,7 +16,6 @@ from morphology_workflows.repair import plot_smooth_diameters
 from morphology_workflows.repair import repair
 from morphology_workflows.repair import smooth_diameters
 from morphology_workflows.repair import unravel
-from morphology_workflows.tasks.utils import SkippableMixin
 
 logger = logging.getLogger(__name__)
 
