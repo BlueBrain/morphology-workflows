@@ -52,7 +52,7 @@ class ExtractMarkers(SkippableMixin(), ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {Collect(): {"morph_path": "morph_path"}}
+        return {Collect: {"morph_path": "morph_path"}}
 
 
 class PlotMarkers(SkippableMixin(), ElementValidationTask):
@@ -73,7 +73,7 @@ class PlotMarkers(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            ExtractMarkers(): {"marker_path": "marker_path"},
+            ExtractMarkers: {"marker_path": "marker_path"},
         }
 
 
@@ -128,7 +128,7 @@ class CheckNeurites(ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {Collect(): {"morph_path": "morph_path"}}
+        return {Collect: {"morph_path": "morph_path"}}
 
 
 class Sanitize(ElementValidationTask):
@@ -153,7 +153,7 @@ class Sanitize(ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {CheckNeurites(): {"morph_path": "morph_path"}}
+        return {CheckNeurites: {"morph_path": "morph_path"}}
 
 
 class Recenter(SkippableMixin(), ElementValidationTask):
@@ -168,7 +168,7 @@ class Recenter(SkippableMixin(), ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {Sanitize(): {"morph_path": "morph_path"}}
+        return {Sanitize: {"morph_path": "morph_path"}}
 
 
 class Orient(ElementValidationTask):
@@ -195,7 +195,7 @@ class Orient(ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {Recenter(): {"morph_path": "morph_path"}}
+        return {Recenter: {"morph_path": "morph_path"}}
 
 
 class Align(SkippableMixin(True), ElementValidationTask):
@@ -232,7 +232,7 @@ class Align(SkippableMixin(True), ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {Orient(): {"morph_path": "morph_path"}}
+        return {Orient: {"morph_path": "morph_path"}}
 
 
 class EnsureNeuritesOutsideSoma(SkippableMixin(True), ElementValidationTask):
@@ -243,7 +243,7 @@ class EnsureNeuritesOutsideSoma(SkippableMixin(True), ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {Align(): {"morph_path": "morph_path"}}
+        return {Align: {"morph_path": "morph_path"}}
 
 
 class DetectErrors(SkippableMixin(), ElementValidationTask):
@@ -282,7 +282,7 @@ class DetectErrors(SkippableMixin(), ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {CheckNeurites(): {"morph_path": "morph_path"}}
+        return {CheckNeurites: {"morph_path": "morph_path"}}
 
 
 class PlotErrors(SkippableMixin(), ElementValidationTask):
@@ -303,8 +303,8 @@ class PlotErrors(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            Recenter(): {"morph_path": "morph_path"},
-            DetectErrors(): {"error_marker_path": "error_marker_path"},
+            Recenter: {"morph_path": "morph_path"},
+            DetectErrors: {"error_marker_path": "error_marker_path"},
         }
 
 
@@ -323,7 +323,7 @@ class ErrorsReport(SkippableMixin(), SetValidationTask):
     def inputs(self):
         """ """
         return {
-            DetectErrors(): {"error_marker_path": "error_marker_path"},
+            DetectErrors: {"error_marker_path": "error_marker_path"},
         }
 
 
@@ -346,7 +346,7 @@ class Resample(SkippableMixin(), ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {EnsureNeuritesOutsideSoma(): {"morph_path": "morph_path"}}
+        return {EnsureNeuritesOutsideSoma: {"morph_path": "morph_path"}}
 
 
 class PlotMorphologies(SkippableMixin(), ElementValidationTask):
@@ -374,5 +374,5 @@ class PlotMorphologies(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            Resample(): {"morph_path": "morph_path"},
+            Resample: {"morph_path": "morph_path"},
         }

@@ -59,7 +59,7 @@ class MType(ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {CollectCurated(): {"mtype": "mtype"}}
+        return {CollectCurated: {"mtype": "mtype"}}
 
 
 class HardLimit(ElementValidationTask):
@@ -95,7 +95,7 @@ class HardLimit(ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {CollectCurated(): {"morph_path": "morph_path"}}
+        return {CollectCurated: {"morph_path": "morph_path"}}
 
 
 class PlotHardLimit(SkippableMixin(), ElementValidationTask):
@@ -116,8 +116,8 @@ class PlotHardLimit(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            CollectCurated(): {"morph_path": "morph_path"},
-            HardLimit(): {"hard_limit_path": "hard_limit_path"},
+            CollectCurated: {"morph_path": "morph_path"},
+            HardLimit: {"hard_limit_path": "hard_limit_path"},
         }
 
 
@@ -141,7 +141,7 @@ class ApicalPoint(SkippableMixin(), ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {CollectCurated(): {"morph_path": "morph_path", "has_apical": "has_apical"}}
+        return {CollectCurated: {"morph_path": "morph_path", "has_apical": "has_apical"}}
 
 
 class PlotApicalPoint(SkippableMixin(), ElementValidationTask):
@@ -162,8 +162,8 @@ class PlotApicalPoint(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            CollectCurated(): {"morph_path": "morph_path", "has_apical": "has_apical"},
-            ApicalPoint(): {"apical_point_path": "apical_point_path"},
+            CollectCurated: {"morph_path": "morph_path", "has_apical": "has_apical"},
+            ApicalPoint: {"apical_point_path": "apical_point_path"},
         }
 
 
@@ -191,7 +191,7 @@ class CutLeaves(ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            CollectCurated(): {"morph_path": "morph_path", "rotation_matrix": "rotation_matrix"}
+            CollectCurated: {"morph_path": "morph_path", "rotation_matrix": "rotation_matrix"}
         }
 
 
@@ -214,6 +214,6 @@ class PlotCutLeaves(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            CutLeaves(): {"cut_leaves_path": "cut_leaves_path", "cut_qualities": "cut_qualities"},
-            CollectCurated(): {"morph_path": "morph_path"},
+            CutLeaves: {"cut_leaves_path": "cut_leaves_path", "cut_qualities": "cut_qualities"},
+            CollectCurated: {"morph_path": "morph_path"},
         }

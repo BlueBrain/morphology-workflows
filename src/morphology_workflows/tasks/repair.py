@@ -49,7 +49,7 @@ class FixZeroDiameters(ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {CollectAnnotated(): {"morph_path": "morph_path"}}
+        return {CollectAnnotated: {"morph_path": "morph_path"}}
 
 
 class Unravel(ElementValidationTask):
@@ -79,8 +79,8 @@ class Unravel(ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            FixZeroDiameters(): {"morph_path": "morph_path"},
-            CollectAnnotated(): {
+            FixZeroDiameters: {"morph_path": "morph_path"},
+            CollectAnnotated: {
                 "cut_leaves_path": "cut_leaves_path",
                 "apical_point_path": "apical_point_path",
             },
@@ -115,12 +115,12 @@ class RepairNeurites(ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            CollectAnnotated(): {
+            CollectAnnotated: {
                 "has_axon": "has_axon",
                 "has_basal": "has_basal",
                 "has_apical": "has_apical",
             },
-            Unravel(): {
+            Unravel: {
                 "unravelled_apical_point_path": "unravelled_apical_point_path",
                 "morph_path": "morph_path",
                 "unravelled_cut_leaves_path": "unravelled_cut_leaves_path",
@@ -151,7 +151,7 @@ class MakeCollage(SetValidationTask):
 
     def inputs(self):
         """ """
-        return {SmoothDiameters(): {"morph_path": "morph_path"}}
+        return {SmoothDiameters: {"morph_path": "morph_path"}}
 
 
 class MakeRelease(SetValidationTask):
@@ -190,9 +190,9 @@ class MakeRelease(SetValidationTask):
     def inputs(self):
         """ """
         return {
-            FixZeroDiameters(): {"morph_path": "zero_diameter_morph_path"},
-            Unravel(): {"morph_path": "unravel_morph_path"},
-            RepairNeurites(): {"morph_path": "repair_morph_path"},
+            FixZeroDiameters: {"morph_path": "zero_diameter_morph_path"},
+            Unravel: {"morph_path": "unravel_morph_path"},
+            RepairNeurites: {"morph_path": "repair_morph_path"},
         }
 
 
@@ -211,8 +211,8 @@ class PlotRepair(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            Unravel(): {"unravelled_cut_leaves_path": "cut_leaves_path"},
-            RepairNeurites(): {"morph_path": "morph_path"},
+            Unravel: {"unravelled_cut_leaves_path": "cut_leaves_path"},
+            RepairNeurites: {"morph_path": "morph_path"},
         }
 
 
@@ -230,8 +230,8 @@ class SmoothDiameters(SkippableMixin(True), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            RepairNeurites(): {"morph_path": "morph_path"},
-            Unravel(): {"unravelled_apical_point_path": "apical_point_path"},
+            RepairNeurites: {"morph_path": "morph_path"},
+            Unravel: {"unravelled_apical_point_path": "apical_point_path"},
         }
 
 
@@ -244,6 +244,6 @@ class PlotSmoothDiameters(SkippableMixin(), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            RepairNeurites(): {"morph_path": "morph_path"},
-            SmoothDiameters(): {"morph_path": "smooth_morph_path"},
+            RepairNeurites: {"morph_path": "morph_path"},
+            SmoothDiameters: {"morph_path": "smooth_morph_path"},
         }
