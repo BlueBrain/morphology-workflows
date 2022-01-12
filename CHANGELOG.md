@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0](https://github.com/BlueBrain/morphology-workflows/compare/0.1.3..0.2.0)
+
+> 12 January 2022
+
+- Use the new input mechanism for DVF inputs [#8](https://github.com/BlueBrain/morphology-workflows/pull/8)
+
 ## [0.1.3](https://github.com/BlueBrain/morphology-workflows/compare/0.1.2..0.1.3)
 
 > 20 December 2021
