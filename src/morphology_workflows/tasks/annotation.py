@@ -190,9 +190,7 @@ class CutLeaves(ElementValidationTask):
 
     def inputs(self):
         """ """
-        return {
-            CollectCurated: {"morph_path": "morph_path", "rotation_matrix": "rotation_matrix"}
-        }
+        return {CollectCurated: {"morph_path": "morph_path", "rotation_matrix": "rotation_matrix"}}
 
 
 class PlotCutLeaves(SkippableMixin(), ElementValidationTask):
