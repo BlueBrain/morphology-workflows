@@ -67,27 +67,27 @@ class Curate(ValidationWorkflow):
     def inputs(self):
         """ """
         return {
-            Collect(): {},
-            ExtractMarkers(): {"marker_path": "marker_path"},
-            Sanitize(): {},
-            CheckNeurites(): {
+            Collect: {},
+            ExtractMarkers: {"marker_path": "marker_path"},
+            Sanitize: {},
+            CheckNeurites: {
                 "has_axon": "has_axon",
                 "has_basal": "has_basal",
                 "has_apical": "has_apical",
             },
-            Recenter(): {"soma_location": "soma_location"},
-            DetectErrors(): {
+            Recenter: {"soma_location": "soma_location"},
+            DetectErrors: {
                 "error_marker_path": "error_marker_path",
                 "error_annotated_path": "error_annotated_path",
             },
-            PlotMarkers(): {},
-            PlotErrors(): {},
-            ErrorsReport(): {},
-            Align(): {"rotation_matrix": "rotation_matrix"},
-            EnsureNeuritesOutsideSoma(): {},
-            Orient(): {},
-            Resample(): {"morph_path": "morph_path"},
-            PlotMorphologies(): {},
+            PlotMarkers: {},
+            PlotErrors: {},
+            ErrorsReport: {},
+            Align: {"rotation_matrix": "rotation_matrix"},
+            EnsureNeuritesOutsideSoma: {},
+            Orient: {},
+            Resample: {"morph_path": "morph_path"},
+            PlotMorphologies: {},
         }
 
 
@@ -109,14 +109,14 @@ class Annotate(ValidationWorkflow):
     def inputs(self):
         """ """
         return {
-            CollectCurated(): {},
-            MType(): {"mtype": "mtype"},
-            HardLimit(): {"hard_limit_path": "hard_limit_path"},
-            ApicalPoint(): {"apical_point_path": "apical_point_path"},
-            CutLeaves(): {"cut_leaves_path": "cut_leaves_path"},
-            PlotApicalPoint(): {},
-            PlotCutLeaves(): {},
-            PlotHardLimit(): {},
+            CollectCurated: {},
+            MType: {"mtype": "mtype"},
+            HardLimit: {"hard_limit_path": "hard_limit_path"},
+            ApicalPoint: {"apical_point_path": "apical_point_path"},
+            CutLeaves: {"cut_leaves_path": "cut_leaves_path"},
+            PlotApicalPoint: {},
+            PlotCutLeaves: {},
+            PlotHardLimit: {},
         }
 
 
@@ -151,22 +151,22 @@ class Repair(ValidationWorkflow):
     def inputs(self):
         """ """
         inputs = {
-            CollectAnnotated(): {
+            CollectAnnotated: {
                 "morph_path": "morph_path",
                 "apical_point_path": "apical_point_path",
                 "cut_leaves_path": "cut_leaves_path",
             },
-            FixZeroDiameters(): {"morph_path": "zero_diameter_morph_path"},
-            Unravel(): {"morph_path": "unravel_morph_path"},
-            RepairNeurites(): {"morph_path": "repair_morph_path"},
-            SmoothDiameters(): {"morph_path": "smooth_morph_path"},
-            PlotSmoothDiameters(): {},
-            PlotRepair(): {},
-            MakeCollage(): {},
+            FixZeroDiameters: {"morph_path": "zero_diameter_morph_path"},
+            Unravel: {"morph_path": "unravel_morph_path"},
+            RepairNeurites: {"morph_path": "repair_morph_path"},
+            SmoothDiameters: {"morph_path": "smooth_morph_path"},
+            PlotSmoothDiameters: {},
+            PlotRepair: {},
+            MakeCollage: {},
         }
 
         if self.make_release:
-            inputs[MakeRelease()] = {
+            inputs[MakeRelease] = {
                 "zero_diameter_morph_db_path": "zero_diameter_morph_db_path",
                 "unravel_morph_db_path": "unravel_morph_db_path",
                 "repair_morph_db_path": "repair_morph_db_path",

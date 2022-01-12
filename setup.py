@@ -7,7 +7,7 @@ with open("README.md", encoding="utf-8") as f:
     README = f.read()
 
 reqs = [
-    "data-validation-framework>=0.2.0",
+    "data-validation-framework>=0.3.0",
     "diameter-synthesis>=0.2.5",
     "luigi",
     "luigi-tools>=0.0.7",
