@@ -2,8 +2,8 @@
 import logging
 
 import luigi
-from data_validation_framework.task import ElementValidationTask
-from data_validation_framework.task import SetValidationTask
+from morphology_workflows.tasks import ElementValidationTask
+from morphology_workflows.tasks import SetValidationTask
 from data_validation_framework.task import SkippableMixin
 from luigi_tools.parameter import BoolParameter
 from luigi_tools.parameter import OptionalChoiceParameter
