@@ -348,22 +348,23 @@ def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extension
 
             if _zero_diameter_path is not None:
                 zero_diameter_release_path = (
-                    _zero_diameter_path / Path(df.loc[name, "zero_diameter_morph_path"]).stem
-                ).with_suffix(extension)
+                    str(_zero_diameter_path / Path(df.loc[name, "zero_diameter_morph_path"]).stem)
+                    + extension
+                )
                 Morphology(df.loc[name, "zero_diameter_morph_path"]).write(
                     zero_diameter_release_path
                 )
                 df.loc[name, "zero_diameter_release_morph_path"] = zero_diameter_release_path
             if _unravel_path is not None:
                 unravel_release_path = (
-                    _unravel_path / Path(df.loc[name, "unravel_morph_path"]).stem
-                ).with_suffix(extension)
+                    str(_unravel_path / Path(df.loc[name, "unravel_morph_path"]).stem) + extension
+                )
                 Morphology(df.loc[name, "unravel_morph_path"]).write(unravel_release_path)
                 df.loc[name, "unravel_release_morph_path"] = unravel_release_path
             if _repair_path is not None:
                 repair_release_path = (
-                    _repair_path / Path(df.loc[name, "repair_morph_path"]).stem
-                ).with_suffix(extension)
+                    str(_repair_path / Path(df.loc[name, "repair_morph_path"]).stem) + extension
+                )
                 Morphology(df.loc[name, "repair_morph_path"]).write(repair_release_path)
                 df.loc[name, "repair_release_morph_path"] = repair_release_path
 

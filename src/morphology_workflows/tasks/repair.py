@@ -167,7 +167,7 @@ class MakeRelease(SetValidationTask):
         default="repaired_release",
         description=":str: Path to repaired morphologies (not created if None)",
     )
-    extensions = luigi.ListParameter(default=['.asc', '.h5'])
+    extensions = luigi.ListParameter(default=[".asc", ".h5"])
 
     output_columns = {
         "zero_diameter_morph_db_path": None,
