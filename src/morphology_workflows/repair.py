@@ -266,7 +266,7 @@ def make_collage(
                     try:
                         layer_pos = layer_centers[int(mtype[1]) - 1]
                     except (TypeError, IndexError):
-                        layer_pos = 0
+                        layer_pos = layer_centers.mean()
                     neuron = load_morphology(_df.loc[morph_name, "morph_path"])
 
                     translate = [shift * separation, layer_pos, 0.0]
