@@ -128,7 +128,7 @@ class RepairNeurites(ElementValidationTask):
         }
 
 
-class MakeCollage(SetValidationTask):
+class MakeCollage(SkippableMixin(), SetValidationTask):
     """Make collage plot of morphologies."""
 
     collage_path = luigi.Parameter(default="collage.pdf", description=":str: Path to collage plot")
@@ -167,6 +167,7 @@ class MakeRelease(SetValidationTask):
         default="repaired_release",
         description=":str: Path to repaired morphologies (not created if None)",
     )
+    extensions = luigi.ListParameter(default=['.asc', '.h5'])
 
     output_columns = {
         "zero_diameter_morph_db_path": None,
@@ -185,6 +186,7 @@ class MakeRelease(SetValidationTask):
             "zero_diameter_path": self.zero_diameter_path,
             "unravel_path": self.unravel_path,
             "repair_path": self.repair_path,
+            "extensions": self.extensions,
         }
 
     def inputs(self):

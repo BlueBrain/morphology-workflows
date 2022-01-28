@@ -319,71 +319,63 @@ def make_collage(
                 plt.close()
 
 
-def make_release(  # pylint: disable=unused-argument
-    df, data_dir, zero_diameter_path=None, unravel_path=None, repair_path=None
-):
+def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extensions):
     """Make morphology release."""
-    if zero_diameter_path is not None:
-        zero_diameter_path = Path(zero_diameter_path)
-        zero_diameter_path.mkdir(exist_ok=True, parents=True)
-
-    if unravel_path is not None:
-        unravel_path = Path(unravel_path)
-        unravel_path.mkdir(exist_ok=True, parents=True)
-
-    if repair_path is not None:
-        repair_path = Path(repair_path)
-        repair_path.mkdir(exist_ok=True, parents=True)
-
-    _m = []
-    for name in df.loc[df["is_valid"]].index:
-        if "mtype" in df.columns and isinstance(df.loc[name, "mtype"], str):
-            mtype = df.loc[name, "mtype"]
-            layer = df.loc[name, "mtype"][1]
-        else:
-            mtype = ""
-            layer = ""
-        _m.append(
-            MorphInfo(
-                name=name,
-                mtype=mtype,
-                layer=layer,
-                use_dendrite=df.loc[name, "has_basal"],
-                use_axon=df.loc[name, "has_axon"],
-            )
-        )
-
+    for extension in extensions:
         if zero_diameter_path is not None:
-            zero_diameter_release_path = (
-                zero_diameter_path / Path(df.loc[name, "zero_diameter_morph_path"]).name
-            )
-            shutil.copy(
-                df.loc[name, "zero_diameter_morph_path"],
-                zero_diameter_release_path,
-            )
-            df.loc[name, "zero_diameter_release_morph_path"] = zero_diameter_release_path
-        if unravel_path is not None:
-            unravel_release_path = unravel_path / Path(df.loc[name, "unravel_morph_path"]).name
-            shutil.copy(
-                df.loc[name, "unravel_morph_path"],
-                unravel_release_path,
-            )
-            df.loc[name, "unravel_release_morph_path"] = unravel_release_path
-        if repair_path is not None:
-            repair_release_path = repair_path / Path(df.loc[name, "repair_morph_path"]).name
-            shutil.copy(
-                df.loc[name, "repair_morph_path"],
-                repair_release_path,
-            )
-            df.loc[name, "repair_release_morph_path"] = repair_release_path
+            _zero_diameter_path = Path(f"{zero_diameter_path}-{extension[1:]}")
+            _zero_diameter_path.mkdir(exist_ok=True, parents=True)
 
-    db = MorphDB(_m)
-    if zero_diameter_path is not None:
-        db.write(zero_diameter_path / "neurondb.xml")
-        df.loc[df["is_valid"], "zero_diameter_morph_db_path"] = zero_diameter_path / "neurondb.xml"
-    if unravel_path is not None:
-        db.write(unravel_path / "neurondb.xml")
-        df.loc[df["is_valid"], "unravel_morph_db_path"] = unravel_path / "neurondb.xml"
-    if repair_path is not None:
-        db.write(repair_path / "neurondb.xml")
-        df.loc[df["is_valid"], "repair_morph_db_path"] = repair_path / "neurondb.xml"
+        if unravel_path is not None:
+            _unravel_path = Path(f"{unravel_path}-{extension[1:]}")
+            _unravel_path.mkdir(exist_ok=True, parents=True)
+
+        if repair_path is not None:
+            _repair_path = Path(f"{repair_path}-{extension[1:]}")
+            _repair_path.mkdir(exist_ok=True, parents=True)
+
+        _m = []
+        for name in df.loc[df["is_valid"]].index:
+            _m.append(
+                MorphInfo(
+                    name=name,
+                    mtype=df.loc[name, "mtype"],
+                    layer=df.loc[name, "mtype"][1],
+                    use_dendrite=df.loc[name, "has_basal"],
+                    use_axon=df.loc[name, "has_axon"],
+                )
+            )
+
+            if _zero_diameter_path is not None:
+                zero_diameter_release_path = (
+                    _zero_diameter_path / Path(df.loc[name, "zero_diameter_morph_path"]).stem
+                ).with_suffix(extension)
+                Morphology(df.loc[name, "zero_diameter_morph_path"]).write(
+                    zero_diameter_release_path
+                )
+                df.loc[name, "zero_diameter_release_morph_path"] = zero_diameter_release_path
+            if _unravel_path is not None:
+                unravel_release_path = (
+                    _unravel_path / Path(df.loc[name, "unravel_morph_path"]).stem
+                ).with_suffix(extension)
+                Morphology(df.loc[name, "unravel_morph_path"]).write(unravel_release_path)
+                df.loc[name, "unravel_release_morph_path"] = unravel_release_path
+            if _repair_path is not None:
+                repair_release_path = (
+                    _repair_path / Path(df.loc[name, "repair_morph_path"]).stem
+                ).with_suffix(extension)
+                Morphology(df.loc[name, "repair_morph_path"]).write(repair_release_path)
+                df.loc[name, "repair_release_morph_path"] = repair_release_path
+
+        db = MorphDB(_m)
+        if _zero_diameter_path is not None:
+            db.write(_zero_diameter_path / "neurondb.xml")
+            df.loc[df["is_valid"], "zero_diameter_morph_db_path"] = (
+                _zero_diameter_path / "neurondb.xml"
+            )
+        if _unravel_path is not None:
+            db.write(_unravel_path / "neurondb.xml")
+            df.loc[df["is_valid"], "unravel_morph_db_path"] = _unravel_path / "neurondb.xml"
+        if _repair_path is not None:
+            db.write(_repair_path / "neurondb.xml")
+            df.loc[df["is_valid"], "repair_morph_db_path"] = _repair_path / "neurondb.xml"
