@@ -12,25 +12,43 @@
 import importlib
 import os
 import re
+import subprocess
 from pathlib import Path
 
 import luigi
 from pkg_resources import get_distribution
+from sphinx.util import logging
 
 import morphology_workflows
 import morphology_workflows.tasks
 from morphology_workflows.tasks import cli
 
+logger = logging.getLogger(__name__)
+
 # -- Project information -----------------------------------------------------
 
 project = "morphology-workflows"
 
-rtd_version = os.environ.get("READTHEDOCS_VERSION", None)
-if rtd_version is not None:
-    os.environ["SETUPTOOLS_SCM_PRETEND_VERSION"] = rtd_version
-
 # The full version, including alpha/beta/rc tags
-version = get_distribution(project).version
+version = None
+if os.environ.get("READTHEDOCS_VERSION", "") == "stable":
+    logger.info("Stable ReadTheDocs environment found.")
+    os.environ["SPHINX_BLUE_BRAIN_THEME_CHECK_VERSIONS"] = "False"
+    with subprocess.Popen(
+        ["git", "describe", "--abbrev=0", "--tags"],
+        stdout=subprocess.PIPE,
+    ) as proc:
+        version = proc.communicate()[0].decode("utf-8").strip()
+    if not version:
+        logger.info(
+            "Could not find version from the 'git describe' command ."
+            "The 'pkg_resources.get_distribution' will be used."
+        )
+
+if not version:
+    version = get_distribution(project).version
+
+logger.info(f"Version found: {version}")
 
 # The X.Y.Z version
 release = version

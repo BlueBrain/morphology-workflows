@@ -6,8 +6,6 @@ requires = [
     "wheel",
 ]
 
-[tool.setuptools_scm]
-
 # BLACK
 [tool.black]
 line-length = 100
