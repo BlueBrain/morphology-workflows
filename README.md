@@ -1,4 +1,4 @@
-![workflow Logo](doc/source/logo/BBP-Morphology-Workflows.jpg)
+![workflow Logo](logo/BBP-Morphology-Workflows.jpg)
 
 [![Version](https://img.shields.io/pypi/v/morphology-workflows)](https://github.com/BlueBrain/morphology-workflows/releases)
 [![Build status](https://github.com/BlueBrain/morphology-workflows/actions/workflows/run-tox.yml/badge.svg?branch=main)](https://github.com/BlueBrain/morphology-workflows/actions)
