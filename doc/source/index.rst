@@ -1,5 +1,7 @@
-.. mdinclude:: ../../README.md
+.. image:: logo/BBP-Morphology-Workflows.jpg
 
+.. mdinclude:: ../../README.md
+    :start-line: 2
 
 .. toctree::
    :hidden:
