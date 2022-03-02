@@ -28,6 +28,10 @@ morphologies, as well as a flag ``is_valid``, used in subsequent tasks to filter
 At the end of each workflow, another ``report.csv`` file is created, with the main output columns of
 each tasks, and a ``report.pdf`` containing a human readable summary of the result of the workflow.
 
+The complete documentation can be found here:
+  * stable: https://morphology-workflows.readthedocs.io/en/stable/
+  * latest: https://morphology-workflows.readthedocs.io/en/latest/
+
 
 ## Installation
 
