@@ -7,7 +7,7 @@ import dir_content_diff.pandas
 import pytest
 
 DATA = Path(__file__).parent / "data"
-EXAMPLES = Path(__file__).parent.parent / "examples"
+EXAMPLES = "examples_test"
 
 dir_content_diff.pandas.register()
 
