@@ -161,7 +161,7 @@ def plot_repair(row, data_dir, with_plotly=True):
                 ax.autoscale()
                 ax.axis("equal")
                 plt.title(f"{row.name}")
-                if hasattr(row, "mtype"):
+                if hasattr(row, "mtype") and isinstance(row.mtype, str):
                     plt.suptitle(plane + "mtype:" + row.mtype)
                 else:
                     plt.suptitle(plane)
