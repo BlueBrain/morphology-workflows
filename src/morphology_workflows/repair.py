@@ -334,11 +334,17 @@ def make_release(  # pylint: disable=unused-argument
 
     _m = []
     for name in df.loc[df["is_valid"]].index:
+        if "mtype" in df.columns and isinstance(df.loc[name, "mtype"], str):
+            mtype = df.loc[name, "mtype"]
+            layer = df.loc[name, "mtype"][1]
+        else:
+            mtype = ""
+            layer = ""
         _m.append(
             MorphInfo(
                 name=name,
-                mtype=df.loc[name, "mtype"],
-                layer=df.loc[name, "mtype"][1],
+                mtype=mtype,
+                layer=layer,
                 use_dendrite=df.loc[name, "has_basal"],
                 use_axon=df.loc[name, "has_axon"],
             )
