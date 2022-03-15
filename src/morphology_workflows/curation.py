@@ -499,7 +499,7 @@ def plot_morphology(row, data_dir, with_plotly=True, realistic_diameters=True):
             )
             plt.axis(bbox[:, axis].T.flatten())
             plt.axis("equal")
-            if hasattr(row, 'mtype'):
+            if hasattr(row, "mtype"):
                 plt.suptitle(plane + "mtype:" + row.mtype)
             else:
                 plt.suptitle(plane)

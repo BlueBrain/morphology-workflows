@@ -55,7 +55,7 @@ def assign_mtypes(row, data_dir, mtype_regex=None):  # pylint: disable=unused-ar
     """Assign mtype to morphologies."""
     if not mtype_regex:
         return ValidationResult(is_valid=True, mtype=row.mtype, comment="No regex provided!")
-    if not hasattr(row, 'mtype') or not isinstance(row.mtype, str):
+    if not hasattr(row, "mtype") or not isinstance(row.mtype, str):
         return ValidationResult(is_valid=True, mtype=row.mtype, comment="No  mtype data!")
 
     mtype_re = [re.compile(_re) for _re in mtype_regex]
