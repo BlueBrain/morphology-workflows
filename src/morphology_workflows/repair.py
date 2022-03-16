@@ -263,7 +263,10 @@ def make_collage(
                 plt.figure(figsize=figsize)
                 ax = plt.gca()
                 for shift, morph_name in enumerate(batch):
-                    layer_pos = layer_centers[int(mtype[1]) - 1]
+                    try:
+                        layer_pos = layer_centers[int(mtype[1]) - 1]
+                    except (TypeError, IndexError):
+                        layer_pos = 0
                     neuron = load_morphology(_df.loc[morph_name, "morph_path"])
 
                     translate = [shift * separation, layer_pos, 0.0]
