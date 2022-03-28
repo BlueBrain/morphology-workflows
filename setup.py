@@ -63,7 +63,11 @@ setup(
         "setuptools_scm",
     ],
     install_requires=reqs,
-    extras_require={"docs": doc_reqs, "test": test_reqs},
+    extras_require={
+        "docs": doc_reqs,
+        "test": test_reqs,
+        "allen_brain": ["allensdk"],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Education",
