@@ -1,6 +1,7 @@
 """Workflow tasks."""
 import luigi
 from data_validation_framework.task import ValidationWorkflow
+from luigi_tools.task import WorkflowWrapperTask
 
 from morphology_workflows.tasks.annotation import ApicalPoint
 from morphology_workflows.tasks.annotation import CollectCurated
@@ -24,6 +25,7 @@ from morphology_workflows.tasks.curation import PlotMorphologies
 from morphology_workflows.tasks.curation import Recenter
 from morphology_workflows.tasks.curation import Resample
 from morphology_workflows.tasks.curation import Sanitize
+from morphology_workflows.tasks.fetch import FetchMorphologies as Fetch  # noqa
 from morphology_workflows.tasks.repair import CollectAnnotated
 from morphology_workflows.tasks.repair import FixZeroDiameters
 from morphology_workflows.tasks.repair import MakeCollage

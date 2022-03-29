@@ -18,14 +18,30 @@ logger = logging.getLogger(__name__)
 
 
 class FetchMorphologies(WorkflowTask):
-    """Fetch morphologies from given source."""
+    """Fetch morphologies from given source.
+
+    The JSON configuration file should contain a list of objects where each object is a config set::
+
+        [
+            {
+                "brain_region": "AHN",
+                "nb_morphologies": 2,
+                "seed": 0
+            },
+            {
+                "brain_region": "VISp",
+                "nb_morphologies": 2,
+                "seed": 0
+            }
+        ]
+    """
 
     source = luigi.ChoiceParameter(
-        description="The source used to download the morphologies",
+        description=":str: The source used to download the morphologies",
         choices=["Allen", "BBP-Nexus", "NeuroMorpho", "MouseLight"],
     )
     config_file = PathParameter(
-        description="Path to the JSON config file",
+        description=":str: Path to the JSON config file",
         exists=True,
     )
     result_path = PathParameter(

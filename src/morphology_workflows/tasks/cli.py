@@ -19,6 +19,7 @@ L = logging.getLogger(__name__)
 
 
 WORKFLOW_TASKS = {
+    "Fetch": workflows.Fetch,
     "Curate": workflows.Curate,
     "Annotate": workflows.Annotate,
     "Repair": workflows.Repair,
@@ -177,7 +178,7 @@ class ArgParser:
                         param_name,
                         help=format_description(param_obj),
                         # pylint: disable=protected-access
-                        **param_obj._parser_kwargs(param_name, task_name),
+                        **param_obj._parser_kwargs(param, task_name),
                     )
                 parsers[workflow_name] = subparser
             except (AttributeError, TypeError):

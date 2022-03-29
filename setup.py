@@ -12,6 +12,7 @@ reqs = [
     "luigi",
     "luigi-tools>=0.0.7",
     "matplotlib",
+    "morphapi",
     "morph_tool>=2.9.0,<3.0",
     "morphio>=3.1,<4.0",
     "neurom>=3.0,<4.0",
@@ -67,6 +68,7 @@ setup(
         "docs": doc_reqs,
         "test": test_reqs,
         "allen_brain": ["allensdk"],
+        "mouselight": ["bg_atlasapi"],
     },
     classifiers=[
         "Development Status :: 4 - Beta",
