@@ -189,7 +189,7 @@ class FetchMorphologies(WorkflowTask):
         if self.source == "Allen":
             self.allen_download(config)
         elif self.source == "BBP-Nexus":
-            self.allen_download(config)
+            raise NotImplementedError("Fetching morphologies from Nexus is not implemented yet.")
         elif self.source == "MouseLight":
             self.mouselight_download(config)
         elif self.source == "NeuroMorpho":
