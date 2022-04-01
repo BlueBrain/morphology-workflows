@@ -25,7 +25,6 @@ def silent_logger(log_name):
     """A decorator to silent a logger during the function execution."""
 
     def _silent_logger(function):
-
         @wraps(function)
         def decorated_func(*args, **kwargs):
             func_logger = logging.getLogger(log_name)

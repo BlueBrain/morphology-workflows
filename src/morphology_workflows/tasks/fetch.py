@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class FetchMorphologies(WorkflowTask):
-    """Fetch morphologies from given source.
+    """Fetch morphologies from the given source.
 
     The JSON configuration file should contain a list of objects where each object is a config set::
 
@@ -87,7 +87,7 @@ class FetchMorphologies(WorkflowTask):
                             api.neuromorphorg_cache,
                         )
                     )
-                except Exception as exc:
+                except Exception as exc:  # pylint: disable=broad-except
                     logger.error(
                         "Could not download the morphologies for %s for the following reason: %s",
                         conf_element,
@@ -111,7 +111,6 @@ class FetchMorphologies(WorkflowTask):
 
         for conf_element in config:
             rng = np.random.default_rng(conf_element.get("seed", None))
-            size = conf_element.get("nb_morphologies", float("inf"))
             brain_region = conf_element.get("brain_region", None)
             if brain_region is not None:
                 brain_region = [brain_region]
@@ -127,7 +126,7 @@ class FetchMorphologies(WorkflowTask):
                     replace=False,
                 ).tolist()
                 downloaded_neurons = api.download_neurons(sampled_metadata)
-            except Exception as exc:
+            except Exception as exc:  # pylint: disable=broad-except
                 logger.error(
                     "Could not download the morphologies for %s for the following reason: %s",
                     conf_element,
@@ -151,7 +150,7 @@ class FetchMorphologies(WorkflowTask):
             size = conf_element.get("nb_morphologies", float("inf"))
             species = conf_element.get("species", None)
             brain_region = conf_element.get("brain_region", None)
-            cell_type = conf_element.get("cell_type", None)
+            # cell_type = conf_element.get("cell_type", None)
 
             mask = np.full(len(api.neurons), True, dtype=bool)
             if species is not None:

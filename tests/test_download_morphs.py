@@ -1,13 +1,13 @@
 """Test download tasks."""
+# pylint: disable=redefined-outer-name
 import configparser
 import itertools
 import json
-import shutil
 
 import luigi
 import pytest
 
-from morphology_workflows.tasks.fetch_morphologies import FetchMorphologies
+from morphology_workflows.tasks.workflows import Fetch
 
 
 @pytest.fixture()
@@ -38,7 +38,7 @@ def prepare_dir(tmp_working_dir, examples_dir):
 
 def test_neuromorpho(prepare_dir, data_dir):
     """Download from NeuroMorpho."""
-    task = FetchMorphologies(
+    task = Fetch(
         source="NeuroMorpho",
         config_file=data_dir / "neuromorpho_config_download.json",
         result_path=prepare_dir / "morphologies",
@@ -71,7 +71,7 @@ def test_neuromorpho(prepare_dir, data_dir):
 
 def test_mouselight(prepare_dir, data_dir):
     """Download from NeuroMorpho."""
-    task = FetchMorphologies(
+    task = Fetch(
         source="MouseLight",
         config_file=data_dir / "mouselight_config_download.json",
         result_path=prepare_dir / "morphologies",
@@ -101,7 +101,7 @@ def test_mouselight(prepare_dir, data_dir):
 
 def test_allen(prepare_dir, data_dir):
     """Download from NeuroMorpho."""
-    task = FetchMorphologies(
+    task = Fetch(
         source="Allen",
         config_file=data_dir / "allen_config_download.json",
         result_path=prepare_dir / "morphologies",

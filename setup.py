@@ -11,6 +11,9 @@ reqs = [
     "diameter-synthesis>=0.2.5",
     "luigi",
     "luigi-tools>=0.0.7",
+    # Markupsafe dependency is only due to an incompatibility with Jinja2==2.11.3 but it might be
+    # fixed later
+    "markupsafe<2.1",
     "matplotlib",
     "morphapi",
     "morph_tool>=2.9.0,<3.0",
