@@ -1,0 +1,19 @@
+[
+    {
+        "species": "mouse",
+        "brain_region": "neocortex",
+        "cell_type": "interneuron",
+        "nb_morphologies": 2
+    },
+    {
+        "species": "mouse",
+        "brain_region": "tectum",
+        "cell_type": "pyramidal"
+    },
+    {
+        "species": "mouse",
+        "brain_region": "tectum",
+        "cell_type": "pyramidal",
+        "nb_morphologies": 9999
+    }
+]

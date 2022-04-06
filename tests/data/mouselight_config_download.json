@@ -1,0 +1,16 @@
+[
+    {
+        "brain_region": "AHN",
+        "nb_morphologies": 2,
+        "seed": 0
+    },
+    {
+        "brain_region": "AHN",
+        "seed": 0
+    },
+    {
+        "brain_region": "AHN",
+        "nb_morphologies": 9999,
+        "seed": 0
+    }
+]

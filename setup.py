@@ -11,7 +11,11 @@ reqs = [
     "diameter-synthesis>=0.2.5",
     "luigi",
     "luigi-tools>=0.0.7",
+    # Markupsafe dependency is only due to an incompatibility with Jinja2==2.11.3 but it might be
+    # fixed later
+    "markupsafe<2.1",
     "matplotlib",
+    "morphapi",
     "morph_tool>=2.9.0,<3.0",
     "morphio>=3.1,<4.0",
     "neurom>=3.0,<4.0",
@@ -63,7 +67,12 @@ setup(
         "setuptools_scm",
     ],
     install_requires=reqs,
-    extras_require={"docs": doc_reqs, "test": test_reqs},
+    extras_require={
+        "docs": doc_reqs,
+        "test": test_reqs,
+        "allen_brain": ["allensdk"],
+        "mouselight": ["bg_atlasapi"],
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Education",

@@ -10,6 +10,7 @@
 # Morphology Workflows
 
 This project contains several workflows for processing morphologies:
+- **Fetch:** download morphologies from online database (like Allen, NeuroMorpho or MouseLight).
 - **Curate:** from raw morphologies, ensures that morphologies can be used with the rest of
   BBP codes
   [![](autoapi/tasks/workflows/Curate.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Curate)
