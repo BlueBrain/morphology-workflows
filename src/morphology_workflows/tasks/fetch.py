@@ -1,11 +1,13 @@
 """Tasks to fetch morphologies."""
+import copy
 import json
 import logging
 
 import luigi
 import numpy as np
+import pandas as pd
 from luigi.parameter import PathParameter
-from luigi_tools.target import OutputLocalTarget
+from data_validation_framework.target import TaggedOutputLocalTarget
 from luigi_tools.task import WorkflowTask
 from morphapi.api.mouselight import MouseLightAPI
 from morphapi.api.neuromorphorg import NeuroMorpOrgAPI
@@ -15,7 +17,7 @@ from morphology_workflows.utils import silent_logger
 logger = logging.getLogger(__name__)
 
 
-class FetchMorphologies(WorkflowTask):
+class Fetch(TagResultOutputMixin, WorkflowTask):
     """Fetch morphologies from the given source.
 
     The JSON configuration file should contain a list of objects where each object is a config set::
@@ -208,17 +210,25 @@ class FetchMorphologies(WorkflowTask):
         elif self.source == "NeuroMorpho":
             self.neuromorpho_download(config)
 
-        with self.output()["metadata"].pathlib_path.open("w", encoding="utf-8") as f:
-            json.dump(config, f)
+        formatted_result = []
+        for element in config:
+            params = {k: v for k, v in element.items() if k != "morphologies"}
+            for morph_name in element.get("morphologies", []):
+                entry = copy.copy(params)
+                entry["morphology"] = morph_name
+                formatted_result.append(entry)
+
+        df = pd.DataFrame(formatted_result)
+        df.to_csv(self.output()["metadata"].path, index=False)
 
     def output(self):
         return {
-            "morphologies": OutputLocalTarget(
+            "morphologies": TaggedOutputLocalTarget(
                 self.result_path,
                 create_parent=True,
             ),
-            "metadata": OutputLocalTarget(
-                self.result_path / "metadata.json",
+            "metadata": TaggedOutputLocalTarget(
+                self.result_path / "metadata.csv",
                 create_parent=True,
             ),
         }

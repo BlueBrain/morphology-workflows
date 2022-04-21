@@ -14,12 +14,15 @@ from luigi_tools.util import render_dependency_graph
 
 import morphology_workflows
 from morphology_workflows.tasks import workflows
+from morphology_workflows.tasks.fetch import Fetch
+from morphology_workflows.tasks.placeholders import Placeholders
 
 L = logging.getLogger(__name__)
 
 
 WORKFLOW_TASKS = {
-    "Fetch": workflows.Fetch,
+    "Fetch": Fetch,
+    "Placeholders": Placeholders,
     "Curate": workflows.Curate,
     "Annotate": workflows.Annotate,
     "Repair": workflows.Repair,
