@@ -212,7 +212,7 @@ def _has_apical(morph_path):
 def _add_stub_axon(morph, length=100, diameter=1.0):
     """Add a stub axon to a morphology."""
     stub_orig = morph.soma.points[np.argmin(morph.soma.points[:, COLS.Y])]
-    stub = PointLevel([stub_orig, stub_orig - np.array([0, -length, 0])], 2 * [diameter])
+    stub = PointLevel([stub_orig, stub_orig - np.array([0, length, 0])], 2 * [diameter])
     morph.append_root_section(stub, SectionType.axon)
 
 
