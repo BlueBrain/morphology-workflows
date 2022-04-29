@@ -118,12 +118,17 @@ class CheckNeurites(ElementValidationTask):
         description=":int: Minimum number of sections in an axon to consider it valid",
         default=5,
     )
+    ensure_stub_axon = luigi.BoolParameter(
+        description=":bool: Add a stub axon if there is no axon on the morphology",
+        default=False,
+    )
 
     def kwargs(self):
         """ """
         return {
             "mock_soma_type": self.mock_soma_type,
             "axon_n_section_min": self.axon_n_section_min,
+            "ensure_stub_axon": self.ensure_stub_axon,
         }
 
     def inputs(self):

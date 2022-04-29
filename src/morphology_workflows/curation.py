@@ -16,6 +16,7 @@ from morph_tool.resampling import resample_linear_density
 from morph_tool.transform import align_morphology
 from morph_tool.transform import rotate
 from morph_tool.transform import rotation_matrix_from_vectors
+from morphio import PointLevel
 from morphio import SectionType
 from morphio.mut import Morphology
 from neurom import COLS
@@ -178,7 +179,7 @@ def _add_soma(morph, soma_type="spherical"):
 
 
 def _has_axon(morph_path, n_section_min=5):
-    """Check if neuron has axon with  more than n_section_min sections."""
+    """Check if neuron has axon with strictly more than n_section_min sections."""
     _morph = Morphology(morph_path)
     for root in _morph.root_sections:
         if root.type == SectionType.axon:
@@ -208,17 +209,28 @@ def _has_apical(morph_path):
     return False
 
 
+def _add_stub_axon(morph, length=100, diameter=1.0):
+    """Add a stub axon to a morphology."""
+    stub_orig = morph.soma.points[np.argmin(morph.soma.points[:, COLS.Y])]
+    stub = PointLevel([stub_orig, stub_orig - np.array([0, -length, 0])], 2 * [diameter])
+    morph.append_root_section(stub, SectionType.axon)
+
+
 def check_neurites(
     row,
     data_dir,
     axon_n_section_min=5,
     mock_soma_type="spherical",
+    ensure_stub_axon=False,
 ):
     """Check which neurites are present, add soma if missing and mock_soma_type is not None."""
     new_morph_path = data_dir / Path(row.morph_path).name
     morph = Morphology(row.morph_path)
     if mock_soma_type is not None:
         _add_soma(morph, mock_soma_type)
+    if ensure_stub_axon:
+        if not _has_axon(row.morph_path, n_section_min=0):
+            _add_stub_axon(morph)
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(row.morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(row.morph_path))
