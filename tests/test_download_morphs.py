@@ -3,8 +3,10 @@
 import configparser
 import itertools
 import json
+import sys
 
 import luigi
+import mock
 import pytest
 
 from morphology_workflows.tasks.workflows import Fetch
@@ -127,3 +129,72 @@ def test_allen(prepare_dir, data_dir):
         metadata[0]["morphologies"], metadata[1]["morphologies"], metadata[2]["morphologies"]
     ):
         assert (output_path / filepath).exists()
+
+
+class TestMissingImports:
+    """Test the errors raised when optional dependencies are not installed."""
+
+    @mock.patch.dict(sys.modules, {"morphapi.api.allenmorphology": None})
+    def test_allen(self, prepare_dir, data_dir):
+        """Test Allen Brain case."""
+
+        class FetchTmp(Fetch):
+            """Dummy task class to attach the event handler."""
+
+        task = FetchTmp(
+            source="Allen",
+            config_file=data_dir / "allen_config_download.json",
+            result_path=prepare_dir / "morphologies",
+        )
+
+        failed_tasks = []
+        exceptions = []
+
+        @FetchTmp.event_handler(luigi.Event.FAILURE)
+        def check_exception(failed_task, exception):
+            failed_tasks.append(str(failed_task))
+            exceptions.append(str(exception))
+
+        assert not luigi.build([task], local_scheduler=True)
+
+        assert failed_tasks == [
+            f"FetchTmp(source=Allen, config_file={data_dir / 'allen_config_download.json'}, "
+            f"result_path={prepare_dir / 'morphologies'})"
+        ]
+        assert exceptions == [
+            'You need to install the "allensdk" package to fetch morphologies from the Allen Brain '
+            'database: "pip install allensdk"'
+        ]
+
+    @mock.patch.dict(sys.modules, {"bg_atlasapi": None})
+    def test_mouselight(self, prepare_dir, data_dir):
+        """Test MouseLight case."""
+
+        class FetchTmp(Fetch):
+            """Dummy task class to attach the event handler."""
+
+        task = FetchTmp(
+            source="MouseLight",
+            config_file=data_dir / "mouselight_config_download.json",
+            result_path=prepare_dir / "morphologies",
+        )
+
+        failed_tasks = []
+        exceptions = []
+
+        @FetchTmp.event_handler(luigi.Event.FAILURE)
+        def check_exception(failed_task, exception):
+            failed_tasks.append(str(failed_task))
+            exceptions.append(str(exception))
+
+        assert not luigi.build([task], local_scheduler=True)
+
+        assert failed_tasks == [
+            "FetchTmp(source=MouseLight, "
+            f"config_file={data_dir / 'mouselight_config_download.json'}, "
+            f"result_path={prepare_dir / 'morphologies'})"
+        ]
+        assert exceptions == [
+            'You need to install the "bg_atlasapi" package to fetch morphologies from the '
+            'MouseLight database: "pip install bg_atlasapi"'
+        ]

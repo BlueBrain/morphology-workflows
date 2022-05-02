@@ -41,6 +41,7 @@ doc_reqs = [
 test_reqs = [
     "diff-pdf-visually>=1.5.1",
     "dir-content-diff>=0.2",
+    "mock",
     "pytest",
     "pytest-cov",
     "pytest-html",

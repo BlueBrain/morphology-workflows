@@ -4,11 +4,9 @@ import logging
 
 import luigi
 import numpy as np
-from bg_atlasapi import BrainGlobeAtlas
 from luigi_tools.parameter import PathParameter
 from luigi_tools.target import OutputLocalTarget
 from luigi_tools.task import WorkflowTask
-from morphapi.api.allenmorphology import AllenMorphology
 from morphapi.api.mouselight import MouseLightAPI
 from morphapi.api.neuromorphorg import NeuroMorpOrgAPI
 
@@ -103,6 +101,14 @@ class FetchMorphologies(WorkflowTask):
 
     def mouselight_download(self, config):
         """Download morphologies from the MouseLight database."""
+        try:
+            # pylint: disable=import-outside-toplevel
+            from bg_atlasapi import BrainGlobeAtlas
+        except ImportError as exc:
+            raise ImportError(
+                'You need to install the "bg_atlasapi" package to fetch morphologies from the '
+                'MouseLight database: "pip install bg_atlasapi"'
+            ) from exc
         api = MouseLightAPI()
         api.mouselight_cache = self.output()["morphologies"].pathlib_path
         api.mouselight_cache.mkdir(parents=True, exist_ok=True)
@@ -142,6 +148,14 @@ class FetchMorphologies(WorkflowTask):
     @silent_logger("allensdk.api.api.retrieve_file_over_http")
     def allen_download(self, config):
         """Download morphologies from the Allen database."""
+        try:
+            # pylint: disable=import-outside-toplevel
+            from morphapi.api.allenmorphology import AllenMorphology
+        except ImportError as exc:
+            raise ImportError(
+                'You need to install the "allensdk" package to fetch morphologies from the '
+                'Allen Brain database: "pip install allensdk"'
+            ) from exc
         api = AllenMorphology()
         api.allen_morphology_cache = self.output()["morphologies"].pathlib_path
         api.allen_morphology_cache.mkdir(parents=True, exist_ok=True)
