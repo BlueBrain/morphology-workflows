@@ -16,3 +16,7 @@ doc/build
 doc/source/generated/
 doc/source/autoapi/
 doc/_images
+
+examples/*.log
+examples/dataset.csv
+examples/morphologies
