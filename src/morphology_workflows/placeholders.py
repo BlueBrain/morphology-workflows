@@ -6,6 +6,7 @@ from typing import Optional
 import neurom
 import pandas as pd
 from neurom.apps import morph_stats
+from pkg_resources import resource_filename
 
 logger = logging.getLogger(__name__)
 
@@ -81,9 +82,25 @@ def compute_placeholders(
     if config is None:
         config = DEFAULT_CONFIG
 
-    logger.debug("Compute placeholders with the following config: %s", config)
-
-    df_placeholder = morph_stats.extract_dataframe(population, config)
+    if len(population) == 0:
+        logger.debug(
+            (
+                "The population for the %s region and %s mtype is empty so the default "
+                "placeholders are used."
+            ),
+            region,
+            mtype,
+        )
+        df_placeholder = pd.read_csv(
+            resource_filename(
+                "morphology_workflows",
+                "_data/default_placeholders.csv",
+            ),
+            header=[0, 1],
+        )
+    else:
+        logger.debug("Compute placeholders with the following config: %s", config)
+        df_placeholder = morph_stats.extract_dataframe(population, config)
 
     # Add region and mtype to the dataframe
     df_placeholder[("Metadata", "Region")] = region

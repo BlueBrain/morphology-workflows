@@ -5,6 +5,7 @@ import shutil
 import luigi
 import pandas as pd
 import pytest
+from pkg_resources import resource_filename
 
 from morphology_workflows.tasks.placeholders import Placeholders
 
@@ -57,5 +58,32 @@ def test_placeholders(prepare_dir, data_dir):
     result = pd.read_csv(task.output().path, header=[0, 1])
 
     expected = pd.read_csv(data_dir / "placeholders.csv", header=[0, 1])
+
+    pd.testing.assert_frame_equal(result, expected)
+
+
+def test_placeholders_empty_population(prepare_dir):
+    """Test that the default placeholders are used when the population is empty."""
+    region = "unknown region"
+    mtype = "targeted mtype"
+
+    task = Placeholders(
+        input_dir=prepare_dir / "morphologies",
+        region=region,
+        mtype=mtype,
+    )
+    assert luigi.build([task], local_scheduler=True)
+
+    result = pd.read_csv(task.output().path, header=[0, 1])
+
+    expected = pd.read_csv(
+        resource_filename(
+            "morphology_workflows",
+            "_data/default_placeholders.csv",
+        ),
+        header=[0, 1],
+    )
+    expected[("Metadata", "Region")] = region
+    expected[("Metadata", "Mtype")] = mtype
 
     pd.testing.assert_frame_equal(result, expected)
