@@ -45,7 +45,7 @@ class Placeholders(TagResultOutputMixin, WorkflowTask):
     def run(self):
         input_dir = self.input_dir or self.input()["morphologies"]
         df = compute_placeholders(input_dir, self.region, self.mtype, self.config)
-        df.to_csv(self.output().path)
+        df.to_csv(self.output().path, index=False)
 
     def output(self):
         return TaggedOutputLocalTarget(
