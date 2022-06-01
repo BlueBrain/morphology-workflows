@@ -27,6 +27,7 @@ from neurom.check import morphology_checks as nc
 from neurom.core.morphology import iter_sections
 from neurom.core.soma import SomaSinglePoint
 from neurom.geom import bounding_box
+from neuror.sanitize import _ZERO_LENGTH
 from neuror.sanitize import CorruptedMorphology
 from neuror.sanitize import annotate_neurolucida
 from neuror.sanitize import fix_points_in_soma
@@ -144,36 +145,32 @@ def sanitize(row, data_dir):
     return ValidationResult(is_valid=True, morph_path=new_morph_path)
 
 
+def _center_root_points(morph):
+    root_points = np.array([section.points[0, COLS.XYZ] for section in morph.root_sections])
+    center = np.mean(root_points, axis=0)
+    dists = np.linalg.norm(root_points - center, axis=1)
+    radius = max(1.0, dists.mean())
+    return center, radius, root_points
+
+
 def _add_soma(morph, soma_type="spherical"):
     """Add a mock soma centered around first points with radius mean distance to them."""
     if len(morph.soma.points) == 0:
-        _init_points = []
-        for section in morph.root_sections:
-            _init_points.append(section.points[0])
-        _init_points = np.array(_init_points)
-
-        # Compute center
-        center = np.mean(_init_points[:, COLS.XYZ], axis=0)
-
+        center, radius, root_points = _center_root_points(morph)
         if soma_type == "spherical":
-            # Compute radius
-            dists = np.linalg.norm(_init_points - center, axis=1)
-            radius = max(1.0, dists.mean())
 
             morph.soma.points = [center.tolist()]
             morph.soma.diameters = [2.0 * radius]
             L.info("Adding a spherical mock soma at %s of radius %s.", center, radius)
         elif soma_type == "contour":
             # Order contour points by polar angle
-            relative_pts = _init_points - center
+            relative_pts = root_points - center
             angles = np.arctan(relative_pts[:, COLS.Y] / relative_pts[:, COLS.X])
             angle_order = np.argsort(angles)
 
-            morph.soma.points = _init_points[angle_order]
-            morph.soma.diameters = np.zeros(len(_init_points), dtype=np.float)
-            L.info(
-                "Adding a contour mock soma around %s with %s points.", center, len(_init_points)
-            )
+            morph.soma.points = root_points[angle_order]
+            morph.soma.diameters = np.zeros(len(root_points), dtype=np.float)
+            L.info("Adding a contour mock soma around %s with %s points.", center, len(root_points))
 
     return morph
 
@@ -216,12 +213,105 @@ def _add_stub_axon(morph, length=100, diameter=1.0):
     morph.append_root_section(stub, SectionType.axon)
 
 
+def _children_direction(
+    section,
+    min_length=_ZERO_LENGTH,
+    starting_point=None,
+    remove_intermediate_pts=True,
+):
+    """Compute the mean direction of children of a given section."""
+    if starting_point is None:
+        starting_point = section.points[-1]
+
+    direction = np.zeros(3)
+    for child in section.children:
+        child_direction_norm = 0
+        imax = 0
+        for i in range(1, len(child.points)):
+            child_direction = child.points[i] - starting_point
+            child_direction_norm = np.linalg.norm(child_direction)
+            if child_direction_norm >= min_length:
+                child_direction /= child_direction_norm
+                imax = i
+                break
+
+        if child_direction_norm < min_length:
+            # If the child section is too small, then the direction is derived from the
+            # grand-children
+            child_direction = _children_direction(child, min_length, starting_point=starting_point)
+
+        if remove_intermediate_pts and imax > 1:
+            # Remove intermediate points that are in the min_length redius
+            imax = min(len(child.points) - 1, imax)
+            child.points = np.vstack([child.points[0], child.points[imax:]])
+            if len(child.diameters) > 0:
+                child.diameters = np.vstack([child.diameters[0], child.diameters[imax:]])
+            if len(child.perimeters) > 0:
+                child.perimeters = np.vstack([child.perimeters[0], child.perimeters[imax:]])
+        direction += child_direction
+
+    direction /= np.linalg.norm(direction)
+
+    return direction
+
+
+def _move_children(section, shift, min_length=_ZERO_LENGTH):
+    """Move the children of a given section by a given shift."""
+    for child in section.children:
+        child_norm = np.linalg.norm(child.points[0] - child.points[-1])
+        child_points = child.points
+        child_points[0] += shift
+        if child_norm < min_length:
+            try:
+                child_points[1] += shift
+            except IndexError:
+                # A section can have only 1 point!
+                pass
+            _move_children(child, shift, min_length)
+        child.points = child_points
+
+
+def fix_root_section(morph, min_length=_ZERO_LENGTH):
+    """Ensures that each neurite has a root section with non-zero length."""
+    if min_length is None:
+        return
+
+    to_delete = []
+
+    for root_section in morph.root_sections:
+        root_section_points = root_section.points
+        if (
+            len(root_section_points) == 2
+            and np.linalg.norm(np.diff(root_section_points[:2], axis=0)[0]) < min_length
+        ):
+            if root_section.children:
+                direction = _children_direction(root_section, min_length, root_section.points[-1])
+            else:
+                # In some cases a 0-length section has no child so the direction has NaN coordinates
+                direction = root_section_points[0] - morph.soma.center
+                if (direction == 0).all():
+                    # If the direction is still not correct, the section is deleted
+                    to_delete.append(root_section)
+                    continue
+                direction /= np.linalg.norm(direction)
+
+            root_section_points[1] = root_section_points[0] + direction * min_length
+            shift = root_section_points[1] - root_section.points[1]
+            root_section.points = root_section_points
+
+            _move_children(root_section, shift, min_length)
+
+    for sec in to_delete:
+        morph.delete_section(sec)
+
+
 def check_neurites(
     row,
     data_dir,
     axon_n_section_min=5,
     mock_soma_type="spherical",
     ensure_stub_axon=False,
+    min_length_first_section=_ZERO_LENGTH,
 ):
     """Check which neurites are present, add soma if missing and mock_soma_type is not None."""
     new_morph_path = data_dir / Path(row.morph_path).name
@@ -231,6 +321,7 @@ def check_neurites(
     if ensure_stub_axon:
         if not _has_axon(row.morph_path, n_section_min=0):
             _add_stub_axon(morph)
+    fix_root_section(morph, min_length_first_section)
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(row.morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(row.morph_path))

@@ -20,8 +20,7 @@ simple,True,0,No cut leaves found,,out_annotated/CollectCurated/data/simple.asc,
 simple-with-font,True,0,No cut leaves found,,out_annotated/CollectCurated/data/simple-with-font.asc,,,
 simple-with-image-coord,True,0,No cut leaves found,,out_annotated/CollectCurated/data/simple-with-image-coord.asc,,,
 simple2,True,0,No cut leaves found,,out_annotated/CollectCurated/data/simple2.asc,,,
-soma_cylinders,False,1,,"Traceback  ... ValueError: Can not search for cut leaves for a neuron with no neurites.
-",out_annotated/CollectCurated/data/soma_cylinders.swc,,,
+soma_cylinders,True,0,No cut leaves found,,out_annotated/CollectCurated/data/soma_cylinders.swc,,,
 soma_multiple_frustums,False,1,,"Traceback  ... ValueError: Can not search for cut leaves for a neuron with no neurites.
 ",out_annotated/CollectCurated/data/soma_multiple_frustums.swc,,,
 soma_single_frustum,False,1,,"Traceback  ... ValueError: Can not search for cut leaves for a neuron with no neurites.
