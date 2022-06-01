@@ -146,7 +146,7 @@ def sanitize(row, data_dir):
 
 
 def _center_root_points(morph):
-    root_points = np.array([section.points[0, COLS.XYZ] for section in morph.root_sections])
+    root_points = [section.points[0, COLS.XYZ] for section in morph.root_sections]
     center = np.mean(root_points, axis=0)
     dists = np.linalg.norm(root_points - center, axis=1)
     radius = max(1.0, dists.mean())
@@ -213,6 +213,7 @@ def _add_stub_axon(morph, length=100, diameter=1.0):
     morph.append_root_section(stub, SectionType.axon)
 
 
+<<<<<<< HEAD
 def _children_direction(
     section,
     min_length=_ZERO_LENGTH,
@@ -325,6 +326,20 @@ def fix_root_section(morph, min_length=_ZERO_LENGTH):
 
     for sec in to_delete:
         morph.delete_section(sec)
+=======
+def _has_root_section(morph, len_first_section=1.0, min_length=1e-8):
+    """Ensures that each neurite has a root section with non-zero length."""
+    for root_section in morph.root_sections:
+        if np.linalg.norm(np.diff(root_section.points, axis=0)[:2], axis=1)[0] < min_length:
+            print("before", root_section.points)
+            center = _center_root_points(morph)[0]
+            direction = center - root_section.points[0]
+            direction /= np.linalg.norm(direction)
+            points = root_section.points
+            points[0] += direction * len_first_section
+            root_section.points = points
+            print("after", root_section.points)
+>>>>>>> 4ae0ad6 (add check root section)
 
 
 def check_neurites(
@@ -343,9 +358,13 @@ def check_neurites(
     if ensure_stub_axon:
         if not _has_axon(row.morph_path, n_section_min=0):
             _add_stub_axon(morph)
+<<<<<<< HEAD
 
     fix_root_section(morph, min_length_first_section)
 
+=======
+    _has_root_section(morph)
+>>>>>>> 4ae0ad6 (add check root section)
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(row.morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(row.morph_path))
