@@ -122,6 +122,13 @@ class CheckNeurites(ElementValidationTask):
         description=":bool: Add a stub axon if there is no axon on the morphology",
         default=False,
     )
+    min_length_first_section = luigi.BoolParameter(
+        description=(
+            ":bool: Resize the first section to be at least of the given size (do nothing if None "
+            "is given)"
+        ),
+        default=None,
+    )
 
     def kwargs(self):
         """ """
@@ -129,6 +136,8 @@ class CheckNeurites(ElementValidationTask):
             "mock_soma_type": self.mock_soma_type,
             "axon_n_section_min": self.axon_n_section_min,
             "ensure_stub_axon": self.ensure_stub_axon,
+            "min_length_first_section": self.min_length_first_section,
+            "tol_length_first_section": self.min_length_first_section,
         }
 
     def inputs(self):

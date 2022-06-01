@@ -212,19 +212,78 @@ def _add_stub_axon(morph, length=100, diameter=1.0):
     morph.append_root_section(stub, SectionType.axon)
 
 
-def _has_root_section(morph, len_first_section=1.0, min_length=1e-8):
+def _children_direction(
+    section,
+    min_length=1e-8,
+    starting_point=None,
+    remove_intermediate_pts=True,
+):
+    """Compute the mean direction of children of a given section."""
+    if starting_point is None:
+        starting_point = section.points[-1]
+
+    direction = np.zeros(3)
+    for child in section.children:
+        child_direction_norm = 0
+        imax = 0
+        for i in range(1, len(child.points)):
+            child_direction = child.points[i] - starting_point
+            child_direction_norm = np.linalg.norm(child_direction)
+            if child_direction_norm >= min_length:
+                child_direction /= child_direction_norm
+                imax = i
+                break
+
+        if child_direction_norm < min_length:
+            # If the child section is too small, then the direction is derived from the
+            # grand-children
+            child_direction = _children_direction(child, min_length, starting_point=starting_point)
+
+        if remove_intermediate_pts and imax > 1:
+            # Remove intermediate points that are in the min_length redius
+            imax = min(len(child.points) - 1, imax)
+            child.points = np.vstack([child.points[0], child.points[imax:]])
+            if len(child.diameters) > 0:
+                child.diameters = np.vstack([child.diameters[0], child.diameters[imax:]])
+            if len(child.perimeters) > 0:
+                child.perimeters = np.vstack([child.perimeters[0], child.perimeters[imax:]])
+        direction += child_direction
+
+    direction /= np.linalg.norm(direction)
+
+    return direction
+
+
+def _move_children(section, shift, min_length=1e-8):
+    """Move the children of a given section by a given shift."""
+    for child in section.children:
+        child_norm = np.linalg.norm(child.points[0] - child.points[-1])
+        child_points = child.points
+        child_points[0] += shift
+        if child_norm < min_length:
+            child_points[1] += shift
+            _move_children(child, shift, min_length)
+        child.points = child_points
+
+
+def fix_root_section(morph, len_first_section=1.0, min_length=1e-8):
     """Ensures that each neurite has a root section with non-zero length."""
+    if len_first_section is None:
+        return
+
     for root_section in morph.root_sections:
-        if np.linalg.norm(np.diff(root_section.points[:2], axis=0)[0]) < min_length:
-            direction = np.zeros(3)
-            for child in root_section.children:
-                _direction = np.diff(child.points[:2], axis=0)[0]
-                _direction /= np.linalg.norm(_direction)
-                direction += _direction
-            direction /= np.linalg.norm(direction)
-            points = root_section.points
-            points[0] -= direction * len_first_section
-            root_section.points = points
+        root_section_points = root_section.points
+        if (
+            len(root_section_points) == 2
+            and np.linalg.norm(np.diff(root_section_points[:2], axis=0)[0]) < min_length
+        ):
+            direction = _children_direction(root_section, min_length, root_section.points[-1])
+
+            root_section_points[1] = root_section_points[0] + direction * len_first_section
+            shift = root_section_points[1] - root_section.points[1]
+            root_section.points = root_section_points
+
+            _move_children(root_section, shift, min_length)
 
 
 def check_neurites(
@@ -233,6 +292,8 @@ def check_neurites(
     axon_n_section_min=5,
     mock_soma_type="spherical",
     ensure_stub_axon=False,
+    min_length_first_section=0.1,
+    tol_length_first_section=1e-8,
 ):
     """Check which neurites are present, add soma if missing and mock_soma_type is not None."""
     new_morph_path = data_dir / Path(row.morph_path).name
@@ -242,7 +303,7 @@ def check_neurites(
     if ensure_stub_axon:
         if not _has_axon(row.morph_path, n_section_min=0):
             _add_stub_axon(morph)
-    _has_root_section(morph)
+    fix_root_section(morph, min_length_first_section, tol_length_first_section)
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(row.morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(row.morph_path))
