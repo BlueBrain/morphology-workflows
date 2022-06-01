@@ -215,15 +215,16 @@ def _add_stub_axon(morph, length=100, diameter=1.0):
 def _has_root_section(morph, len_first_section=1.0, min_length=1e-8):
     """Ensures that each neurite has a root section with non-zero length."""
     for root_section in morph.root_sections:
-        if np.linalg.norm(np.diff(root_section.points, axis=0)[:2], axis=1)[0] < min_length:
-            print("before", root_section.points)
-            center = _center_root_points(morph)[0]
-            direction = center - root_section.points[0]
+        if np.linalg.norm(np.diff(root_section.points[:2], axis=0)[0]) < min_length:
+            direction = np.zeros(3)
+            for child in root_section.children:
+                _direction = np.diff(child.points[:2], axis=0)[0]
+                _direction /= np.linalg.norm(_direction)
+                direction += _direction
             direction /= np.linalg.norm(direction)
             points = root_section.points
-            points[0] += direction * len_first_section
+            points[0] -= direction * len_first_section
             root_section.points = points
-            print("after", root_section.points)
 
 
 def check_neurites(
