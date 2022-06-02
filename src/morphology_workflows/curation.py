@@ -27,6 +27,7 @@ from neurom.check import morphology_checks as nc
 from neurom.core.morphology import iter_sections
 from neurom.core.soma import SomaSinglePoint
 from neurom.geom import bounding_box
+from neuror.sanitize import _ZERO_LENGTH
 from neuror.sanitize import CorruptedMorphology
 from neuror.sanitize import annotate_neurolucida
 from neuror.sanitize import fix_points_in_soma
@@ -214,7 +215,7 @@ def _add_stub_axon(morph, length=100, diameter=1.0):
 
 def _children_direction(
     section,
-    min_length=1e-8,
+    min_length=_ZERO_LENGTH,
     starting_point=None,
     remove_intermediate_pts=True,
 ):
@@ -254,21 +255,25 @@ def _children_direction(
     return direction
 
 
-def _move_children(section, shift, min_length=1e-8):
+def _move_children(section, shift, min_length=_ZERO_LENGTH):
     """Move the children of a given section by a given shift."""
     for child in section.children:
         child_norm = np.linalg.norm(child.points[0] - child.points[-1])
         child_points = child.points
         child_points[0] += shift
         if child_norm < min_length:
-            child_points[1] += shift
+            try:
+                child_points[1] += shift
+            except IndexError:
+                # A section can have only 1 point!
+                pass
             _move_children(child, shift, min_length)
         child.points = child_points
 
 
-def fix_root_section(morph, len_first_section=1.0, min_length=1e-8):
+def fix_root_section(morph, min_length=_ZERO_LENGTH):
     """Ensures that each neurite has a root section with non-zero length."""
-    if len_first_section is None:
+    if min_length is None:
         return
 
     for root_section in morph.root_sections:
@@ -279,7 +284,7 @@ def fix_root_section(morph, len_first_section=1.0, min_length=1e-8):
         ):
             direction = _children_direction(root_section, min_length, root_section.points[-1])
 
-            root_section_points[1] = root_section_points[0] + direction * len_first_section
+            root_section_points[1] = root_section_points[0] + direction * min_length
             shift = root_section_points[1] - root_section.points[1]
             root_section.points = root_section_points
 
@@ -292,8 +297,7 @@ def check_neurites(
     axon_n_section_min=5,
     mock_soma_type="spherical",
     ensure_stub_axon=False,
-    min_length_first_section=0.1,
-    tol_length_first_section=1e-8,
+    min_length_first_section=_ZERO_LENGTH,
 ):
     """Check which neurites are present, add soma if missing and mock_soma_type is not None."""
     new_morph_path = data_dir / Path(row.morph_path).name
@@ -303,7 +307,7 @@ def check_neurites(
     if ensure_stub_axon:
         if not _has_axon(row.morph_path, n_section_min=0):
             _add_stub_axon(morph)
-    fix_root_section(morph, min_length_first_section, tol_length_first_section)
+    fix_root_section(morph, min_length_first_section)
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(row.morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(row.morph_path))

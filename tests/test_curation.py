@@ -158,7 +158,7 @@ class TestFixRootSections:
             ],
         )
 
-        curation.fix_root_section(morph, len_first_section=0.5, min_length=0.1)
+        curation.fix_root_section(morph, min_length=0.5)
 
         assert_array_almost_equal(
             morph.points,
@@ -199,7 +199,7 @@ class TestFixRootSections:
             ],
         )
 
-        curation.fix_root_section(morph, len_first_section=0.5, min_length=0.1)
+        curation.fix_root_section(morph, min_length=0.5)
 
         assert_array_almost_equal(
             morph.points,
@@ -244,7 +244,7 @@ class TestFixRootSections:
             ],
         )
 
-        curation.fix_root_section(morph, len_first_section=0.5, min_length=0.1)
+        curation.fix_root_section(morph, min_length=0.5)
 
         assert_array_almost_equal(
             morph.points,
@@ -263,7 +263,7 @@ class TestFixRootSections:
         )
 
     def test_three_small_sections(self):
-        """The thre first sections are too small."""
+        """The three first sections are too small."""
         morph = create_morphology(
             """
             1 1 0 0 0 1. -1
@@ -299,24 +299,79 @@ class TestFixRootSections:
             ],
         )
 
-        curation.fix_root_section(morph, len_first_section=0.5, min_length=0.1)
+        curation.fix_root_section(morph, min_length=0.5)
 
         assert_array_almost_equal(
             morph.points,
             [
                 [1.0, 0.0, 0.0, 1.0],
-                [1.4732283, 0.1614155, 0.0, 1.0],
-                [1.4732283, 0.1614155, 0.0, 1.0],
-                [1.5232284, 0.1614155, 0.0, 1.0],
-                [1.5232284, 0.1614155, 0.0, 1.0],
-                [1.5732284, 0.1614155, 0.0, 1.0],
-                [1.5732284, 0.1614155, 0.0, 1.0],
+                [1.4679317, 0.17618132, 0.0, 1.0],
+                [1.4679317, 0.17618132, 0.0, 1.0],
+                [1.5179318, 0.17618132, 0.0, 1.0],
+                [1.5179318, 0.17618132, 0.0, 1.0],
+                [1.5679318, 0.17618132, 0.0, 1.0],
+                [1.5679318, 0.17618132, 0.0, 1.0],
                 [3.0, 0.5, 0.0, 1.0],
-                [1.5732284, 0.1614155, 0.0, 1.0],
+                [1.5679318, 0.17618132, 0.0, 1.0],
                 [3.0, 0.0, 0.0, 1.0],
-                [1.5232284, 0.1614155, 0.0, 1.0],
+                [1.5179318, 0.17618132, 0.0, 1.0],
                 [3.0, 0.75, 0.0, 1.0],
-                [1.4732283, 0.1614155, 0.0, 1.0],
+                [1.4679317, 0.17618132, 0.0, 1.0],
+                [3.0, 1.0, 0.0, 1.0],
+            ],
+        )
+
+    def test_three_zero_sections(self):
+        """The three first sections have 0 lengths."""
+        morph = create_morphology(
+            """
+            1 1 0 0 0 1. -1
+            2 2 1. 0 0 1. 1
+            3 2 1. 0 0 1. 2
+            4 2 1. 0 0 1. 3
+            5 2 1. 0 0 1. 4
+            6 2 3 0.5 0 1. 5
+            7 2 3 0 0 1. 5
+            8 2 3 0.75 0 1. 4
+            9 2 3 1 0 1. 3
+            """,
+            "swc",
+        )
+
+        assert_array_almost_equal(
+            morph.points,
+            [
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [3.0, 0.5, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [3.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [3.0, 0.75, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [3.0, 1.0, 0.0, 1.0],
+            ],
+        )
+
+        curation.fix_root_section(morph)
+
+        assert_array_almost_equal(
+            morph.points,
+            [
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0000938, 3.4490615e-05, 0.0, 1.0],
+                [1.0000938, 3.4490615e-05, 0.0, 1.0],
+                [1.0000938, 3.4490615e-05, 0.0, 1.0],
+                [1.0000938, 3.4490615e-05, 0.0, 1.0],
+                [3.0, 5.0e-01, 0.0, 1.0],
+                [1.0000938, 3.4490615e-05, 0.0, 1.0],
+                [3.0, 0.0, 0.0, 1.0],
+                [1.0000938, 3.4490615e-05, 0.0, 1.0],
+                [3.0, 7.5e-01, 0.0, 1.0],
+                [1.0000938, 3.4490615e-05, 0.0, 1.0],
                 [3.0, 1.0, 0.0, 1.0],
             ],
         )
