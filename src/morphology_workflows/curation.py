@@ -276,19 +276,33 @@ def fix_root_section(morph, min_length=_ZERO_LENGTH):
     if min_length is None:
         return
 
+    to_delete = []
+
     for root_section in morph.root_sections:
         root_section_points = root_section.points
         if (
             len(root_section_points) == 2
             and np.linalg.norm(np.diff(root_section_points[:2], axis=0)[0]) < min_length
         ):
-            direction = _children_direction(root_section, min_length, root_section.points[-1])
+            if root_section.children:
+                direction = _children_direction(root_section, min_length, root_section.points[-1])
+            else:
+                # In some cases a 0-length section has no child so the direction has NaN coordinates
+                direction = root_section_points[0] - morph.soma.center
+                if (direction == 0).all():
+                    # If the direction is still not correct, the section is deleted
+                    to_delete.append(root_section)
+                    continue
+                direction /= np.linalg.norm(direction)
 
             root_section_points[1] = root_section_points[0] + direction * min_length
             shift = root_section_points[1] - root_section.points[1]
             root_section.points = root_section_points
 
             _move_children(root_section, shift, min_length)
+
+    for sec in to_delete:
+        morph.delete_section(sec)
 
 
 def check_neurites(

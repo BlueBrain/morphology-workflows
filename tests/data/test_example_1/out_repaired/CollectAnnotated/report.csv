@@ -20,5 +20,6 @@ simple,True,0,,,out_repaired/CollectAnnotated/data/simple.asc,False,False,True,,
 simple-with-font,True,0,,,out_repaired/CollectAnnotated/data/simple-with-font.asc,False,False,True,,
 simple-with-image-coord,True,0,,,out_repaired/CollectAnnotated/data/simple-with-image-coord.asc,False,False,True,,
 simple2,True,0,,,out_repaired/CollectAnnotated/data/simple2.asc,False,False,True,,
+soma_cylinders,True,0,,,out_repaired/CollectAnnotated/data/soma_cylinders.swc,False,False,False,,
 spine,True,0,,,out_repaired/CollectAnnotated/data/spine.asc,False,False,True,,
 three_point_soma,True,0,,,out_repaired/CollectAnnotated/data/three_point_soma.swc,True,False,True,,out_annotated/ApicalPoint/data/three_point_soma.yaml
