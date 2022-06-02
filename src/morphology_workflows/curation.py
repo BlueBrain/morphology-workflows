@@ -146,7 +146,7 @@ def sanitize(row, data_dir):
 
 
 def _center_root_points(morph):
-    root_points = [section.points[0, COLS.XYZ] for section in morph.root_sections]
+    root_points = np.array([section.points[0, COLS.XYZ] for section in morph.root_sections])
     center = np.mean(root_points, axis=0)
     dists = np.linalg.norm(root_points - center, axis=1)
     radius = max(1.0, dists.mean())
