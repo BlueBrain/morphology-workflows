@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.1](https://github.com/BlueBrain/morphology-workflows/compare/0.3.0..0.3.1)
+
+> 16 June 2022
+
+- Ensure 0-length sections are always fixed, even if the min length is too small (Adrien Berchet - [#35](https://github.com/BlueBrain/morphology-workflows/pull/35))
+
 ## [0.3.0](https://github.com/BlueBrain/morphology-workflows/compare/0.2.0..0.3.0)
 
 > 14 June 2022
