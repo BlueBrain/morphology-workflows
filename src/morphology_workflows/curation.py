@@ -271,6 +271,10 @@ def _move_children(section, shift, min_length=_ZERO_LENGTH):
         child.points = child_points
 
 
+def _float_formatter(x):
+    return str(x)
+
+
 def fix_root_section(morph, min_length=_ZERO_LENGTH):
     """Ensures that each neurite has a root section with non-zero length."""
     if min_length is None:
@@ -295,7 +299,25 @@ def fix_root_section(morph, min_length=_ZERO_LENGTH):
                     continue
                 direction /= np.linalg.norm(direction)
 
-            root_section_points[1] = root_section_points[0] + direction * min_length
+            new_point = (root_section_points[0] + direction * min_length).astype(
+                root_section_points.dtype
+            )
+            if (new_point == root_section_points[1]).all():
+                # If the point was not moved because min_length is too small for the current
+                # precision, the smallest movement is ensured
+                _formatter = {"float": _float_formatter}
+
+                new_point = np.nextafter(
+                    root_section_points[1],
+                    root_section_points[1] * (1 + direction),
+                    dtype=root_section_points.dtype,
+                )
+                L.debug(
+                    "The min_length was too small to move the point %s so it was moved to %s",
+                    np.array2string(root_section_points[1], separator=", ", formatter=_formatter),
+                    np.array2string(new_point, separator=", ", formatter=_formatter),
+                )
+            root_section_points[1] = new_point
             shift = root_section_points[1] - root_section.points[1]
             root_section.points = root_section_points
 
