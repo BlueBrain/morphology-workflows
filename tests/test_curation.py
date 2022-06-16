@@ -437,3 +437,51 @@ class TestFixRootSections:
                 [3.0, 0.0, 0.0, 1.0],
             ],
         )
+
+    def test_too_small_min_length(self, caplog):
+        """The min length is too small compared to the precision to move a point."""
+        morph = create_morphology(
+            """
+            1 1 0 0 0 1. -1
+            2 2 1 0 0 1. 1
+            3 2 1 0 0 1. 2
+            4 2 2 0 0 1. 3
+            5 2 3 0 0 1. 3
+            """,
+            "swc",
+        )
+
+        assert_array_almost_equal(
+            morph.points,
+            [
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [2.0, 0.0, 0.0, 1.0],
+                [1.0, 0.0, 0.0, 1.0],
+                [3.0, 0.0, 0.0, 1.0],
+            ],
+        )
+
+        caplog.clear()
+        with caplog.at_level("DEBUG"):
+            curation.fix_root_section(morph, min_length=1e-9)
+
+        assert_array_almost_equal(
+            morph.points,
+            [
+                [1.0, 0.0, 0.0, 1.0],
+                [1.0000001, 0.0, 0.0, 1.0],
+                [1.0000001, 0.0, 0.0, 1.0],
+                [2.0, 0.0, 0.0, 1.0],
+                [1.0000001, 0.0, 0.0, 1.0],
+                [3.0, 0.0, 0.0, 1.0],
+            ],
+        )
+
+        assert caplog.messages == [
+            (
+                "The min_length was too small to move the point [1.0, 0.0, 0.0] so "
+                "it was moved to [1.0000001, 0.0, 0.0]"
+            )
+        ]
