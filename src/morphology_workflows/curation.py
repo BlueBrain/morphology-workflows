@@ -145,36 +145,32 @@ def sanitize(row, data_dir):
     return ValidationResult(is_valid=True, morph_path=new_morph_path)
 
 
+def _center_root_points(morph):
+    root_points = np.array([section.points[0, COLS.XYZ] for section in morph.root_sections])
+    center = np.mean(root_points, axis=0)
+    dists = np.linalg.norm(root_points - center, axis=1)
+    radius = max(1.0, dists.mean())
+    return center, radius, root_points
+
+
 def _add_soma(morph, soma_type="spherical"):
     """Add a mock soma centered around first points with radius mean distance to them."""
     if len(morph.soma.points) == 0:
-        _init_points = []
-        for section in morph.root_sections:
-            _init_points.append(section.points[0])
-        _init_points = np.array(_init_points)
-
-        # Compute center
-        center = np.mean(_init_points[:, COLS.XYZ], axis=0)
+        center, radius, root_points = _center_root_points(morph)
 
         if soma_type == "spherical":
-            # Compute radius
-            dists = np.linalg.norm(_init_points - center, axis=1)
-            radius = max(1.0, dists.mean())
-
             morph.soma.points = [center.tolist()]
             morph.soma.diameters = [2.0 * radius]
             L.info("Adding a spherical mock soma at %s of radius %s.", center, radius)
         elif soma_type == "contour":
             # Order contour points by polar angle
-            relative_pts = _init_points - center
+            relative_pts = root_points - center
             angles = np.arctan(relative_pts[:, COLS.Y] / relative_pts[:, COLS.X])
             angle_order = np.argsort(angles)
 
-            morph.soma.points = _init_points[angle_order]
-            morph.soma.diameters = np.zeros(len(_init_points), dtype=np.float)
-            L.info(
-                "Adding a contour mock soma around %s with %s points.", center, len(_init_points)
-            )
+            morph.soma.points = root_points[angle_order]
+            morph.soma.diameters = np.zeros(len(root_points), dtype=np.float)
+            L.info("Adding a contour mock soma around %s with %s points.", center, len(root_points))
 
     return morph
 
@@ -347,9 +343,7 @@ def check_neurites(
     if ensure_stub_axon:
         if not _has_axon(row.morph_path, n_section_min=0):
             _add_stub_axon(morph)
-
     fix_root_section(morph, min_length_first_section)
-
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(row.morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(row.morph_path))
