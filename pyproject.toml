@@ -22,6 +22,7 @@ disable=[
 	"no-member",
 	"too-many-ancestors",
 	"too-many-lines",
+    "unspecified-encoding",
 ]
 
 [tool.pylint.format]

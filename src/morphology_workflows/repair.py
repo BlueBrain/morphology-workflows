@@ -12,6 +12,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
 from morph_tool.spatial import point_to_section_segment
+from morph_tool.converter import convert
+from morph_tool.exceptions import MorphToolException
 from morphio.mut import Morphology
 from neurom import load_morphology
 from neurom import view
@@ -319,6 +321,16 @@ def make_collage(
                 plt.close()
 
 
+def _convert(input_file, output_file):
+    """Handles crashes in convertion of writing of morphologies."""
+
+    try:
+        convert(input_file, output_file)
+        return output_file
+    except MorphToolException:
+        return "cannot save"
+
+
 def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extensions):
     """Make morphology release."""
     for extension in extensions:
@@ -336,11 +348,19 @@ def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extension
 
         _m = []
         for name in df.loc[df["is_valid"]].index:
+
+            layer = "no_layer"
+            mtype = "no_mtype"
+            if isinstance(df.loc[name, "mtype"], str):
+                mtype = df.loc[name, "mtype"]
+                if len(df.loc[name, "mtype"]) > 1:
+                    layer = df.loc[name, "mtype"][1]
+
             _m.append(
                 MorphInfo(
                     name=name,
-                    mtype=df.loc[name, "mtype"],
-                    layer=df.loc[name, "mtype"][1],
+                    mtype=mtype,
+                    layer=layer,
                     use_dendrite=df.loc[name, "has_basal"],
                     use_axon=df.loc[name, "has_axon"],
                 )
@@ -351,32 +371,42 @@ def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extension
                     str(_zero_diameter_path / Path(df.loc[name, "zero_diameter_morph_path"]).stem)
                     + extension
                 )
-                Morphology(df.loc[name, "zero_diameter_morph_path"]).write(
-                    zero_diameter_release_path
+
+                df.loc[name, f"zero_diameter_release_morph_path_{extension[1:]}"] = _convert(
+                    df.loc[name, "zero_diameter_morph_path"], zero_diameter_release_path
                 )
-                df.loc[name, "zero_diameter_release_morph_path"] = zero_diameter_release_path
+
             if _unravel_path is not None:
                 unravel_release_path = (
                     str(_unravel_path / Path(df.loc[name, "unravel_morph_path"]).stem) + extension
                 )
-                Morphology(df.loc[name, "unravel_morph_path"]).write(unravel_release_path)
-                df.loc[name, "unravel_release_morph_path"] = unravel_release_path
+                df.loc[name, f"unravel_release_morph_path_{extension[1:]}"] = _convert(
+                    df.loc[name, "unravel_morph_path"], unravel_release_path
+                )
+
             if _repair_path is not None:
                 repair_release_path = (
                     str(_repair_path / Path(df.loc[name, "repair_morph_path"]).stem) + extension
                 )
-                Morphology(df.loc[name, "repair_morph_path"]).write(repair_release_path)
-                df.loc[name, "repair_release_morph_path"] = repair_release_path
+                df.loc[name, f"repair_release_morph_path_{extension[1:]}"] = _convert(
+                    df.loc[name, "repair_morph_path"], repair_release_path
+                )
 
         db = MorphDB(_m)
         if _zero_diameter_path is not None:
             db.write(_zero_diameter_path / "neurondb.xml")
-            df.loc[df["is_valid"], "zero_diameter_morph_db_path"] = (
+            df.loc[df["is_valid"], f"zero_diameter_morph_db_path_{extension[:1]}"] = (
                 _zero_diameter_path / "neurondb.xml"
             )
+
         if _unravel_path is not None:
             db.write(_unravel_path / "neurondb.xml")
-            df.loc[df["is_valid"], "unravel_morph_db_path"] = _unravel_path / "neurondb.xml"
+            df.loc[df["is_valid"], f"unravel_morph_db_path_{extension[1:]}"] = (
+                _unravel_path / "neurondb.xml"
+            )
+
         if _repair_path is not None:
             db.write(_repair_path / "neurondb.xml")
-            df.loc[df["is_valid"], "repair_morph_db_path"] = _repair_path / "neurondb.xml"
+            df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
+                _repair_path / "neurondb.xml"
+            )

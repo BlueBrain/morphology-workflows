@@ -169,14 +169,15 @@ class MakeRelease(SetValidationTask):
     )
     extensions = luigi.ListParameter(default=[".asc", ".h5"])
 
-    output_columns = {
-        "zero_diameter_morph_db_path": None,
-        "unravel_morph_db_path": None,
-        "repair_morph_db_path": None,
-        "zero_diameter_release_morph_path": None,
-        "unravel_release_morph_path": None,
-        "repair_release_morph_path": None,
-    }
+    for extension in extensions:
+        output_columns = {
+            f"zero_diameter_morph_db_path_{extension[1:]}": None,
+            f"unravel_morph_db_path_{extension[1:]}": None,
+            f"repair_morph_db_path_{extension[1:]}": None,
+            f"zero_diameter_release_morph_path_{extension[1:]}": None,
+            f"unravel_release_morph_path_{extension[1:]}": None,
+            f"repair_release_morph_path_{extension[1:]}": None,
+        }
 
     validation_function = make_release
 

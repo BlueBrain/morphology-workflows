@@ -157,7 +157,6 @@ def _add_soma(morph, soma_type="spherical"):
     """Add a mock soma centered around first points with radius mean distance to them."""
     if len(morph.soma.points) == 0:
         center, radius, root_points = _center_root_points(morph)
-
         if soma_type == "spherical":
             morph.soma.points = [center.tolist()]
             morph.soma.diameters = [2.0 * radius]
@@ -633,7 +632,7 @@ def plot_morphology(row, data_dir, with_plotly=True, realistic_diameters=True):
     plot_path = (data_dir / row.name).with_suffix(".pdf")
     with PdfPages(plot_path) as pdf:
         for plane, axis in {"xy": [0, 1], "xz": [0, 2], "yz": [1, 2]}.items():
-            plt.figure(figsize=(6, 6))
+            plt.figure()
             view.plot_morph(
                 neuron,
                 plt.gca(),
