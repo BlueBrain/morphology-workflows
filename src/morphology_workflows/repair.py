@@ -331,6 +331,17 @@ def _convert(input_file, output_file):
         return "cannot save"
 
 
+def _get_layer_mtype(mtype_input):
+    """Helper to get layer from mtype, if mtype exists as a str."""
+    layer = "no_layer"
+    mtype = "no_mtype"
+    if isinstance(mtype_input, str):
+        mtype = mtype_input
+        if len(mtype_input) > 1:
+            layer = mtype_input[1]
+    return mtype, layer
+
+
 def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extensions):
     """Make morphology release."""
     for extension in extensions:
@@ -349,13 +360,7 @@ def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extension
         _m = []
         for name in df.loc[df["is_valid"]].index:
 
-            layer = "no_layer"
-            mtype = "no_mtype"
-            if isinstance(df.loc[name, "mtype"], str):
-                mtype = df.loc[name, "mtype"]
-                if len(df.loc[name, "mtype"]) > 1:
-                    layer = df.loc[name, "mtype"][1]
-
+            mtype, layer = _get_layer_mtype(df.loc[name, "mtype"])
             _m.append(
                 MorphInfo(
                     name=name,
