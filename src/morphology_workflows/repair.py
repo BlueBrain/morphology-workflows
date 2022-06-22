@@ -9,11 +9,11 @@ import numpy as np
 from data_validation_framework.result import ValidationResult
 from diameter_synthesis.main import diametrize_single_neuron
 from matplotlib.backends.backend_pdf import PdfPages
+from morph_tool.converter import convert
+from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
 from morph_tool.spatial import point_to_section_segment
-from morph_tool.converter import convert
-from morph_tool.exceptions import MorphToolException
 from morphio.mut import Morphology
 from neurom import load_morphology
 from neurom import view
