@@ -9,18 +9,19 @@ with open("README.md", encoding="utf-8") as f:
 reqs = [
     "data-validation-framework>=0.3.0",
     "diameter-synthesis>=0.2.5",
+    "Jinja2<3.1",
     "luigi",
     "luigi-tools>=0.0.7",
     # Markupsafe dependency is only due to an incompatibility with Jinja2==2.11.3 but it might be
     # fixed later
-    "markupsafe<2.1",
+    "MarkupSafe<2.1",
     "matplotlib",
     "morphapi",
     "morph_tool>=2.9.0,<3.0",
     "morphio>=3.1,<4.0",
     "neurom>=3.0,<4.0",
     "neuror>=1.5.0,<2.0",
-    "numpy",
+    "numpy>=1.21",
     "pandas",
     "plotly-helper>=0.0.8,<1.0",
     "PyYAML",
