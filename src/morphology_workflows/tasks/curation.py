@@ -247,7 +247,9 @@ class Align(SkippableMixin(True), ElementValidationTask):
         default="apical", description=":str: Neurite to use to align morphology"
     )
     direction = luigi.ListParameter(default=None)
-    custom_orientation_json_path = luigi.Parameter(default=None)
+    custom_orientation_json_path = luigi.Parameter(
+        default=None, description=":str: Path to json with custom orientations"
+    )
 
     def kwargs(self):
         """ """

@@ -1,7 +1,10 @@
 """Process functions."""
 import logging
 import shutil
+from functools import partial
 from pathlib import Path
+from multiprocessing.pool import Pool
+import pandas as pd
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -341,60 +344,72 @@ def _get_layer_mtype(mtype_input):
     return mtype, layer
 
 
+def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):
+    """Create a db row and convert morphology."""
+    name, data = _data
+    mtype, layer = _get_layer_mtype(data["mtype"])
+    m = MorphInfo(
+        name=name,
+        mtype=mtype,
+        layer=layer,
+        use_dendrite=data["has_basal"],
+        use_axon=data["has_axon"],
+    )
+
+    if zero_diameter_path is not None:
+        zero_diameter_release_path = (
+            str(zero_diameter_path / Path(data["zero_diameter_morph_path"]).stem) + extension
+        )
+
+        data[f"zero_diameter_release_morph_path_{extension[1:]}"] = _convert(
+            data["zero_diameter_morph_path"], zero_diameter_release_path
+        )
+
+    if unravel_path is not None:
+        unravel_release_path = str(unravel_path / Path(data["unravel_morph_path"]).stem) + extension
+        data[f"unravel_release_morph_path_{extension[1:]}"] = _convert(
+            data["unravel_morph_path"], unravel_release_path
+        )
+
+    if repair_path is not None:
+        repair_release_path = str(repair_path / Path(data["repair_morph_path"]).stem) + extension
+        data[f"repair_release_morph_path_{extension[1:]}"] = _convert(
+            data["repair_morph_path"], repair_release_path
+        )
+    return name, data, m
+
+
 def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extensions):
     """Make morphology release."""
     for extension in extensions:
+        _zero_diameter_path = None
         if zero_diameter_path is not None:
             _zero_diameter_path = Path(f"{zero_diameter_path}-{extension[1:]}")
             _zero_diameter_path.mkdir(exist_ok=True, parents=True)
 
+        _unravel_path = None
         if unravel_path is not None:
             _unravel_path = Path(f"{unravel_path}-{extension[1:]}")
             _unravel_path.mkdir(exist_ok=True, parents=True)
 
+        _repair_path = None
         if repair_path is not None:
             _repair_path = Path(f"{repair_path}-{extension[1:]}")
             _repair_path.mkdir(exist_ok=True, parents=True)
 
+        __create_db_row = partial(
+            _create_db_row,
+            zero_diameter_path=_zero_diameter_path,
+            unravel_path=_unravel_path,
+            repair_path=_repair_path,
+            extension=extension,
+        )
+
         _m = []
-        for name in df.loc[df["is_valid"]].index:
-
-            mtype, layer = _get_layer_mtype(df.loc[name, "mtype"])
-            _m.append(
-                MorphInfo(
-                    name=name,
-                    mtype=mtype,
-                    layer=layer,
-                    use_dendrite=df.loc[name, "has_basal"],
-                    use_axon=df.loc[name, "has_axon"],
-                )
-            )
-
-            if _zero_diameter_path is not None:
-                zero_diameter_release_path = (
-                    str(_zero_diameter_path / Path(df.loc[name, "zero_diameter_morph_path"]).stem)
-                    + extension
-                )
-
-                df.loc[name, f"zero_diameter_release_morph_path_{extension[1:]}"] = _convert(
-                    df.loc[name, "zero_diameter_morph_path"], zero_diameter_release_path
-                )
-
-            if _unravel_path is not None:
-                unravel_release_path = (
-                    str(_unravel_path / Path(df.loc[name, "unravel_morph_path"]).stem) + extension
-                )
-                df.loc[name, f"unravel_release_morph_path_{extension[1:]}"] = _convert(
-                    df.loc[name, "unravel_morph_path"], unravel_release_path
-                )
-
-            if _repair_path is not None:
-                repair_release_path = (
-                    str(_repair_path / Path(df.loc[name, "repair_morph_path"]).stem) + extension
-                )
-                df.loc[name, f"repair_release_morph_path_{extension[1:]}"] = _convert(
-                    df.loc[name, "repair_morph_path"], repair_release_path
-                )
+        with Pool() as pool:
+            for name, row, m in pool.imap(__create_db_row, df.loc[df["is_valid"]].iterrows()):
+                df.loc[name] = pd.Series(row)
+                _m.append(m)
 
         db = MorphDB(_m)
         if _zero_diameter_path is not None:
