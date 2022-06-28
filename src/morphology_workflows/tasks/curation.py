@@ -226,7 +226,7 @@ class Align(SkippableMixin(True), ElementValidationTask):
     ``method`` can be: ``whole``, ``trunk``, ``first_segment``, ``first_section``, ``custom``
 
     If ``method`` is ``custom``, one must provide external orientation direction in a json file
-    via the parameter ``custom_orinetation_json_path``.
+    via the parameter ``custom_orientation_json_path``.
 
 
     TODO: implement the axon_collateral method (for thalamus or example), following
