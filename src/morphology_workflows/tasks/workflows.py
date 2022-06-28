@@ -171,13 +171,19 @@ class Repair(ValidationWorkflow):
         }
 
         if self.make_release:
-            inputs[MakeRelease] = {
-                "zero_diameter_morph_db_path": "zero_diameter_morph_db_path",
-                "unravel_morph_db_path": "unravel_morph_db_path",
-                "repair_morph_db_path": "repair_morph_db_path",
-                "zero_diameter_release_morph_path": "zero_diameter_release_morph_path",
-                "unravel_release_morph_path": "unravel_release_morph_path",
-                "repair_release_morph_path": "repair_release_morph_path",
-            }
+            folders = [
+                "zero_diameter_morph_db_path",
+                "unravel_morph_db_path",
+                "repair_morph_db_path",
+                "zero_diameter_release_morph_path",
+                "unravel_release_morph_path",
+                "repair_release_morph_path",
+            ]
+            inputs[MakeRelease] = {}
+            for extension in MakeRelease().extensions:
+                ext = extension[1:]
+                inputs[MakeRelease].update(
+                    {f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders}
+                )
 
         return inputs

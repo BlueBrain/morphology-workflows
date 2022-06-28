@@ -79,7 +79,7 @@ class Unravel(ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            FixZeroDiameters: {"morph_path": "morph_path"},
+            SmoothDiameters: {"morph_path": "morph_path"},
             CollectAnnotated: {
                 "cut_leaves_path": "cut_leaves_path",
                 "apical_point_path": "apical_point_path",
@@ -128,7 +128,7 @@ class RepairNeurites(ElementValidationTask):
         }
 
 
-class MakeCollage(SetValidationTask):
+class MakeCollage(SkippableMixin(), SetValidationTask):
     """Make collage plot of morphologies."""
 
     collage_path = luigi.Parameter(default="collage.pdf", description=":str: Path to collage plot")
@@ -151,7 +151,7 @@ class MakeCollage(SetValidationTask):
 
     def inputs(self):
         """ """
-        return {SmoothDiameters: {"morph_path": "morph_path"}}
+        return {RepairNeurites: {"morph_path": "morph_path"}}
 
 
 class MakeRelease(SetValidationTask):
@@ -167,15 +167,20 @@ class MakeRelease(SetValidationTask):
         default="repaired_release",
         description=":str: Path to repaired morphologies (not created if None)",
     )
-
-    output_columns = {
-        "zero_diameter_morph_db_path": None,
-        "unravel_morph_db_path": None,
-        "repair_morph_db_path": None,
-        "zero_diameter_release_morph_path": None,
-        "unravel_release_morph_path": None,
-        "repair_release_morph_path": None,
-    }
+    extensions = [".asc", ".h5", ".swc"]
+    output_columns = {}
+    for extension in extensions:
+        ext = extension[1:]
+        output_columns.update(
+            {
+                f"zero_diameter_morph_db_path_{ext}": None,
+                f"unravel_morph_db_path_{ext}": None,
+                f"repair_morph_db_path_{ext}": None,
+                f"zero_diameter_release_morph_path_{ext}": None,
+                f"unravel_release_morph_path_{ext}": None,
+                f"repair_release_morph_path_{ext}": None,
+            }
+        )
 
     validation_function = make_release
 
@@ -185,6 +190,7 @@ class MakeRelease(SetValidationTask):
             "zero_diameter_path": self.zero_diameter_path,
             "unravel_path": self.unravel_path,
             "repair_path": self.repair_path,
+            "extensions": self.extensions,
         }
 
     def inputs(self):
@@ -225,17 +231,18 @@ class SmoothDiameters(SkippableMixin(True), ElementValidationTask):
     """
 
     output_columns = {"morph_path": None}
+
     validation_function = smooth_diameters
 
     def inputs(self):
         """ """
         return {
-            RepairNeurites: {"morph_path": "morph_path"},
-            Unravel: {"unravelled_apical_point_path": "apical_point_path"},
+            FixZeroDiameters: {"morph_path": "morph_path"},
+            CollectAnnotated: {"apical_point_path": "apical_point_path"},
         }
 
 
-class PlotSmoothDiameters(SkippableMixin(), ElementValidationTask):
+class PlotSmoothDiameters(SkippableMixin(True), ElementValidationTask):
     """Plot smoothed diameters versus originals."""
 
     output_columns = {"plot_smooth_path": None}

@@ -223,7 +223,14 @@ class Align(SkippableMixin(True), ElementValidationTask):
     Sometimes, a morphology is not aligned with any consistent direction, so we can try here to
     align them using a various algorithms from :func:`morph_tool.transform.align_morphology`.
 
-    ``method`` can be: ``whole``, ``trunk``, ``first_segment``, ``first_section``
+    ``method`` can be: ``whole``, ``trunk``, ``first_segment``, ``first_section``, ``custom``
+
+    If ``method`` is ``custom``, one must provide external orientation direction in a json file
+    via the parameter ``custom_orientation_json_path``.
+
+
+    TODO: implement the axon_collateral method (for thalamus or example), following
+    https://bbpgitlab.epfl.ch/cells/archive/iavarone/thalamus_pipeline/-/blob/master/notebooks/cell_alignement/Rt_TC_rotations_AxonCollaterals_Releases2019.ipynb
 
     By default, this task is skipped.
     """
@@ -233,13 +240,16 @@ class Align(SkippableMixin(True), ElementValidationTask):
 
     method = luigi.ChoiceParameter(
         default="whole",
-        choices=["whole", "trunk", "first_segment", "first_section"],
+        choices=["whole", "trunk", "first_segment", "first_section", "custom"],
         description=":str: Method to align morphology",
     )
     neurite_type = luigi.Parameter(
         default="apical", description=":str: Neurite to use to align morphology"
     )
     direction = luigi.ListParameter(default=None)
+    custom_orientation_json_path = luigi.Parameter(
+        default=None, description=":str: Path to json with custom orientations"
+    )
 
     def kwargs(self):
         """ """
@@ -247,6 +257,7 @@ class Align(SkippableMixin(True), ElementValidationTask):
             "method": self.method,
             "neurite_type": self.neurite_type,
             "direction": self.direction,
+            "custom_orientation_json_path": self.custom_orientation_json_path,
         }
 
     def inputs(self):

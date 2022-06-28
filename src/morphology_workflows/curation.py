@@ -53,7 +53,7 @@ def collect(row, data_dir, morph_path_col="morph_path"):
         )
     is_morph, ext = is_morphology(row[morph_path_col])
     if is_morph:
-        full_new_morph_path = (data_dir / row.name).with_suffix(ext)
+        full_new_morph_path = str(data_dir / row.name) + ext
         shutil.copy(row[morph_path_col], full_new_morph_path)
         return ValidationResult(is_valid=True, morph_path=full_new_morph_path)
     return ValidationResult(
@@ -158,7 +158,6 @@ def _add_soma(morph, soma_type="spherical"):
     if len(morph.soma.points) == 0:
         center, radius, root_points = _center_root_points(morph)
         if soma_type == "spherical":
-
             morph.soma.points = [center.tolist()]
             morph.soma.diameters = [2.0 * radius]
             L.info("Adding a spherical mock soma at %s of radius %s.", center, radius)
@@ -461,14 +460,33 @@ def orient(row, data_dir, pia_direction="y"):
     return ValidationResult(is_valid=True, morph_path=new_morph_path)
 
 
-def align(row, data_dir, method="whole", neurite_type="apical", direction=None):
+def align(
+    row,
+    data_dir,
+    method="whole",
+    neurite_type="apical",
+    direction=None,
+    custom_orientation_json_path=None,
+):
     """Align a morphology."""
     new_morph_path = data_dir / Path(row.morph_path).name
     morph = Morphology(row.morph_path)
 
-    rotation_matrix = align_morphology(
-        morph, method=method, neurite_type=neurite_type, direction=direction
-    )
+    if method == "custom":
+        if custom_orientation_json_path is None:
+            raise Exception("Provide a custom_orientation_json_path parameter with method==custom")
+        with open(custom_orientation_json_path, "r") as orient_file:
+            orient_dict = json.load(orient_file)
+        if row.name in orient_dict:
+            direction = orient_dict[row.name]
+            rotation_matrix = rotation_matrix_from_vectors(orient_dict[row.name], [0.0, 1.0, 0.0])
+            rotate(morph, rotation_matrix)
+        else:
+            rotation_matrix = np.eye(3)
+    else:
+        rotation_matrix = align_morphology(
+            morph, method=method, neurite_type=neurite_type, direction=direction
+        )
     morph.write(new_morph_path)
     return ValidationResult(
         is_valid=True,
