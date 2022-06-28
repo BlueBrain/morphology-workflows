@@ -2,13 +2,13 @@
 import logging
 import shutil
 from functools import partial
-from pathlib import Path
 from multiprocessing.pool import Pool
-import pandas as pd
+from pathlib import Path
 
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from data_validation_framework.result import ValidationResult
 from diameter_synthesis.main import diametrize_single_neuron
 from matplotlib.backends.backend_pdf import PdfPages
