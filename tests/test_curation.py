@@ -1,9 +1,16 @@
 """Test curation functions."""
+import json
+
+import numpy as np
+import pandas as pd
+import pytest
+from morphio.mut import Morphology
 from numpy.testing import assert_array_almost_equal
 
 from morphology_workflows import curation
 
 from . import create_morphology
+from . import create_morphology_file
 
 
 class Test_fix_soma_radius:
@@ -485,3 +492,322 @@ class TestFixRootSections:
                 "it was moved to [1.0000001, 0.0, 0.0]"
             )
         ]
+
+
+class TestCheckNeurites:
+    """Test the function curation.check_neurites()."""
+
+    @pytest.fixture
+    def res_path(self, tmpdir):
+        """Result to which the result morphologies are exported."""
+        path = tmpdir / "res"
+        path.mkdir()
+        return path
+
+    @pytest.fixture
+    def simple_morph(self, tmpdir):
+        """A simple morphology used for testing."""
+        return create_morphology_file(
+            """
+            1 1 0 0 0 1 -1
+            5 3 -1 0 0 1. 1
+            6 3 -2 0 0 1. 5
+            7 3 -3 0 0 1. 6
+            8 4 0 1 0 1. 1
+            9 4 0 6 0 1. 8
+            10 4 1 7 0 1. 9
+            """,
+            "swc",
+            tmpdir / "morph.swc",
+        )
+
+    def test_default(self, simple_morph, res_path):
+        """Check neurites with default options."""
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        res = curation.check_neurites(
+            row,
+            res_path,
+        )
+
+        res_morph = Morphology(res["morph_path"])
+        expected = {
+            0: [[-1, 0, 0], [-2, 0, 0], [-3, 0, 0]],
+            1: [[0, 1, 0], [0, 6, 0], [1, 7, 0]],
+            2: [[0, 0, 0], [0, -100, 0]],
+        }
+        for i, j in zip(res_morph.sections.items(), expected.items()):
+            assert i[0] == j[0]
+            assert_array_almost_equal(i[1].points, j[1])
+
+    def test_no_soma(self, simple_morph, res_path):
+        """Check neurites with default options on a morph without any soma."""
+        morph = Morphology(simple_morph)
+        morph.soma.points = np.array([], dtype=morph.soma.points.dtype).reshape((0, 3))
+        morph.soma.diameters = np.array([], dtype=morph.soma.diameters.dtype)
+        morph.write(simple_morph)
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+
+        # Test with spherical soma
+        res = curation.check_neurites(
+            row,
+            res_path,
+        )
+
+        res_morph = Morphology(res["morph_path"])
+        expected = {
+            0: [[-1, 0, 0], [-2, 0, 0], [-3, 0, 0]],
+            1: [[0, 1, 0], [0, 6, 0], [1, 7, 0]],
+            2: [[0, 0, 0], [0, -100, 0]],
+        }
+        for i, j in zip(res_morph.sections.items(), expected.items()):
+            assert i[0] == j[0]
+            assert_array_almost_equal(i[1].points, j[1])
+        assert_array_almost_equal(res_morph.soma.points, [[-0.5, 0.5, 0]])
+
+        # Test with contour soma
+        res = curation.check_neurites(
+            row,
+            res_path,
+            mock_soma_type="contour",
+        )
+
+        res_morph = Morphology(res["morph_path"])
+        expected = {
+            0: [[-1, 0, 0], [-2, 0, 0], [-3, 0, 0]],
+            1: [[0, 1, 0], [0, 6, 0], [1, 7, 0]],
+            2: [[0, 0, 0], [0, -100, 0]],
+        }
+        for i, j in zip(res_morph.sections.items(), expected.items()):
+            assert i[0] == j[0]
+            assert_array_almost_equal(i[1].points, j[1])
+        assert_array_almost_equal(
+            res_morph.soma.points,
+            [
+                [-1, 0, 0],
+                [0, 1, 0],
+            ],
+        )
+
+    def test_no_mock_but_stub(self, simple_morph, res_path):
+        """Check neurites with no mock soma but with stub axon."""
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        res = curation.check_neurites(
+            row,
+            res_path,
+            mock_soma_type=None,
+            ensure_stub_axon=True,
+        )
+
+        res_morph = Morphology(res["morph_path"])
+        expected = {
+            0: [[-1, 0, 0], [-2, 0, 0], [-3, 0, 0]],
+            1: [[0, 1, 0], [0, 6, 0], [1, 7, 0]],
+            2: [[0, 0, 0], [0, -100, 0]],
+        }
+        for i, j in zip(res_morph.sections.items(), expected.items()):
+            assert i[0] == j[0]
+            assert_array_almost_equal(i[1].points, j[1])
+
+
+class TestFixNeuritesInSoma:
+    """Test the function curation.fix_neurites_in_soma()."""
+
+    @pytest.fixture
+    def res_path(self, tmpdir):
+        """Result to which the result morphologies are exported."""
+        path = tmpdir / "res"
+        path.mkdir()
+        return path
+
+    @pytest.fixture
+    def simple_morph(self, tmpdir):
+        """A simple morphology used for testing."""
+        return create_morphology_file(
+            """
+            1 1 0 0 0 10 -1
+            2 2 1 0 0 1. 1
+            3 2 2 0 0 1. 2
+            4 2 6 0 0 1. 3
+            5 3 -1 0 0 1. 1
+            6 3 -2 0 0 1. 5
+            7 3 -3 0 0 1. 6
+            8 4 0 1 0 1. 1
+            9 4 0 6 0 1. 8
+            10 4 1 7 0 1. 9
+            """,
+            "swc",
+            tmpdir / "morph.swc",
+        )
+
+    def test_default(self, simple_morph, res_path):
+        """Align with default options."""
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        res = curation.fix_neurites_in_soma(
+            row,
+            res_path,
+        )
+
+        res_morph = Morphology(res["morph_path"])
+        expected = {
+            0: [
+                [2.5, 0, 0],
+                [6, 0, 0],
+            ],
+            1: [
+                [-2.5, 0, 0],
+                [-3, 0, 0],
+            ],
+            2: [
+                [0, 2.5, 0],
+                [0, 6, 0],
+                [1, 7, 0],
+            ],
+        }
+        for i, j in zip(res_morph.sections.items(), expected.items()):
+            assert i[0] == j[0]
+            assert_array_almost_equal(i[1].points, j[1])
+
+
+class TestAlign:
+    """Test the function curation.align()."""
+
+    @pytest.fixture
+    def res_path(self, tmpdir):
+        """Result to which the result morphologies are exported."""
+        path = tmpdir / "res"
+        path.mkdir()
+        return path
+
+    @pytest.fixture
+    def simple_morph(self, tmpdir):
+        """A simple morphology used for testing."""
+        return create_morphology_file(
+            """
+            1 1 0 0 0 1. -1
+            2 2 1 0 0 1. 1
+            3 2 2 0 0 1. 2
+            4 2 3 0 0 1. 3
+            5 3 0 1 0 1. 1
+            6 3 0 2 0 1. 5
+            7 3 0 3 0 1. 6
+            8 4 -1 0 0 1. 1
+            9 4 -2 0 0 1. 8
+            10 4 -3 0 0 1. 9
+            """,
+            "swc",
+            tmpdir / "morph.swc",
+        )
+
+    def check_res(self, res, expected):
+        """Compare the result points to the expected ones."""
+        res_morph = Morphology(res["morph_path"])
+        for i, j in zip(res_morph.sections.items(), expected.items()):
+            assert i[0] == j[0]
+            assert_array_almost_equal(i[1].points, j[1])
+
+    def test_default(self, simple_morph, res_path):
+        """Align with default options."""
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        res = curation.align(
+            row,
+            res_path,
+        )
+
+        expected = {
+            0: [[0, -1, 0], [0, -2, 0], [0, -3, 0]],
+            1: [[1, 0, 0], [2, 0, 0], [3, 0, 0]],
+            2: [[0, 1, 0], [0, 2, 0], [0, 3, 0]],
+        }
+        self.check_res(res, expected)
+
+    def test_neurite_type(self, simple_morph, res_path):
+        """Align with a given neurite type."""
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        res = curation.align(
+            row,
+            res_path,
+            neurite_type="axon",
+        )
+
+        expected = {
+            0: [[0, 1, 0], [0, 2, 0], [0, 3, 0]],
+            1: [[-1, 0, 0], [-2, 0, 0], [-3, 0, 0]],
+            2: [[0, -1, 0], [0, -2, 0], [0, -3, 0]],
+        }
+        self.check_res(res, expected)
+
+    def test_given_direction(self, simple_morph, res_path):
+        """Align with a given direction."""
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        res = curation.align(
+            row,
+            res_path,
+            direction=[1, 0, 0],
+        )
+
+        expected = {
+            0: [[1, 0, 0], [2, 0, 0], [3, 0, 0]],
+            1: [[0, 1, 0], [0, 2, 0], [0, 3, 0]],
+            2: [[-1, 0, 0], [-2, 0, 0], [-3, 0, 0]],
+        }
+        self.check_res(res, expected)
+
+    def test_custom_method(self, tmpdir, simple_morph, res_path):
+        """Align with a custom rotation method."""
+        custom_orientation_json_path = tmpdir / "custom_orientation.json"
+        with open(custom_orientation_json_path, mode="w", encoding="utf-8") as f:
+            json.dump(
+                {
+                    "test_name": [-np.sqrt(2) / 2, np.sqrt(2) / 2, 0],
+                },
+                f,
+            )
+        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        res = curation.align(
+            row,
+            res_path,
+            method="custom",
+            custom_orientation_json_path=custom_orientation_json_path,
+        )
+
+        expected = {
+            0: [
+                [np.sqrt(2) / 2, -np.sqrt(2) / 2, 0],
+                [np.sqrt(2), -np.sqrt(2), 0],
+                [3 * np.sqrt(2) / 2, -3 * np.sqrt(2) / 2, 0],
+            ],
+            1: [
+                [np.sqrt(2) / 2, np.sqrt(2) / 2, 0],
+                [np.sqrt(2), np.sqrt(2), 0],
+                [3 * np.sqrt(2) / 2, 3 * np.sqrt(2) / 2, 0],
+            ],
+            2: [
+                [-np.sqrt(2) / 2, np.sqrt(2) / 2, 0],
+                [-np.sqrt(2), np.sqrt(2), 0],
+                [-3 * np.sqrt(2) / 2, 3 * np.sqrt(2) / 2, 0],
+            ],
+        }
+        self.check_res(res, expected)
+
+        # Test with unknown morphology name => should not be rotated
+        row = pd.Series({"morph_path": simple_morph}, name="unknown_name")
+        res = curation.align(
+            row,
+            res_path,
+            method="custom",
+            custom_orientation_json_path=custom_orientation_json_path,
+        )
+
+        expected = {i: j.points.tolist() for i, j in Morphology(simple_morph).sections.items()}
+        self.check_res(res, expected)
+
+        # Test with custom method but no custom_orientation_json_path
+        with pytest.raises(
+            ValueError,
+            match="Provide a custom_orientation_json_path parameter when method=='custom'",
+        ):
+            res = curation.align(
+                row,
+                res_path,
+                method="custom",
+            )

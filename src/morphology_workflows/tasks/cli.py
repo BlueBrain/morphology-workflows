@@ -133,8 +133,8 @@ class ArgParser:
             "--create-dependency-graph",
             help=(
                 "Create the dependency graph of a workflow instead of running it. "
-                "Pass either 'ascii' to print the graph to screen or a path to render "
-                "it as an image (depending on the extension of the given path)."
+                "Pass a path to render it as an image (depending on the extension of the given "
+                "path)."
             ),
         )
 

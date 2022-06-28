@@ -474,12 +474,14 @@ def align(
 
     if method == "custom":
         if custom_orientation_json_path is None:
-            raise Exception("Provide a custom_orientation_json_path parameter with method==custom")
+            raise ValueError(
+                "Provide a custom_orientation_json_path parameter when method=='custom'"
+            )
         with open(custom_orientation_json_path, "r") as orient_file:
             orient_dict = json.load(orient_file)
         if row.name in orient_dict:
             direction = orient_dict[row.name]
-            rotation_matrix = rotation_matrix_from_vectors(orient_dict[row.name], [0.0, 1.0, 0.0])
+            rotation_matrix = rotation_matrix_from_vectors(direction, [0.0, 1.0, 0.0])
             rotate(morph, rotation_matrix)
         else:
             rotation_matrix = np.eye(3)
