@@ -5,9 +5,9 @@ import luigi
 from data_validation_framework.task import ElementValidationTask
 from data_validation_framework.task import SetValidationTask
 from data_validation_framework.task import SkippableMixin
+from luigi.parameter import OptionalChoiceParameter
+from luigi.parameter import OptionalNumericalParameter
 from luigi_tools.parameter import BoolParameter
-from luigi_tools.parameter import OptionalChoiceParameter
-from luigi_tools.parameter import OptionalNumericalParameter
 from neuror.sanitize import _ZERO_LENGTH
 
 from morphology_workflows.curation import align
@@ -247,7 +247,7 @@ class Align(SkippableMixin(True), ElementValidationTask):
         default="apical", description=":str: Neurite to use to align morphology"
     )
     direction = luigi.ListParameter(default=None)
-    custom_orientation_json_path = luigi.Parameter(
+    custom_orientation_json_path = luigi.OptionalStrParameter(
         default=None, description=":str: Path to json with custom orientations"
     )
 
