@@ -4,7 +4,7 @@ import logging
 
 import luigi
 import numpy as np
-from luigi_tools.parameter import PathParameter
+from luigi.parameter import PathParameter
 from luigi_tools.target import OutputLocalTarget
 from luigi_tools.task import WorkflowTask
 from morphapi.api.mouselight import MouseLightAPI
