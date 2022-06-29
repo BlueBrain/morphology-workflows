@@ -10,8 +10,8 @@ reqs = [
     "data-validation-framework>=0.3.0",
     "diameter-synthesis>=0.2.5",
     "Jinja2<3.1",
-    "luigi",
-    "luigi-tools>=0.0.7",
+    "luigi>=3.1",
+    "luigi-tools>=0.0.18",
     # Markupsafe dependency is only due to an incompatibility with Jinja2==2.11.3 but it might be
     # fixed later
     "MarkupSafe<2.1",
