@@ -224,30 +224,36 @@ def main(arguments=None):
     luigi_config = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
 
     # Prepare workflow task and aguments
-    task = WORKFLOW_TASKS[args.workflow]
-    args_dict = {k: v for k, v in vars(args).items() if k in task.get_param_names()}
+    task_cls = WORKFLOW_TASKS[args.workflow]
+    args_dict = {k.split(task_cls.get_task_family() + "_")[-1]: v for k, v in vars(args).items()}
+    args_dict = {
+        k: v for k, v in args_dict.items() if v is not None and k in task_cls.get_param_names()
+    }
+    task = WORKFLOW_TASKS[args.workflow](**args_dict)
 
     # Export the dependency graph of the workflow instead of running it
     if args.create_dependency_graph is not None:
-        task = WORKFLOW_TASKS[args.workflow](**args_dict)
-        g = get_dependency_graph(task)
+        g = get_dependency_graph(task, allow_orphans=True)
 
         # Create URLs
         base_f = Path(inspect.getfile(morphology_workflows)).parent
         node_kwargs = {}
         for _, child in g:
+            if child is None:
+                continue
             url = (
                 Path(inspect.getfile(child.__class__)).relative_to(base_f).with_suffix("")
                 / "index.html"
             )
             anchor = "#" + ".".join(child.__module__.split(".")[1:] + [child.__class__.__name__])
             node_kwargs[child] = {"URL": "../../" + url.as_posix() + anchor}
+
         dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs)
         render_dependency_graph(dot, args.create_dependency_graph)
         return
 
     # Run the luigi task
-    luigi.build([WORKFLOW_TASKS[args.workflow](**args_dict)], **luigi_config)
+    luigi.build([task], **luigi_config)
 
 
 if __name__ == "__main__":
