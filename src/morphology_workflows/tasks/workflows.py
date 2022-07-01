@@ -24,7 +24,6 @@ from morphology_workflows.tasks.curation import PlotMorphologies
 from morphology_workflows.tasks.curation import Recenter
 from morphology_workflows.tasks.curation import Resample
 from morphology_workflows.tasks.curation import Sanitize
-from morphology_workflows.tasks.fetch import FetchMorphologies
 from morphology_workflows.tasks.repair import CollectAnnotated
 from morphology_workflows.tasks.repair import FixZeroDiameters
 from morphology_workflows.tasks.repair import MakeCollage
@@ -48,10 +47,6 @@ def save_reduced_df(
     df.loc[
         df.is_valid, [col for col in df.columns if isinstance(col, str) and col not in _to_remove]
     ].rename_axis(index="morph_name").reset_index().to_csv(out_dir / df_path, index=False)
-
-
-class Fetch(FetchMorphologies):
-    """Fetch morphologies from the given source."""
 
 
 class Curate(ValidationWorkflow):

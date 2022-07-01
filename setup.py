@@ -19,7 +19,7 @@ reqs = [
     "morphapi",
     "morph_tool>=2.9.0,<3.0",
     "morphio>=3.1,<4.0",
-    "neurom>=3.0,<4.0",
+    "neurom>=3.2.0,<4.0",
     "neuror>=1.5.0,<2.0",
     "numpy>=1.21",
     "pandas",

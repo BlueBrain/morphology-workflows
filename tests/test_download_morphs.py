@@ -1,15 +1,15 @@
 """Test download tasks."""
 # pylint: disable=redefined-outer-name
 import configparser
-import itertools
-import json
 import sys
 
 import luigi
 import mock
+import numpy as np
+import pandas as pd
 import pytest
 
-from morphology_workflows.tasks.workflows import Fetch
+from morphology_workflows.tasks.fetch import Fetch
 
 
 @pytest.fixture()
@@ -47,28 +47,35 @@ def test_neuromorpho(prepare_dir, data_dir):
     )
     assert luigi.build([task], local_scheduler=True)
 
-    with task.output()["metadata"].pathlib_path.open("r", encoding="utf-8") as f:
-        metadata = json.load(f)
+    metadata = pd.read_csv(task.output()["metadata"].path)
 
     # Check metadata
-    assert sorted(metadata[0]["morphologies"]) == [
-        "102367.swc",
-        "102369.swc",
-    ]
-    assert sorted(metadata[1]["morphologies"]) == [
-        "121518.swc",
-        "121694.swc",
-        "121695.swc",
-        "121696.swc",
-    ]
-    assert sorted(metadata[1]["morphologies"]) == sorted(metadata[2]["morphologies"])
+    expected = pd.DataFrame(
+        {
+            "species": ["mouse"] * 10,
+            "brain_region": ["neocortex"] * 2 + ["tectum"] * 8,
+            "cell_type": ["interneuron"] * 2 + ["pyramidal"] * 8,
+            "nb_morphologies": [2] * 2 + [np.nan] * 4 + [9999] * 4,
+            "morphology": [
+                "102367.swc",
+                "102369.swc",
+                "121518.swc",
+                "121694.swc",
+                "121695.swc",
+                "121696.swc",
+                "121518.swc",
+                "121694.swc",
+                "121695.swc",
+                "121696.swc",
+            ],
+        }
+    )
+
+    pd.testing.assert_frame_equal(metadata, expected)
 
     # Check the files exist
     output_path = task.output()["morphologies"].pathlib_path
-    for filepath in itertools.chain(
-        metadata[0]["morphologies"], metadata[1]["morphologies"], metadata[2]["morphologies"]
-    ):
-        assert (output_path / filepath).exists()
+    assert metadata["morphology"].apply(lambda x: (output_path / x).exists()).all()
 
 
 def test_mouselight(prepare_dir, data_dir):
@@ -80,25 +87,34 @@ def test_mouselight(prepare_dir, data_dir):
     )
     assert luigi.build([task], local_scheduler=True)
 
-    with task.output()["metadata"].pathlib_path.open("r", encoding="utf-8") as f:
-        metadata = json.load(f)
+    metadata = pd.read_csv(task.output()["metadata"].path)
 
     # Check metadata
-    assert sorted(metadata[0]["morphologies"]) == ["84993.swc", "85214.swc"]
-    assert sorted(metadata[1]["morphologies"]) == [
-        "122053.swc",
-        "84993.swc",
-        "85214.swc",
-        "85215.swc",
-    ]
-    assert sorted(metadata[1]["morphologies"]) == sorted(metadata[2]["morphologies"])
+    expected = pd.DataFrame(
+        {
+            "brain_region": ["AHN"] * 10,
+            "nb_morphologies": [2] * 2 + [np.nan] * 4 + [9999] * 4,
+            "seed": [0] * 10,
+            "morphology": [
+                "85214.swc",
+                "84993.swc",
+                "84993.swc",
+                "85214.swc",
+                "122053.swc",
+                "85215.swc",
+                "84993.swc",
+                "85214.swc",
+                "122053.swc",
+                "85215.swc",
+            ],
+        }
+    )
+
+    pd.testing.assert_frame_equal(metadata, expected)
 
     # Check the files exist
     output_path = task.output()["morphologies"].pathlib_path
-    for filepath in itertools.chain(
-        metadata[0]["morphologies"], metadata[1]["morphologies"], metadata[2]["morphologies"]
-    ):
-        assert (output_path / filepath).exists()
+    assert metadata["morphology"].apply(lambda x: (output_path / x).exists()).all()
 
 
 def test_allen(prepare_dir, data_dir):
@@ -110,25 +126,36 @@ def test_allen(prepare_dir, data_dir):
     )
     assert luigi.build([task], local_scheduler=True)
 
-    with task.output()["metadata"].pathlib_path.open("r", encoding="utf-8") as f:
-        metadata = json.load(f)
+    metadata = pd.read_csv(task.output()["metadata"].path)
 
     # Check metadata
-    assert sorted(metadata[0]["morphologies"]) == ["555019563.swc", "603402458.swc"]
-    assert sorted(metadata[1]["morphologies"]) == [
-        "526573598.swc",
-        "555019563.swc",
-        "555241040.swc",
-        "603402458.swc",
-    ]
-    assert sorted(metadata[1]["morphologies"]) == sorted(metadata[2]["morphologies"])
+    expected = pd.DataFrame(
+        {
+            "species": ["Mus musculus"] * 10,
+            "brain_region": ["VISli"] * 10,
+            "cell_type": ["interneuron"] * 2 + ["pyramidal"] * 8,
+            "nb_morphologies": [2] * 2 + [np.nan] * 4 + [9999] * 4,
+            "seed": [0] * 10,
+            "morphology": [
+                "555019563.swc",
+                "603402458.swc",
+                "555019563.swc",
+                "603402458.swc",
+                "526573598.swc",
+                "555241040.swc",
+                "555019563.swc",
+                "603402458.swc",
+                "526573598.swc",
+                "555241040.swc",
+            ],
+        }
+    )
+
+    pd.testing.assert_frame_equal(metadata, expected)
 
     # Check the files exist
     output_path = task.output()["morphologies"].pathlib_path
-    for filepath in itertools.chain(
-        metadata[0]["morphologies"], metadata[1]["morphologies"], metadata[2]["morphologies"]
-    ):
-        assert (output_path / filepath).exists()
+    assert metadata["morphology"].apply(lambda x: (output_path / x).exists()).all()
 
 
 class TestMissingImports:
@@ -158,7 +185,8 @@ class TestMissingImports:
         assert not luigi.build([task], local_scheduler=True)
 
         assert failed_tasks == [
-            f"FetchTmp(source=Allen, config_file={data_dir / 'allen_config_download.json'}, "
+            "FetchTmp(tag_output=False, source=Allen, config_file="
+            f"{data_dir / 'allen_config_download.json'}, "
             f"result_path={prepare_dir / 'morphologies'})"
         ]
         assert exceptions == [
@@ -190,7 +218,7 @@ class TestMissingImports:
         assert not luigi.build([task], local_scheduler=True)
 
         assert failed_tasks == [
-            "FetchTmp(source=MouseLight, "
+            "FetchTmp(tag_output=False, source=MouseLight, "
             f"config_file={data_dir / 'mouselight_config_download.json'}, "
             f"result_path={prepare_dir / 'morphologies'})"
         ]
