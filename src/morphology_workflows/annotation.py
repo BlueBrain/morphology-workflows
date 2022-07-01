@@ -186,7 +186,7 @@ def plot_apical_point(row, data_dir, with_plotly=True):
         if with_plotly:
             plot_path = str(data_dir / row.name) + ".html"
             MarkerSet.from_file(row.apical_point_path).plot(filename=plot_path)
-        else:
+        else:  # pragma: no cover
             plot_path = str(data_dir / row.name) + ".pdf"
             neuron = load_morphology(row.morph_path)
             plt.figure()
@@ -256,7 +256,7 @@ def plot_cut_leaves(row, data_dir, with_plotly=True):
         if markers:
             plot_path = (data_dir / row.name).with_suffix(".html")
             markers.plot(filename=plot_path)
-    else:
+    else:  # pragma: no cover
         plt.figure()
         plot_path = (data_dir / row.name).with_suffix(".pdf")
         neuron = load_morphology(row.morph_path)

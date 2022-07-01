@@ -23,5 +23,11 @@ def create_morphology(content, extension):
     with NamedTemporaryFile(suffix=f".{extension}", mode="w", encoding="utf-8") as tmp_file:
         tmp_file.write(content)
         tmp_file.flush()
-
         return Morphology(tmp_file.name)
+
+
+def create_morphology_file(content, extension, filepath):
+    """Create a morphology file from a string."""
+    morph = create_morphology(content, extension)
+    morph.write(filepath)
+    return filepath
