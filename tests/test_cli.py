@@ -17,7 +17,7 @@ class TestCLI:
         assert (
             re.match(
                 r"usage: \S+ .*Run the workflow\n\npositional arguments:\s*"
-                r"{Fetch,Curate,Annotate,Repair}\s*Possible workflows.*",
+                r"{Fetch,Placeholders,Curate,Annotate,Repair}\s*Possible workflows.*",
                 captured.out,
                 flags=re.DOTALL,
             )

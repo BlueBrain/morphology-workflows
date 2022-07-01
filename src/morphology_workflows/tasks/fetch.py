@@ -6,8 +6,9 @@ import logging
 import luigi
 import numpy as np
 import pandas as pd
-from luigi.parameter import PathParameter
 from data_validation_framework.target import TaggedOutputLocalTarget
+from data_validation_framework.task import TagResultOutputMixin
+from luigi.parameter import PathParameter
 from luigi_tools.task import WorkflowTask
 from morphapi.api.mouselight import MouseLightAPI
 from morphapi.api.neuromorphorg import NeuroMorpOrgAPI

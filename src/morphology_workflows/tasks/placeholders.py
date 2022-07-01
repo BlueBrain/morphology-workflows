@@ -3,9 +3,9 @@ import logging
 
 from data_validation_framework.target import TaggedOutputLocalTarget
 from data_validation_framework.task import TagResultOutputMixin
-from luigi import Parameter
-from luigi_tools.parameter import OptionalPathParameter
-from luigi_tools.parameter import PathParameter
+from luigi.parameter import OptionalPathParameter
+from luigi.parameter import Parameter
+from luigi.parameter import PathParameter
 from luigi_tools.task import WorkflowTask
 
 from morphology_workflows.placeholders import compute_placeholders
