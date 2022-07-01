@@ -1,8 +1,18 @@
 # Changelog
 
+## [0.3.2](https://github.com/BlueBrain/morphology-workflows/compare/0.3.1..0.3.2)
+
+> 1 July 2022
+
+- Improve test coverage (Adrien Berchet - [#40](https://github.com/BlueBrain/morphology-workflows/pull/40))
+- Use luigi features moved from luigi-tools (Adrien Berchet - [#42](https://github.com/BlueBrain/morphology-workflows/pull/42))
+- Fix task arguments in CLI and use new empty dependency graph feature of luigi-tools (Adrien Berchet - [#41](https://github.com/BlueBrain/morphology-workflows/pull/41))
+- Improve MakeRelease and minor changes (Alexis Arnaudon - [#11](https://github.com/BlueBrain/morphology-workflows/pull/11))
+- Constrain requirements for Jinja2 and Numpy (Adrien Berchet - [#38](https://github.com/BlueBrain/morphology-workflows/pull/38))
+
 ## [0.3.1](https://github.com/BlueBrain/morphology-workflows/compare/0.3.0..0.3.1)
 
-> 16 June 2022
+> 17 June 2022
 
 - Ensure 0-length sections are always fixed, even if the min length is too small (Adrien Berchet - [#35](https://github.com/BlueBrain/morphology-workflows/pull/35))
 
