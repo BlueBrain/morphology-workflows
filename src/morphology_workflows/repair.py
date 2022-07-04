@@ -114,7 +114,7 @@ def repair(row, data_dir, with_plot=False, repair_params=None):
         _repair(  # pylint: disable=unexpected-keyword-arg
             row.morph_path,
             morph_path,
-            axons=None,
+            axons=[row.morph_path],
             seed=0,
             cut_leaves_coordinates=leaves,
             legacy_detection=False,  # cut_leaves_coordinates are provided, so this is not used
