@@ -97,7 +97,7 @@ def unravel(row, data_dir, window_half_length=10):
     )
 
 
-def repair(row, data_dir, with_plot=False, repair_params=None):
+def repair(row, data_dir, with_plot=False, repair_params=None, repair_axon=False):
     """Repair morphologies.
 
     TODO: understand the repair_flag correctly and how to set them.
@@ -114,7 +114,7 @@ def repair(row, data_dir, with_plot=False, repair_params=None):
         _repair(  # pylint: disable=unexpected-keyword-arg
             row.morph_path,
             morph_path,
-            axons=[row.morph_path],
+            axons=[row.morph_path] if repair_axon else None,
             seed=0,
             cut_leaves_coordinates=leaves,
             legacy_detection=False,  # cut_leaves_coordinates are provided, so this is not used

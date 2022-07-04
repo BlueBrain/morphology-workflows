@@ -91,12 +91,6 @@ class RepairNeurites(ElementValidationTask):
     """RepairNeurites morphologies.
 
     Using the cut leaves, we recreate missing branches using neuror.main.repair.
-
-    .. todo::
-
-        Currently, axons are not repaired, as they need other axons.
-
-        Improve repair of dendrite by using all dendrites of same type.
     """
 
     output_columns = {"morph_path": None}
@@ -107,10 +101,15 @@ class RepairNeurites(ElementValidationTask):
     repair_params = luigi.DictParameter(
         default=None, description=":dict: Repair internal parameters"
     )
+    repair_axon = luigi.BoolParameter(defaut=False, description=":bool: To repair axon or not")
 
     def kwargs(self):
         """ """
-        return {"with_plot": self.with_plot, "repair_params": self.repair_params}
+        return {
+            "with_plot": self.with_plot,
+            "repair_params": self.repair_params,
+            "repair_axon": self.repair_axon,
+        }
 
     def inputs(self):
         """ """
