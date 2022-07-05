@@ -101,7 +101,7 @@ class RepairNeurites(ElementValidationTask):
     repair_params = luigi.DictParameter(
         default=None, description=":dict: Repair internal parameters"
     )
-    repair_axon = luigi.BoolParameter(defaut=False, description=":bool: To repair axon or not")
+    repair_axon = luigi.BoolParameter(default=False, description=":bool: To repair axon or not")
 
     def kwargs(self):
         """ """
