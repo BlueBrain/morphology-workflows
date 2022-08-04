@@ -24,7 +24,7 @@ from neuror.main import RepairType
 from neuror.main import repair as _repair
 from neuror.unravel import unravel as _unravel
 from neuror.zero_diameter_fixer import fix_zero_diameters as _fix_zero_diameters
-from scipy.spatial.ckdtree import cKDTree
+from scipy.spatial import KDTree
 from tqdm import tqdm
 
 from morphology_workflows.marker_helper import MarkerSet
@@ -45,14 +45,14 @@ def fix_zero_diameters(row, data_dir):
 
 def _map_apical(apical_point, mapping):
     """Map apical points as cut-leaves."""
-    t = cKDTree(mapping[["x0", "y0", "z0"]])
+    t = KDTree(mapping[["x0", "y0", "z0"]])
     _, indices = t.query(apical_point)
     return mapping.iloc[indices][["x1", "y1", "z1"]].values
 
 
 def _unravel_leaves(leaves, mapping):
     """Adapted from neuror.unraavel.unravel_plane."""
-    t = cKDTree(mapping[["x0", "y0", "z0"]])
+    t = KDTree(mapping[["x0", "y0", "z0"]])
     distances, indices = t.query(leaves)
     not_matching_leaves = np.where(distances > 1e-3)[0]
     if not_matching_leaves.size:

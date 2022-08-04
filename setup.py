@@ -26,6 +26,7 @@ reqs = [
     "plotly-helper>=0.0.8,<1.0",
     "PyYAML",
     "rst2pdf",
+    "scipy>=1.6",
     "sphinx<4",
     "tqdm",
 ]
