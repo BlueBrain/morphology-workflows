@@ -169,7 +169,7 @@ def _add_soma(morph, soma_type="spherical"):
             angle_order = np.argsort(angles)
 
             morph.soma.points = root_points[angle_order]
-            morph.soma.diameters = np.zeros(len(root_points), dtype=np.float)
+            morph.soma.diameters = np.zeros(len(root_points), dtype=float)
             L.info("Adding a contour mock soma around %s with %s points.", center, len(root_points))
 
     return morph
