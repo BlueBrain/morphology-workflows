@@ -59,7 +59,8 @@ The inputs should consist in:
     3. ``morph_name``: the name of the morphology.
     4. ``brain_region``: the brain region in which the morphology is located.
 * a ``luigi.cfg`` file containing the configuration for all the tasks.
-* a ``logging.conf`` file containing the logging configuration.
+* an optional ``logging.conf`` file containing the logging configuration. If you prefer default logging
+  behavior, remove this file and comment line in ``logging_conf_file = logging.conf`` in ``luigi.cfg``.
 
 The [examples](https://github.com/BlueBrain/morphology-workflows/tree/main/examples) folder contains
 examples for the ``luigi.cfg`` and ``logging.conf`` files.
@@ -70,11 +71,18 @@ This workflow is based on the ``luigi`` library but can be run via the command l
 example, you can run the ``Curate`` workflow with the following command:
 
 ```bash
-morphology_workflows --local-scheduler Curate
+morphology_workflows Curate
 ```
 
-> **NOTE** This command must be executed from a directory containing a ``luigi.cfg`` file.
+> **NOTE:** This command must be executed from a directory containing a ``luigi.cfg`` file.
 > An example of such file is given in the ``examples`` directory.
+
+By default, a local scheduler is used but it is also possible to use a Luigi's master scheduler
+using the `-m / --master-scheduler` trigger:
+
+```bash
+morphology_workflows -m Curate
+```
 
 More details can be found in the command line interface section of the documentation.
 

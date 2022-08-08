@@ -1,3 +1,3 @@
 #!/bin/bash
 
-morphology_workflows --local-scheduler Curate
+morphology_workflows Curate

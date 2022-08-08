@@ -29,7 +29,6 @@ class TestCLI:
         output_path = (data_dir / "neuromorpho_config_download.json").resolve()
         cli.main(
             arguments=[
-                "--local-scheduler",
                 "--create-dependency-graph",
                 str(tmpdir / "dependency_graph.png"),
                 "Fetch",

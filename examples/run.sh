@@ -1,9 +1,9 @@
 #!/bin/bash
 
-rm -rf out_*
+rm -rf out_* *_release-*
 
 python get_dataset.py
 
-morphology_workflows --local-scheduler Curate
-morphology_workflows --local-scheduler Annotate
-morphology_workflows --local-scheduler Repair
+morphology_workflows Curate
+morphology_workflows Annotate
+morphology_workflows Repair

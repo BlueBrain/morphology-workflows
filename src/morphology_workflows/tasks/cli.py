@@ -30,7 +30,7 @@ WORKFLOW_TASKS = {
 
 LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
-LUIGI_PARAMETERS = ["workers", "local_scheduler", "log_level"]
+LUIGI_PARAMETERS = ["workers", "log_level"]
 
 
 _PARAM_NO_VALUE = [luigi.parameter._no_value, None]  # pylint: disable=protected-access
@@ -106,11 +106,11 @@ class ArgParser:
         parser.add_argument("-c", "--config-path", help="Path to the Luigi config file")
 
         parser.add_argument(
-            "-l",
-            "--local-scheduler",
+            "-m",
+            "--master-scheduler",
             default=False,
             action="store_true",
-            help="Use Luigi's local scheduler instead of master scheduler.",
+            help="Use Luigi's master scheduler instead of local scheduler.",
         )
 
         parser.add_argument(
@@ -225,6 +225,7 @@ def main(arguments=None):
 
     # Get arguments to configure luigi
     luigi_config = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
+    luigi_config["local_scheduler"] = not args.master_scheduler
 
     # Prepare workflow task and aguments
     task_cls = WORKFLOW_TASKS[args.workflow]
