@@ -31,7 +31,6 @@ class CollectAnnotated(ElementValidationTask):
         "cut_leaves_path": None,
         "apical_point_path": None,
     }
-    input_index_col = luigi.Parameter(default="morph_name")
 
     validation_function = collect
 

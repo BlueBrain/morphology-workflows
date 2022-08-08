@@ -54,10 +54,9 @@ The inputs should consist in:
 
 * a directory containing the input morphologies.
 * a CSV file with the following columns:
-    1. ``index``: the row index.
-    2. ``morph_path``: the path to the morphology file.
-    3. ``morph_name``: the name of the morphology.
-    4. ``brain_region``: the brain region in which the morphology is located.
+    1. ``morph_path``: the path to the morphology file.
+    2. ``morph_name``: the name of the morphology.
+    3. ``brain_region``: the brain region in which the morphology is located.
 * a ``luigi.cfg`` file containing the configuration for all the tasks.
 * an optional ``logging.conf`` file containing the logging configuration. If you prefer default logging
   behavior, remove this file and comment line in ``logging_conf_file = logging.conf`` in ``luigi.cfg``.
