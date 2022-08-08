@@ -87,3 +87,18 @@ convention = "google"
 line_length = 100
 profile = "black"
 force_single_line = true
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning:luigi",
+    "ignore::DeprecationWarning:xarray",
+    "ignore::DeprecationWarning:matplotlib",
+    "ignore::DeprecationWarning:neurom.morphmath",
+    "ignore::DeprecationWarning:neuror.unravel",
+    "ignore::DeprecationWarning:setuptools",
+    "ignore::DeprecationWarning:sphinx.util.docutil",
+    "ignore::DeprecationWarning:sphinx.util.rst",
+    "ignore::urllib3.exceptions.InsecureRequestWarning:urllib3",
+    "ignore:Config file does not exist. luigi\\.cfg:UserWarning:luigi",
+]
+
