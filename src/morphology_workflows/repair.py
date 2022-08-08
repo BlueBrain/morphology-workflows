@@ -154,7 +154,9 @@ def plot_repair(row, data_dir, with_plotly=True):
         if markers is not None:
             points = markers.markers[0].data.T[[0, 2]]
 
-        with disable_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"),  PdfPages(plot_path) as pdf:
+        with disable_loggers(
+            "matplotlib.font_manager", "matplotlib.backends.backend_pdf"
+        ), PdfPages(plot_path) as pdf:
             for plane in ["xy", "xz", "yz"]:
                 plt.figure()
                 ax = plt.gca()
@@ -261,7 +263,9 @@ def make_collage(
     top_panel_shift += layer_boundaries[-1]
 
     mtypes = sorted(df.mtype.unique())
-    with disable_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"),  PdfPages(data_dir.parent.parent / collage_path) as pdf:
+    with disable_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(
+        data_dir.parent.parent / collage_path
+    ) as pdf:
         for mtype in tqdm(mtypes):
             _df = df[df.mtype == mtype]
             name_batches = np.array_split(_df.index, max(1, len(_df.index) / n_morph_per_page))

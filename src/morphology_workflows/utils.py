@@ -42,14 +42,11 @@ def silent_logger(log_name):
 
 @contextmanager
 def disable_loggers(*logger_names):
-    """
-    A context manager that will prevent any logging messages triggered during the body from being
-    processed.
+    """A context manager to silent loggers during the body execution.
 
     Args:
         *logger_names (str): The names of the loggers to be disabled.
     """
-
     if not logger_names:
         loggers = [logging.root]
     else:

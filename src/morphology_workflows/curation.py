@@ -633,7 +633,9 @@ def plot_morphology(row, data_dir, with_plotly=True, realistic_diameters=True):
         bbox = np.array([[-1000, -1000, 1000], [1000, 1000, 1000]])
 
     plot_path = (data_dir / row.name).with_suffix(".pdf")
-    with disable_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(plot_path) as pdf:
+    with disable_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(
+        plot_path
+    ) as pdf:
         for plane, axis in {"xy": [0, 1], "xz": [0, 2], "yz": [1, 2]}.items():
             plt.figure()
             view.plot_morph(
