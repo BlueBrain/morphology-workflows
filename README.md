@@ -29,6 +29,9 @@ morphologies, as well as a flag ``is_valid``, used in subsequent tasks to filter
 At the end of each workflow, another ``report.csv`` file is created, with the main output columns of
 each tasks, and a ``report.pdf`` containing a human readable summary of the result of the workflow.
 
+Usually, the user should run the ``Curate`` workflow, then the ``Annotate`` workflow and finally the
+``Repair`` workflow.
+
 The complete documentation can be found here:
   * stable: https://morphology-workflows.readthedocs.io/en/stable/
   * latest: https://morphology-workflows.readthedocs.io/en/latest/
@@ -45,7 +48,26 @@ pip install morphology-workflows
 
 ## Usage
 
-This workflow is based on the ``luigi`` library but can be run via the command line interface:
+### Create inputs
+
+The inputs should consist in:
+
+* a directory containing the input morphologies.
+* a CSV file with the following columns:
+    1. ``index``: the row index.
+    2. ``morph_path``: the path to the morphology file.
+    3. ``morph_name``: the name of the morphology.
+    4. ``brain_region``: the brain region in which the morphology is located.
+* a ``luigi.cfg`` file containing the configuration for all the tasks.
+* a ``logging.conf`` file containing the logging configuration.
+
+The [examples](https://github.com/BlueBrain/morphology-workflows/tree/main/examples) folder contains
+examples for the ``luigi.cfg`` and ``logging.conf`` files.
+
+### Run the workflows
+
+This workflow is based on the ``luigi`` library but can be run via the command line interface. For
+example, you can run the ``Curate`` workflow with the following command:
 
 ```bash
 morphology_workflows --local-scheduler Curate
@@ -59,7 +81,8 @@ More details can be found in the command line interface section of the documenta
 
 ## Examples
 
-The `examples` folder contains a simple example that will process a set of morphologies.
+The [examples](https://github.com/BlueBrain/morphology-workflows/tree/main/examples) folder contains
+a simple example that will fetch and process a set of morphologies.
 A ``dataset.csv`` file is provided which is taken as input for the workflows. A ``luigi.cfg`` file
 is also provided to give a default configuration for the workflows.
 This example can simply be run using the following command:

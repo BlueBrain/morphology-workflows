@@ -9,6 +9,7 @@
 
    Home <self>
    cli
+   luigi_cfg
    api_ref
    changelog
    contributing
