@@ -45,7 +45,8 @@ def get_swc_by_neuron_index(neuronIndex, folder="morphologies"):
         filename = folder / file_name
         with open(filename, "w", encoding="utf-8") as f:
             f.write(response.read().decode("utf-8"))
-            return filename
+        print("Fetched", filename)
+        return filename
 
 
 def main():

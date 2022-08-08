@@ -1,5 +1,6 @@
 """Util functions."""
 import logging
+from contextlib import contextmanager
 from functools import wraps
 from pathlib import Path
 
@@ -37,3 +38,26 @@ def silent_logger(log_name):
         return decorated_func
 
     return _silent_logger
+
+
+@contextmanager
+def disable_loggers(*logger_names):
+    """A context manager to silent loggers during the body execution.
+
+    Args:
+        *logger_names (str): The names of the loggers to be disabled.
+    """
+    if not logger_names:
+        loggers = [logging.root]
+    else:
+        loggers = [logging.getLogger(i) for i in logger_names]
+
+    disabled_loggers = [(i, i.disabled) for i in loggers]
+
+    try:
+        for i, _ in disabled_loggers:
+            i.disabled = True
+        yield
+    finally:
+        for i, j in disabled_loggers:
+            i.disabled = j

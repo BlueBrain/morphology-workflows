@@ -29,6 +29,9 @@ morphologies, as well as a flag ``is_valid``, used in subsequent tasks to filter
 At the end of each workflow, another ``report.csv`` file is created, with the main output columns of
 each tasks, and a ``report.pdf`` containing a human readable summary of the result of the workflow.
 
+Usually, the user should run the ``Curate`` workflow, then the ``Annotate`` workflow and finally the
+``Repair`` workflow.
+
 The complete documentation can be found here:
   * stable: https://morphology-workflows.readthedocs.io/en/stable/
   * latest: https://morphology-workflows.readthedocs.io/en/latest/
@@ -45,21 +48,48 @@ pip install morphology-workflows
 
 ## Usage
 
-This workflow is based on the ``luigi`` library but can be run via the command line interface:
+### Create inputs
+
+The inputs should consist in:
+
+* a directory containing the input morphologies.
+* a CSV file with the following columns:
+    1. ``morph_path``: the path to the morphology file.
+    2. ``morph_name``: the name of the morphology.
+    3. any other column is kept into the results but not used in the workflows.
+* a ``luigi.cfg`` file containing the configuration for all the tasks.
+* an optional ``logging.conf`` file containing the logging configuration. If you prefer default logging
+  behavior, remove this file and comment line in ``logging_conf_file = logging.conf`` in ``luigi.cfg``.
+
+The [examples](https://github.com/BlueBrain/morphology-workflows/tree/main/examples) folder contains
+examples for the ``luigi.cfg`` and ``logging.conf`` files.
+
+### Run the workflows
+
+This workflow is based on the ``luigi`` library but can be run via the command line interface. For
+example, you can run the ``Curate`` workflow with the following command:
 
 ```bash
-morphology_workflows --local-scheduler Curate
+morphology_workflows Curate
 ```
 
-> **NOTE** This command must be executed from a directory containing a ``luigi.cfg`` file.
+> **NOTE:** This command must be executed from a directory containing a ``luigi.cfg`` file.
 > An example of such file is given in the ``examples`` directory.
+
+By default, a local scheduler is used but it is also possible to use a Luigi's master scheduler
+using the `-m / --master-scheduler` trigger:
+
+```bash
+morphology_workflows -m Curate
+```
 
 More details can be found in the command line interface section of the documentation.
 
 
 ## Examples
 
-The `examples` folder contains a simple example that will process a set of morphologies.
+The [examples](https://github.com/BlueBrain/morphology-workflows/tree/main/examples) folder contains
+a simple example that will fetch and process a set of morphologies.
 A ``dataset.csv`` file is provided which is taken as input for the workflows. A ``luigi.cfg`` file
 is also provided to give a default configuration for the workflows.
 This example can simply be run using the following command:

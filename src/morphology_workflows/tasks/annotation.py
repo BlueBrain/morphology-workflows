@@ -27,7 +27,6 @@ class CollectCurated(ElementValidationTask):
         "mtype": None,
         "rotation_matrix": None,
     }
-    input_index_col = luigi.Parameter(default="morph_name")
 
     validation_function = collect
 
