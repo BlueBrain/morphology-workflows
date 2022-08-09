@@ -11,12 +11,13 @@
 
 This project contains several workflows for processing morphologies:
 - **Fetch:** download morphologies from online database (like Allen, NeuroMorpho or MouseLight).
+- **Placeholders:** compute the place holders for a given region and mtype set.
 - **Curate:** from raw morphologies, ensures that morphologies can be used with the rest of
-  BBP codes
+  BBP codes.
   [![](autoapi/tasks/workflows/Curate.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Curate)
-- **Annotate:** create various annotations on morphologies needed by specific BBP codes
+- **Annotate:** create various annotations on morphologies needed by specific BBP codes.
   [![](autoapi/tasks/workflows/Annotate.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Annotate)
-- **Repair:** process morphologies to correct for artifacts of in-vitro reconstruction
+- **Repair:** process morphologies to correct for artifacts of in-vitro reconstruction.
   [![](autoapi/tasks/workflows/Repair.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Repair)
 
 
