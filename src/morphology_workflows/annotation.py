@@ -275,3 +275,13 @@ def plot_cut_leaves(row, data_dir, with_plotly=True):
         plt.close()
 
     return ValidationResult(is_valid=True, plot_cut_leaves_path=plot_path)
+
+
+def export_xml_annotations(row, data_dir):
+    """Export hard limit annotation to xml files."""
+    marker = MarkerSet.from_file(row.hard_limit_path)
+    annotation_path = (data_dir / row.name).with_suffix(".xml")
+    with open(annotation_path, "w") as f:
+        f.write(marker.to_xml())
+
+    return ValidationResult(is_valid=True, annotation_path=annotation_path)

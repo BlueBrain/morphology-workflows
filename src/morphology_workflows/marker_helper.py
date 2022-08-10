@@ -1,6 +1,8 @@
 """Module to read/write/plot morphology markers."""
 import logging
+from collections import defaultdict
 
+import xmltodict
 import numpy as np
 import yaml
 from neurom import load_morphology
@@ -143,6 +145,26 @@ class MarkerSet:
             "markers": [marker.to_dict()["marker"] for marker in self.markers],
         }
         return out_dict
+
+    def to_xml(self, key="annotations"):
+        """Convert marker data to xml for use with other BBP tools.
+
+        WARNING: this works for Hard_limit annnotations only
+        """
+        data = {key: {"@morphology": self.morph_name, "placement": []}}
+        _tmp = defaultdict(dict)
+        for marker in self.markers:
+            _marker = marker.to_dict()["marker"]
+            if _marker["label"].endswith("y_min"):
+                rule = _marker["label"][:-6]
+                _tmp[rule]["@y_min"] = _marker["data"][0][1]
+            if _marker["label"].endswith("y_max"):
+                rule = _marker["label"][:-6]
+                _tmp[rule]["@y_max"] = _marker["data"][0][1]
+        for rule, val in _tmp.items():
+            _data = {"@rule": rule, **val}
+            data[key]["placement"].append(_data)
+        return xmltodict.unparse(data, pretty=True, full_document=False, short_empty_elements=True)
 
     def save(self, filename=None, mode="a"):
         """Save marker data.

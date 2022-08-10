@@ -13,6 +13,7 @@ from morphology_workflows.annotation import find_apical_point
 from morphology_workflows.annotation import plot_apical_point
 from morphology_workflows.annotation import plot_cut_leaves
 from morphology_workflows.annotation import plot_hard_limits
+from morphology_workflows.annotation import export_xml_annotations
 from morphology_workflows.curation import collect
 
 logger = logging.getLogger(__name__)
@@ -95,6 +96,17 @@ class HardLimit(ElementValidationTask):
     def inputs(self):
         """ """
         return {CollectCurated: {"morph_path": "morph_path"}}
+
+
+class ExportXMLAnnotations(SkippableMixin(True), ElementValidationTask):
+    """Export placement annotation to xml format for internal BBP use."""
+
+    output_columns = {"annotation_path": None}
+    validation_function = export_xml_annotations
+
+    def inputs(self):
+        """ """
+        return {HardLimit: {"hard_limit_path": "hard_limit_path"}}
 
 
 class PlotHardLimit(SkippableMixin(), ElementValidationTask):

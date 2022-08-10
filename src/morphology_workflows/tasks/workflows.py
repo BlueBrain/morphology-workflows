@@ -10,6 +10,7 @@ from morphology_workflows.tasks.annotation import MType
 from morphology_workflows.tasks.annotation import PlotApicalPoint
 from morphology_workflows.tasks.annotation import PlotCutLeaves
 from morphology_workflows.tasks.annotation import PlotHardLimit
+from morphology_workflows.tasks.annotation import ExportXMLAnnotations
 from morphology_workflows.tasks.curation import Align
 from morphology_workflows.tasks.curation import CheckNeurites
 from morphology_workflows.tasks.curation import Collect
@@ -117,6 +118,7 @@ class Annotate(ValidationWorkflow):
             PlotApicalPoint: {},
             PlotCutLeaves: {},
             PlotHardLimit: {},
+            ExportXMLAnnotations: {},
         }
 
 
