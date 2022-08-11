@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0](https://github.com/BlueBrain/morphology-workflows/compare/0.3.2..0.4.0)
+
+> 11 August 2022
+
+- Chore: Set mtype_regex argument as optional (Adrien Berchet - [#52](https://github.com/BlueBrain/morphology-workflows/pull/52))
+- Docs: Improve doc for the Fetch workflow (Adrien Berchet - [#51](https://github.com/BlueBrain/morphology-workflows/pull/51))
+- Docs: Add the Placeholders workflow in the doc (Adrien Berchet - [#49](https://github.com/BlueBrain/morphology-workflows/pull/49))
+- Remove warning from scipy (Adrien Berchet - [#48](https://github.com/BlueBrain/morphology-workflows/pull/48))
+- Docs: Improve instructions to create inputs (Adrien Berchet - [#47](https://github.com/BlueBrain/morphology-workflows/pull/47))
+- Add workflow to compute placeholders (Adrien Berchet - [#22](https://github.com/BlueBrain/morphology-workflows/pull/22))
+- CI: Use commitlint to check PR titles (#45) (Adrien Berchet - [4d9c3df](https://github.com/BlueBrain/morphology-workflows/commit/4d9c3df738d0b715c5156cc3e4ce066738029bc9))
+
 ## [0.3.2](https://github.com/BlueBrain/morphology-workflows/compare/0.3.1..0.3.2)
 
 > 1 July 2022
