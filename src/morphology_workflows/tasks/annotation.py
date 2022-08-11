@@ -42,15 +42,7 @@ class MType(ElementValidationTask):
 
     output_columns = {"mtype": None}
     validation_function = assign_mtypes
-    mtype_regex = luigi.ListParameter(
-        default=[
-            "L[1-6]_[A-Z]+$",  # ex: L5_BP
-            "L[1-6]_[A-Z]+:[A-C]$",  # ex: L5_TPC:A
-            "L23_[A-Z]+$",  # ex: L23_BP
-            "L23_[A-Z]+:[A-C]$",  # ex: L23_TPC:A
-            "L[1-6]_[A-Z]+-[A-Z]+$",  # ex: L1_NCG-CA
-        ]
-    )
+    mtype_regex = luigi.OptionalListParameter(default=None)
 
     def kwargs(self):
         """ """
