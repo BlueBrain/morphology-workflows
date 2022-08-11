@@ -49,7 +49,70 @@ pip install morphology-workflows
 
 ## Usage
 
-### Create inputs
+### Create inputs for the Fetch workflow
+
+This workflow helps fetching morphologies from online databases. This workflow only needs a
+configuration file, which depends on the source from which the morphologies are fetched.
+
+The possible sources are:
+
+* NeuroMorpho
+* MouseLight
+* Allen
+
+For each of them, the configuration file should be a JSON file containing a list of objects like
+the following examples:
+
+* NeuroMorpho:
+  ```JSON
+  [
+      {
+          "species": "mouse",
+          "brain_region": "neocortex",
+          "cell_type": "interneuron",
+          "nb_morphologies": 10
+      }
+  ]
+  ```
+
+* MouseLight:
+  ```JSON
+  [
+      {
+          "brain_region": "neocortex",
+          "nb_morphologies": 10,
+          "seed": 0
+      }
+  ]
+  ```
+
+* Allen:
+  ```JSON
+  [
+      {
+          "species": "Mus musculus",
+          "brain_region": "VISli",
+          "cell_type": "pyramidal",
+          "nb_morphologies": 10,
+          "seed": 0
+      }
+  ]
+  ```
+
+In these examples, the ``seed`` attribute is optional and is only used to sample which morphologies
+are fetched among those which pass the filter.
+
+Each `JSON` object in the list will give a set of morphologies to fetch, depending on the given
+filters.
+Note that all attributes are optional, so it's possible to pass an empty object to fetch all the
+morphologies from the database, though it is not recommanded.
+
+### Create inputs for the Curate, Annotate and Repair workflow
+
+The **Annotate** and **Repair** workflows should usually be run after the **Curate** workflow since
+their inputs should be the outputs of the **Curate** workflow. But it is still possible to run them
+on arbitrary inputs (though the morphologies must be valid, as the ones processed by the **Curate**
+workflow).
 
 The inputs should consist in:
 
@@ -58,7 +121,7 @@ The inputs should consist in:
     1. ``morph_path``: the path to the morphology file.
     2. ``morph_name``: the name of the morphology.
     3. any other column is kept into the results but not used in the workflows.
-* a ``luigi.cfg`` file containing the configuration for all the tasks.
+* a ``luigi.cfg`` file containing the configuration for all the tasks of the workflow.
 * an optional ``logging.conf`` file containing the logging configuration. If you prefer default logging
   behavior, remove this file and comment line in ``logging_conf_file = logging.conf`` in ``luigi.cfg``.
 
@@ -67,8 +130,8 @@ examples for the ``luigi.cfg`` and ``logging.conf`` files.
 
 ### Run the workflows
 
-This workflow is based on the ``luigi`` library but can be run via the command line interface. For
-example, you can run the ``Curate`` workflow with the following command:
+These workflows are based on the ``luigi`` library but can be run via the command line interface.
+For example, you can run the ``Curate`` workflow with the following command:
 
 ```bash
 morphology_workflows Curate
@@ -84,7 +147,12 @@ using the `-m / --master-scheduler` trigger:
 morphology_workflows -m Curate
 ```
 
-More details can be found in the command line interface section of the documentation.
+More details can be found in the command line interface section of the documentation or by running
+the command:
+
+```bash
+morphology_workflows <workflow> --help
+```
 
 
 ## Examples
