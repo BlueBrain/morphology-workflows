@@ -227,7 +227,7 @@ def main(arguments=None):
     luigi_config = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
     luigi_config["local_scheduler"] = not args.master_scheduler
 
-    # Prepare workflow task and aguments
+    # Prepare workflow task and arguments
     task_cls = WORKFLOW_TASKS[args.workflow]
     args_dict = {k.split(task_cls.get_task_family() + "_")[-1]: v for k, v in vars(args).items()}
     args_dict = {

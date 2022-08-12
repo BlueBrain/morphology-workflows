@@ -133,7 +133,7 @@ def _labeled_line(ax, name, y_pos, color, pos="center"):
 def plot_hard_limits(row, data_dir, with_plotly=True):
     """Plotting placement annotations on morphologies.
 
-    TODO: update the ploting without plotly.
+    TODO: update the plotting without plotly.
     """
     plot_path = None
     if not row.isnull()["hard_limit_path"]:

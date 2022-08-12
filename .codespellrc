@@ -1,0 +1,2 @@
+[codespell]
+skip = .git/*,*.asc,*.csv,*.h5,*.html,*.pdf,*.swc,*.xml,*.yaml,*.yml

@@ -42,7 +42,7 @@ class Collect(ElementValidationTask):
 
 
 class ExtractMarkers(SkippableMixin(), ElementValidationTask):
-    """Extract marker informations from the original morphology files, if any.
+    """Extract marker information from the original morphology files, if any.
 
     Markers are additional spatial information contained in some reconstructed morphologies.
     Some can be read by MorphIO (https://github.com/BlueBrain/MorphIO/pull/186).
