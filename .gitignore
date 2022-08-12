@@ -20,3 +20,7 @@ doc/_images
 examples/*.log
 examples/dataset.csv
 examples/morphologies
+examples/out_*
+examples/repair_release-*
+examples/unravel_release-*
+examples/zero_diameter_release-*

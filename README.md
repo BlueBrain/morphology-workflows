@@ -105,7 +105,7 @@ are fetched among those which pass the filter.
 Each `JSON` object in the list will give a set of morphologies to fetch, depending on the given
 filters.
 Note that all attributes are optional, so it's possible to pass an empty object to fetch all the
-morphologies from the database, though it is not recommanded.
+morphologies from the database, though it is not recommended.
 
 ### Create inputs for the Curate, Annotate and Repair workflow
 

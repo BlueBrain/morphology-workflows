@@ -180,7 +180,7 @@ class Marker:
             data (str): markere data
             morph_name (str): name of corresponding morphology
             morph_path (str): path to corresponding morphology
-            plot_style (dict): custom dict for ploting arguments
+            plot_style (dict): custom dict for plotting arguments
             extra_data (any): additional marker information to keep (better to be yaml-friendly)
         """
         self.label = label

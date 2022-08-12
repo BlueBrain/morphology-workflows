@@ -1,10 +1,11 @@
 # SETUPTOOLS
 [build-system]
 requires = [
-    "setuptools",
+    "setuptools>=42",
     "setuptools_scm[toml]",
     "wheel",
 ]
+build-backend = "setuptools.build_meta"
 
 # BLACK
 [tool.black]
@@ -81,6 +82,7 @@ add-ignore = [
 	"D107",
 ]
 convention = "google"
+match = "[morphology_workflows, tests, doc/source/conf.py, setup.py, examples]"
 
 # ISORT
 [tool.isort]
@@ -101,4 +103,3 @@ filterwarnings = [
     "ignore::urllib3.exceptions.InsecureRequestWarning:urllib3",
     "ignore:Config file does not exist. luigi\\.cfg:UserWarning:luigi",
 ]
-

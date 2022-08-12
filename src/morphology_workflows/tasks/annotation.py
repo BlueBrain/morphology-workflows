@@ -37,7 +37,7 @@ class MType(ElementValidationTask):
     Currently, we only check if the mtype corresponds to the provided list of regex.
     If the list of regex is empty, we let all the morphologies pass (equivalent to skip).
 
-    If they do not, we unvalidate the morphologies.
+    If they do not, we invalidate the morphologies.
     """
 
     output_columns = {"mtype": None}

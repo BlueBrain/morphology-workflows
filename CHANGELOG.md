@@ -1,16 +1,41 @@
 # Changelog
 
+## [0.4.1](https://github.com/BlueBrain/morphology-workflows/compare/0.4.0..0.4.1)
+
+> 12 August 2022
+
+### CI Improvements
+
+- Fix action to publish new releases on Pypi (Adrien Berchet - [#54](https://github.com/BlueBrain/morphology-workflows/pull/54))
+
+### CI Improvements
+
+- Setup pre-commit and format the files accordingly (Adrien Berchet - [75cfc3c](https://github.com/BlueBrain/morphology-workflows/commit/75cfc3c33d311cacb0162348227b093fa032b43b))
+
 ## [0.4.0](https://github.com/BlueBrain/morphology-workflows/compare/0.3.2..0.4.0)
 
 > 11 August 2022
 
-- Chore: Set mtype_regex argument as optional (Adrien Berchet - [#52](https://github.com/BlueBrain/morphology-workflows/pull/52))
-- Docs: Improve doc for the Fetch workflow (Adrien Berchet - [#51](https://github.com/BlueBrain/morphology-workflows/pull/51))
-- Docs: Add the Placeholders workflow in the doc (Adrien Berchet - [#49](https://github.com/BlueBrain/morphology-workflows/pull/49))
+### Chores And Housekeeping
+
+- Set mtype_regex argument as optional (Adrien Berchet - [#52](https://github.com/BlueBrain/morphology-workflows/pull/52))
+
+### Documentation Changes
+
+- Improve doc for the Fetch workflow (Adrien Berchet - [#51](https://github.com/BlueBrain/morphology-workflows/pull/51))
+- Add the Placeholders workflow in the doc (Adrien Berchet - [#49](https://github.com/BlueBrain/morphology-workflows/pull/49))
+- Improve instructions to create inputs (Adrien Berchet - [#47](https://github.com/BlueBrain/morphology-workflows/pull/47))
+
+### Uncategorized Changes
+
 - Remove warning from scipy (Adrien Berchet - [#48](https://github.com/BlueBrain/morphology-workflows/pull/48))
-- Docs: Improve instructions to create inputs (Adrien Berchet - [#47](https://github.com/BlueBrain/morphology-workflows/pull/47))
 - Add workflow to compute placeholders (Adrien Berchet - [#22](https://github.com/BlueBrain/morphology-workflows/pull/22))
-- CI: Use commitlint to check PR titles (#45) (Adrien Berchet - [4d9c3df](https://github.com/BlueBrain/morphology-workflows/commit/4d9c3df738d0b715c5156cc3e4ce066738029bc9))
+
+### CI Improvements
+
+- Use commitlint to check PR titles (#45) (Adrien Berchet - [4d9c3df](https://github.com/BlueBrain/morphology-workflows/commit/4d9c3df738d0b715c5156cc3e4ce066738029bc9))
+
+<!-- auto-changelog-above -->
 
 ## [0.3.2](https://github.com/BlueBrain/morphology-workflows/compare/0.3.1..0.3.2)
 
@@ -41,7 +66,7 @@
 - Add link to the documentation into README.md (Adrien Berchet - [#16](https://github.com/BlueBrain/morphology-workflows/pull/16))
 - Add banner to repo (alex4200 - [#13](https://github.com/BlueBrain/morphology-workflows/pull/13))
 - Adding logo for Morphology-Workflows (alex4200 - [#12](https://github.com/BlueBrain/morphology-workflows/pull/12))
-- misssed fix (#18) (Alexis Arnaudon - [3a9b56f](https://github.com/BlueBrain/morphology-workflows/commit/3a9b56f49fd4e01b2fb3abd2c7493e64912f9182))
+- Missed fix (#18) (Alexis Arnaudon - [3a9b56f](https://github.com/BlueBrain/morphology-workflows/commit/3a9b56f49fd4e01b2fb3abd2c7493e64912f9182))
 - Ensure axon stub (#26) (arnaudon - [7e7f750](https://github.com/BlueBrain/morphology-workflows/commit/7e7f750391ef495c77219bd4e11d8abb978b1c3d))
 - Updating copyright year (adietz - [9b662e5](https://github.com/BlueBrain/morphology-workflows/commit/9b662e538ffa598415a1a6a1640c03ef3354a91d))
 
