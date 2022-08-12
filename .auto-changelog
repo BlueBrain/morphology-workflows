@@ -7,5 +7,6 @@
     "commitUrl": "https://github.com/BlueBrain/morphology-workflows/commit/{id}",
     "issueUrl": "https://github.com/BlueBrain/morphology-workflows/issues/{id}",
     "mergeUrl": "https://github.com/BlueBrain/morphology-workflows/pull/{id}",
-    "compareUrl": "https://github.com/BlueBrain/morphology-workflows/compare/{from}..{to}"
+    "compareUrl": "https://github.com/BlueBrain/morphology-workflows/compare/{from}..{to}",
+    "startingVersion": "0.4.0"
 }
