@@ -16,7 +16,6 @@ from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
-from morph_tool.spatial import point_to_section_segment
 from morphio.mut import Morphology
 from neurom import load_morphology
 from neurom import view
@@ -182,30 +181,9 @@ def plot_repair(row, data_dir, with_plotly=True):
 def smooth_diameters(row, data_dir):
     """Smooth diameters using diameter-synthesis."""
     morph = Morphology(row.morph_path)
-
-    config = {
-        "model": {
-            "taper": {"max": 1e-06, "min": -0.5},
-            "terminal_threshold": 2.0,
-            "models": ["generic"],
-            "neurite_types": ["basal", "apical"],
-        },
-        "diameters": {
-            "models": ["neurite_based"],
-            "n_samples": 5,
-            "neurite_types": ["basal", "apical"],
-            "seed": 0,
-            "trunk_max_tries": 200,
-        },
-    }
-    if isinstance(row.apical_point_path, str):
-        apical_point = MarkerSet.from_file(row.apical_point_path).markers[0].data
-        apical_sec = [point_to_section_segment(morph, apical_point)[0]]
-    else:
-        apical_sec = None
-    diametrize_single_neuron(morph, config, apical_sec)
+    new_morph = diametrize_single_neuron(morph)
     morph_path = data_dir / Path(row.morph_path).name
-    morph.write(morph_path)
+    new_morph.write(morph_path)
     return ValidationResult(is_valid=True, morph_path=morph_path)
 
 
@@ -229,7 +207,7 @@ def plot_smooth_diameters(row, data_dir, shift=200):
         soma_outline=False,
         realistic_diameters=False,
     )
-    plot_path = (data_dir / row.name).with_suffix(".png")
+    plot_path = (data_dir / row.name).with_suffix(".pdf")
     plt.autoscale()
     plt.axis("equal")
     plt.savefig(plot_path, bbox_inches="tight")
