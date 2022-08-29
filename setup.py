@@ -6,7 +6,7 @@ from setuptools import setup
 
 reqs = [
     "data-validation-framework>=0.3.0",
-    "diameter-synthesis>=0.2.5",
+    "diameter-synthesis>=0.2.5,<0.5",
     "Jinja2<3.1",
     "luigi>=3.1",
     "luigi-tools>=0.0.18",
