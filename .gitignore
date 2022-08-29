@@ -1,26 +1,49 @@
-**/__pycache__
-*.egg-info
-*.pyc
-._.DS_Store
-.DS_Store
-*.swp
-coverage.xml
-.coverage*
+# data
 .eggs
-.tox
+.idea
+*.pyc
+*.swp
+*py~
+*~
+*.egg-info
+
+# Mac related stuff
+.DS_Store
+
+# Packaging builds
 build
 dist
 
-reports
-doc/build
-doc/source/generated/
-doc/source/autoapi/
-doc/_images
+# tox
+.tox
 
+# coverage
+.coverage
+.coverage*
+coverage.xml
+
+# venv
+venv
+test_venv
+
+# docs
+docs/build
+docs/source/generated
+docs/source/autoapi/
+docs/source/examples
+docs/_images
+
+# reports
+reports
+
+# examples
+examples/*_release-*
 examples/*.log
+examples/.ipynb_checkpoints
 examples/dataset.csv
 examples/morphologies
 examples/out_*
-examples/repair_release-*
-examples/unravel_release-*
-examples/zero_diameter_release-*
+
+# Node
+node_modules
+package-lock.json

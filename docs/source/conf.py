@@ -1,5 +1,5 @@
 """Configuration file for the Sphinx documentation builder."""
-#
+
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
@@ -13,10 +13,10 @@ import importlib
 import os
 import re
 import subprocess
+from importlib import metadata
 from pathlib import Path
 
 import luigi
-from pkg_resources import get_distribution
 from sphinx.util import logging
 
 import morphology_workflows
@@ -42,11 +42,11 @@ if os.environ.get("READTHEDOCS_VERSION", "") == "stable":
     if not version:
         logger.info(
             "Could not find version from the 'git describe' command ."
-            "The 'pkg_resources.get_distribution' will be used."
+            "The 'importlib.metadata.version' function will be used."
         )
 
 if not version:
-    version = get_distribution(project).version
+    version = metadata.version("morphology_workflows")
 
 logger.info(f"Version found: {version}")
 

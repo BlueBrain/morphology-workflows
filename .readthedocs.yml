@@ -11,7 +11,7 @@ build:
     python: "miniconda3-4.7"
 
 sphinx:
-  configuration: doc/source/conf.py
+  configuration: docs/source/conf.py
   fail_on_warning: true
 
 python:
@@ -22,4 +22,4 @@ python:
         - docs
 
 conda:
-  environment: doc/environment.yml
+  environment: docs/environment.yml

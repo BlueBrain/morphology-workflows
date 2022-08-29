@@ -1,4 +1,4 @@
-"""Prepare fixtures for the tests of the morphology-workflows package."""
+"""Configuration for the pytest test suite."""
 import os
 from pathlib import Path
 

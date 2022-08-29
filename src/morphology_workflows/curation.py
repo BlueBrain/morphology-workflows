@@ -478,7 +478,7 @@ def align(
             raise ValueError(
                 "Provide a custom_orientation_json_path parameter when method=='custom'"
             )
-        with open(custom_orientation_json_path, "r") as orient_file:
+        with open(custom_orientation_json_path, "r", encoding="utf-8") as orient_file:
             orient_dict = json.load(orient_file)
         if row.name in orient_dict:
             direction = orient_dict[row.name]
