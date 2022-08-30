@@ -1,3 +1,4 @@
+global-exclude *.py[co] .DS_Store
 recursive-include src/morphology_workflows/_templates *.cfg *.py
 recursive-include src/morphology_workflows/_data *.csv
 prune .github

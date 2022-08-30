@@ -1,7 +1,7 @@
 API Reference
 =============
 
-This page contains auto-generated API reference documentation.
+This page presents the complete API documentation.
 
 .. toctree::
    :titlesonly:

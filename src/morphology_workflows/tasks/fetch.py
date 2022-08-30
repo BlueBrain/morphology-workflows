@@ -199,7 +199,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
             conf_element["morphologies"] = downloaded_neurons
 
     def run(self):
-        with self.config_file.open() as f:
+        with self.config_file.open() as f:  # pylint: disable=no-member
             config = json.load(f)
 
         if self.source == "Allen":

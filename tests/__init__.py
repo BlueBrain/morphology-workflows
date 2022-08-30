@@ -1,4 +1,4 @@
-"""Some testing tools."""
+"""Tests suite for the morphology-workflows package."""
 import re
 from tempfile import NamedTemporaryFile
 

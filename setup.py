@@ -1,14 +1,12 @@
 """Setup for the morphology-workflows package."""
+from pathlib import Path
+
 from setuptools import find_packages
 from setuptools import setup
 
-# Read the contents of the README file
-with open("README.md", encoding="utf-8") as f:
-    README = f.read()
-
 reqs = [
     "data-validation-framework>=0.3.0",
-    "diameter-synthesis>=0.2.5",
+    "diameter-synthesis>=0.2.5,<0.5",
     "Jinja2<3.1",
     "luigi>=3.1",
     "luigi-tools>=0.0.18",
@@ -54,14 +52,14 @@ setup(
     name="morphology-workflows",
     author="Blue Brain Project, EPFL",
     description="Workflows used for morphology processing.",
-    long_description=README,
+    long_description=Path("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
-    license="Apache-2.0",
-    url="https://github.com/BlueBrain/morphology-workflows",
+    url="https://morphology-workflows.readthedocs.io",
     project_urls={
         "Tracker": "https://github.com/BlueBrain/morphology-workflows/issues",
         "Source": "https://github.com/BlueBrain/morphology-workflows",
     },
+    license="Apache License 2.0",
     packages=find_packages("src", exclude=["tests"]),
     package_dir={"": "src"},
     python_requires=">=3.8",

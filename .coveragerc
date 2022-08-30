@@ -1,5 +1,5 @@
-[run]
-source =
+[paths]
+source_paths =
 	src/morphology_workflows
-	*/src/morphology_workflows
 	*/site-packages/morphology_workflows
+	*/src/morphology_workflows
