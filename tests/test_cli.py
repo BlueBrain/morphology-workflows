@@ -1,4 +1,4 @@
-"""Test CLI."""
+"""Tests for the morphology_workflows.cli module."""
 import re
 
 from morphology_workflows.tasks import cli

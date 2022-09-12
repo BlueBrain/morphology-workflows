@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 project = "morphology-workflows"
 
-# The full version, including alpha/beta/rc tags
+# The short X.Y version
 version = None
 if os.environ.get("READTHEDOCS_VERSION", "") == "stable":
     logger.info("Stable ReadTheDocs environment found.")
@@ -46,11 +46,11 @@ if os.environ.get("READTHEDOCS_VERSION", "") == "stable":
         )
 
 if not version:
-    version = metadata.version("morphology_workflows")
+    version = metadata.version("morphology-workflows")
 
 logger.info(f"Version found: {version}")
 
-# The X.Y.Z version
+# The full version, including alpha/beta/rc tags
 release = version
 
 
@@ -111,7 +111,7 @@ html_theme = "sphinx-bluebrain-theme"
 # html_static_path = ['_static']
 
 html_theme_options = {
-    "metadata_distribution": project,
+    "metadata_distribution": "morphology-workflows",
 }
 
 html_title = "Morphology Workflows"

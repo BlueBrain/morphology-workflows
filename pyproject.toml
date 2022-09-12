@@ -14,17 +14,17 @@ target-version = [
     "py38",
     "py39",
 ]
-include = 'morphology_workflows\/.*\.py$|tests\/.*\.py$|docs\/source\/conf\.py$|setup\.py$|examples\/*.py$'
 
 # PYDOCSTYLE
 [tool.pydocstyle]
 # ignore the following:
+#   - D102: Missing docstring in public method
 #   - D107: Missing docstring in __init__
 add-ignore = [
+    "D102",
     "D107",
 ]
 convention = "google"
-match = "[morphology_workflows, tests, docs/source/conf.py, setup.py, examples]"
 
 # ISORT
 [tool.isort]

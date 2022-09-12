@@ -1,0 +1,7 @@
+name: readthedocs
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.8
+  - graphviz
