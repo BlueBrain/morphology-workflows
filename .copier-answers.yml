@@ -1,24 +1,26 @@
 # Changes here will be overwritten by Copier
 
-_commit: 0.1.7
+_commit: 0.1.19
 _src_path: git@bbpgitlab.epfl.ch:neuromath/python-template.git
 author_email: ''
 author_name: Blue Brain Project, EPFL
 copyright_license: Apache License 2.0
 copyright_year: '2022'
-download_url: git@github.com:BlueBrain/morphology-workflows.git
+distribution_name: morphology-workflows
+download_url: https://github.com/BlueBrain/morphology-workflows
 init_git: false
 maintainer: Alexis Arnaudon (@arnaudon)
 package_name: morphology_workflows
 project_description: Workflows used for morphology processing.
 project_name: morphology-workflows
 project_url: https://morphology-workflows.readthedocs.io
-repository: BlueBrain/morphology-workflows
+repository_name: morphology-workflows
+repository_namespace: BlueBrain
 repository_provider: github
+ssh_url: git@github.com:BlueBrain/morphology-workflows.git
 support_py37: false
-team_name: ''
-today: 29 August 2022
+team_name: neuromath
 tracker_url: https://github.com/BlueBrain/morphology-workflows/issues
-version: 0.4.0
+version: 0.1.0.dev0
 
 # End of Copier answers
