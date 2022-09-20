@@ -182,6 +182,7 @@ class MakeRelease(SetValidationTask):
                 f"zero_diameter_release_morph_path_{ext}": None,
                 f"unravel_release_morph_path_{ext}": None,
                 f"repair_release_morph_path_{ext}": None,
+                "layer": None,
             }
         )
 

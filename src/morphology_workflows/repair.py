@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from data_validation_framework.result import ValidationResult
-from data_validation_framework.result import ValidationResultSet
 from diameter_synthesis.main import diametrize_single_neuron
 from matplotlib.backends.backend_pdf import PdfPages
 from morph_tool.converter import convert
@@ -373,10 +372,10 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
     return index, data, m
 
 
-def _set_layer(df):
+def set_layer_column(df):
     """Set layer values from mtype name if no layer column is present."""
-    if "layer" not in df.columns:
-        for gid in df.index:
+    for gid in df.index:
+        if df.loc[gid, "layer"] is None:
             mtype = df.loc[gid, "mtype"]
             if isinstance(mtype, str):
                 if len(mtype) > 1:
@@ -386,20 +385,23 @@ def _set_layer(df):
                         layer = 0
             else:
                 layer = "no_mtype"
-
             df.loc[gid, "layer"] = layer
             df.loc[gid, "mtype"] = mtype
 
 
-def _duplicate_layers(df):
+def add_duplicated_layers(df):
     """Duplicate entries if layer name has mixed layers, i.e. L23_PC."""
     mtypes = df.mtype.unique()
+    df.reset_index(inplace=True)
     for mtype in mtypes:
         layer = mtype.split("_")[0][1:]
         if len(layer) > 1:
             _df = df[df.mtype == mtype]
             _df.layer = int(layer[1])
-            df = pd.concat([df, _df])
+            id_0 = len(df)
+            for index, row in _df.reset_index().iterrows():
+                df.loc[index + id_0] = row
+    df.set_index("morph_name", inplace=True)
     return df
 
 
@@ -407,10 +409,12 @@ def make_release(
     df, _, zero_diameter_path, unravel_path, repair_path, extensions, duplicate_layers=True
 ):
     """Make morphology release."""
-    _set_layer(df)
+    set_layer_column(df)
+    n_rows = len(df.index)
     if duplicate_layers:
-        df = _duplicate_layers(df)
+        df = add_duplicated_layers(df)
 
+    df.reset_index(inplace=True)
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:
@@ -436,13 +440,11 @@ def make_release(
         )
 
         # we have to reset indices if duplicated morphology names are present
-        df = df.reset_index()
         _m = []
         with Pool() as pool:
             for index, row, m in pool.map(__create_db_row, df.loc[df["is_valid"]].iterrows()):
                 df.loc[index] = pd.Series(row)
                 _m.append(m)
-        df = df.set_index("morph_name")
 
         db = MorphDB(_m)
         if _zero_diameter_path is not None:
@@ -462,4 +464,7 @@ def make_release(
             df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
                 _repair_path / "neurondb.xml"
             )
-    return ValidationResultSet(df)
+
+    # we drop duplicate to preserve df size
+    df.drop(index=df.index[n_rows:], axis=0, inplace=True)
+    df.set_index("morph_name", inplace=True)
