@@ -338,25 +338,13 @@ def _convert(input_file, output_file):
         return "cannot save"
 
 
-def _get_layer_mtype(mtype_input):
-    """Helper to get layer from mtype, if mtype exists as a str."""
-    layer = "no_layer"
-    mtype = "no_mtype"
-    if isinstance(mtype_input, str):
-        mtype = mtype_input
-        if len(mtype_input) > 1:
-            layer = mtype_input[1]
-    return mtype, layer
-
-
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):
     """Create a db row and convert morphology."""
     name, data = _data
-    mtype, layer = _get_layer_mtype(data["mtype"])
     m = MorphInfo(
         name=name,
-        mtype=mtype,
-        layer=layer,
+        mtype=data["mtype"],
+        layer=data["layer"],
         use_dendrite=data["has_basal"],
         use_axon=data["has_axon"],
     )
@@ -384,8 +372,44 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
     return name, data, m
 
 
-def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extensions):
+def _set_layer(df):
+    """Set layer values from mtype name if no layer column is present."""
+    if "layer" not in df.columns:
+        for gid in df.index:
+            mtype = df.loc[gid, "mtype"]
+            if isinstance(mtype, str):
+                if len(mtype) > 1:
+                    try:
+                        layer = int(mtype[1])
+                    except ValueError:
+                        layer = "no_layer"
+            else:
+                layer = "no_mtype"
+
+            df.loc[gid, "layer"] = layer
+            df.loc[gid, "mtype"] = mtype
+
+
+def _duplicate_layers(df):
+    """Duplicate entries if layer name has mixed layers, i.e. L23_PC."""
+    mtypes = df.mtype.unique()
+    for mtype in mtypes:
+        layer = mtype.split("_")[1:]
+        if len(layer) > 1:
+            _df = df[df.mtype == mtype]
+            _df.layer = layer[1]
+            df = pd.concat([df, _df])
+    return df
+
+
+def make_release(
+    df, _, zero_diameter_path, unravel_path, repair_path, extensions, duplicate_layers=True
+):
     """Make morphology release."""
+    _set_layer(df)
+    if duplicate_layers:
+        df = _duplicate_layers(df)
+
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:

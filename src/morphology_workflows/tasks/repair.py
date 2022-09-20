@@ -166,6 +166,10 @@ class MakeRelease(SetValidationTask):
         default="repaired_release",
         description=":str: Path to repaired morphologies (not created if None)",
     )
+    duplicate_layers = luigi.BoolParameter(
+        default=True, description=":bool: Duplicate entries with mixed layer mtypes, i.e. L23_PC."
+    )
+
     extensions = [".asc", ".h5", ".swc"]
     output_columns = {}
     for extension in extensions:
@@ -190,6 +194,7 @@ class MakeRelease(SetValidationTask):
             "unravel_path": self.unravel_path,
             "repair_path": self.repair_path,
             "extensions": self.extensions,
+            "duplicate_layers": self.duplicate_layers,
         }
 
     def inputs(self):
