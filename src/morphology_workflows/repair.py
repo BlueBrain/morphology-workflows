@@ -340,11 +340,11 @@ def _convert(input_file, output_file):
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):
     """Create a db row and convert morphology."""
-    name, data = _data
+    index, data = _data
     m = MorphInfo(
-        name=name,
+        name=data["morph_name"],
         mtype=data["mtype"],
-        layer=data["layer"],
+        layer=int(data["layer"]),
         use_dendrite=data["has_basal"],
         use_axon=data["has_axon"],
     )
@@ -369,7 +369,7 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
         data[f"repair_release_morph_path_{extension[1:]}"] = _convert(
             data["repair_morph_path"], repair_release_path
         )
-    return name, data, m
+    return index, data, m
 
 
 def _set_layer(df):
@@ -380,9 +380,9 @@ def _set_layer(df):
             if isinstance(mtype, str):
                 if len(mtype) > 1:
                     try:
-                        layer = int(mtype[1])
+                        layer = mtype[1]
                     except ValueError:
-                        layer = "no_layer"
+                        layer = 0
             else:
                 layer = "no_mtype"
 
@@ -394,10 +394,10 @@ def _duplicate_layers(df):
     """Duplicate entries if layer name has mixed layers, i.e. L23_PC."""
     mtypes = df.mtype.unique()
     for mtype in mtypes:
-        layer = mtype.split("_")[1:]
+        layer = mtype.split("_")[0][1:]
         if len(layer) > 1:
             _df = df[df.mtype == mtype]
-            _df.layer = layer[1]
+            _df.layer = int(layer[1])
             df = pd.concat([df, _df])
     return df
 
@@ -434,11 +434,14 @@ def make_release(
             extension=extension,
         )
 
+        # we have to reset indices if duplicated morphology names are present
+        df = df.reset_index()
         _m = []
         with Pool() as pool:
-            for name, row, m in pool.imap(__create_db_row, df.loc[df["is_valid"]].iterrows()):
-                df.loc[name] = pd.Series(row)
+            for index, row, m in pool.map(__create_db_row, df.loc[df["is_valid"]].iterrows()):
+                df.loc[index] = pd.Series(row)
                 _m.append(m)
+        df = df.set_index("morph_name")
 
         db = MorphDB(_m)
         if _zero_diameter_path is not None:
