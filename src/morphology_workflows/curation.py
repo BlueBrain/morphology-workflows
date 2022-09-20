@@ -54,6 +54,12 @@ def collect(row, data_dir, morph_path_col="morph_path"):
         )
     is_morph, ext = is_morphology(row[morph_path_col])
     if is_morph:
+        if " " in row.name:
+            return ValidationResult(
+                is_valid=False,
+                comment=f"{row[morph_path_col]} has spaces in its name, which is not supported.",
+                morph_path=None,
+            )
         full_new_morph_path = str(data_dir / row.name) + ext
         shutil.copy(row[morph_path_col], full_new_morph_path)
         return ValidationResult(is_valid=True, morph_path=full_new_morph_path)
