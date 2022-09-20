@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from data_validation_framework.result import ValidationResult
+from data_validation_framework.result import ValidationResultSet
 from diameter_synthesis.main import diametrize_single_neuron
 from matplotlib.backends.backend_pdf import PdfPages
 from morph_tool.converter import convert
@@ -461,3 +462,4 @@ def make_release(
             df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
                 _repair_path / "neurondb.xml"
             )
+    return ValidationResultSet(df)
