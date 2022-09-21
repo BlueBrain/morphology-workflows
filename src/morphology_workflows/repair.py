@@ -410,11 +410,12 @@ def make_release(
 ):
     """Make morphology release."""
     set_layer_column(df)
-    n_rows = len(df.index)
     if duplicate_layers:
-        df = add_duplicated_layers(df)
+        df_tmp = add_duplicated_layers(df).reset_index()
+    else:
+        df_tmp = df.copy()
+        df_tmp["index"] = df.index
 
-    df.reset_index(inplace=True)
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:
@@ -439,11 +440,11 @@ def make_release(
             extension=extension,
         )
 
-        # we have to reset indices if duplicated morphology names are present
         _m = []
         with Pool() as pool:
-            for index, row, m in pool.map(__create_db_row, df.loc[df["is_valid"]].iterrows()):
-                df.loc[index] = pd.Series(row)
+            for name, row, m in pool.map(__create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()):
+                if row["index"] in df:
+                    df.loc[name] = pd.Series(row)
                 _m.append(m)
 
         db = MorphDB(_m)
@@ -464,7 +465,3 @@ def make_release(
             df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
                 _repair_path / "neurondb.xml"
             )
-
-    # we drop duplicate to preserve df size
-    df.drop(index=df.index[n_rows:], axis=0, inplace=True)
-    df.set_index("morph_name", inplace=True)
