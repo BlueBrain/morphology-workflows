@@ -436,8 +436,9 @@ def make_release(
 
         _m = []
         with Pool() as pool:
-            for morph_name, row, m in pool.map(
-                __create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()
+            for morph_name, row, m in tqdm(
+                pool.imap(__create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()),
+                total=len(df_tmp),
             ):
                 df.loc[morph_name] = pd.Series(row)
                 _m.append(m)
