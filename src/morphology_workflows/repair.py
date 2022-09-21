@@ -336,6 +336,8 @@ def _convert(input_file, output_file):
         return output_file
     except MorphToolException:
         return "cannot save"
+    except RuntimeError:  # this can happen if duplicates are being written as the same time
+        return output_file
 
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):
@@ -380,11 +382,11 @@ def set_layer_column(df):
             if isinstance(mtype, str):
                 if len(mtype) > 1:
                     try:
-                        layer = mtype[1]
+                        layer = int(mtype[1])
                     except ValueError:
                         layer = 0
             else:
-                layer = "no_mtype"
+                layer = 0
             df.loc[gid, "layer"] = layer
             df.loc[gid, "mtype"] = mtype
 
