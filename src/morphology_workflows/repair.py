@@ -340,9 +340,9 @@ def _convert(input_file, output_file):
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):
     """Create a db row and convert morphology."""
-    index, data = _data
+    morph_name, data = _data
     m = MorphInfo(
-        name=data["morph_name"],
+        name=morph_name,
         mtype=data["mtype"],
         layer=int(data["layer"]),
         use_dendrite=data["has_basal"],
@@ -369,7 +369,7 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
         data[f"repair_release_morph_path_{extension[1:]}"] = _convert(
             data["repair_morph_path"], repair_release_path
         )
-    return index, data, m
+    return morph_name, data, m
 
 
 def set_layer_column(df):
@@ -391,17 +391,12 @@ def set_layer_column(df):
 
 def add_duplicated_layers(df):
     """Duplicate entries if layer name has mixed layers, i.e. L23_PC."""
-    mtypes = df.mtype.unique()
-    df.reset_index(inplace=True)
-    for mtype in mtypes:
+    for mtype in df.mtype.unique():
         layer = mtype.split("_")[0][1:]
         if len(layer) > 1:
             _df = df[df.mtype == mtype]
             _df.layer = int(layer[1])
-            id_0 = len(df)
-            for index, row in _df.reset_index().iterrows():
-                df.loc[index + id_0] = row
-    df.set_index("morph_name", inplace=True)
+            df = pd.concat([df, _df])
     return df
 
 
@@ -410,11 +405,11 @@ def make_release(
 ):
     """Make morphology release."""
     set_layer_column(df)
-    n_rows = len(df.index)
-    if duplicate_layers:
-        df = add_duplicated_layers(df)
 
-    df.reset_index(inplace=True)
+    df_tmp = df.copy()
+    if duplicate_layers:
+        df_tmp = add_duplicated_layers(df_tmp)
+
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:
@@ -439,11 +434,12 @@ def make_release(
             extension=extension,
         )
 
-        # we have to reset indices if duplicated morphology names are present
         _m = []
         with Pool() as pool:
-            for index, row, m in pool.map(__create_db_row, df.loc[df["is_valid"]].iterrows()):
-                df.loc[index] = pd.Series(row)
+            for morph_name, row, m in pool.map(
+                __create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()
+            ):
+                df.loc[morph_name] = pd.Series(row)
                 _m.append(m)
 
         db = MorphDB(_m)
@@ -464,7 +460,3 @@ def make_release(
             df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
                 _repair_path / "neurondb.xml"
             )
-
-    # we drop duplicate to preserve df size
-    df.drop(index=df.index[n_rows:], axis=0, inplace=True)
-    df.set_index("morph_name", inplace=True)
