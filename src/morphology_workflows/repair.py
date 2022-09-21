@@ -340,9 +340,9 @@ def _convert(input_file, output_file):
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):
     """Create a db row and convert morphology."""
-    morph_name, data = _data
+    index, data = _data
     m = MorphInfo(
-        name=morph_name,
+        name=data["morph_name"],
         mtype=data["mtype"],
         layer=int(data["layer"]),
         use_dendrite=data["has_basal"],
@@ -369,7 +369,7 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
         data[f"repair_release_morph_path_{extension[1:]}"] = _convert(
             data["repair_morph_path"], repair_release_path
         )
-    return morph_name, data, m
+    return index, data, m
 
 
 def set_layer_column(df):
@@ -396,7 +396,7 @@ def add_duplicated_layers(df):
         if len(layer) > 1:
             _df = df[df.mtype == mtype]
             _df.layer = int(layer[1])
-            df = pd.concat([df, _df])
+            df = pd.concat([df, _df]).reset_index(drop=True)
     return df
 
 
@@ -406,10 +406,11 @@ def make_release(
     """Make morphology release."""
     set_layer_column(df)
 
-    df_tmp = df.copy()
+    df_tmp = df.reset_index()
     if duplicate_layers:
         df_tmp = add_duplicated_layers(df_tmp)
 
+    df.reset_index(inplace=True)
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:
@@ -436,11 +437,13 @@ def make_release(
 
         _m = []
         with Pool() as pool:
-            for morph_name, row, m in tqdm(
+            for index, row, m in tqdm(
                 pool.imap(__create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()),
                 total=len(df_tmp),
             ):
-                df.loc[morph_name] = pd.Series(row)
+                if index in df.index:
+                    df.loc[index] = pd.Series(row)
+                df_tmp.loc[index] = pd.Series(row)
                 _m.append(m)
 
         db = MorphDB(_m)
@@ -449,10 +452,16 @@ def make_release(
             df.loc[df["is_valid"], f"zero_diameter_morph_db_path_{extension[:1]}"] = (
                 _zero_diameter_path / "neurondb.xml"
             )
+            df_tmp.loc[df_tmp["is_valid"], f"zero_diameter_morph_db_path_{extension[:1]}"] = (
+                _zero_diameter_path / "neurondb.xml"
+            )
 
         if _unravel_path is not None:
             db.write(_unravel_path / "neurondb.xml")
             df.loc[df["is_valid"], f"unravel_morph_db_path_{extension[1:]}"] = (
+                _unravel_path / "neurondb.xml"
+            )
+            df_tmp.loc[df_tmp["is_valid"], f"unravel_morph_db_path_{extension[1:]}"] = (
                 _unravel_path / "neurondb.xml"
             )
 
@@ -461,3 +470,7 @@ def make_release(
             df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
                 _repair_path / "neurondb.xml"
             )
+            df_tmp.loc[df_tmp["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
+                _repair_path / "neurondb.xml"
+            )
+    df.set_index("morph_name", inplace=True)
