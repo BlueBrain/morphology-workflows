@@ -336,27 +336,17 @@ def _convert(input_file, output_file):
         return output_file
     except MorphToolException:
         return "cannot save"
-
-
-def _get_layer_mtype(mtype_input):
-    """Helper to get layer from mtype, if mtype exists as a str."""
-    layer = "no_layer"
-    mtype = "no_mtype"
-    if isinstance(mtype_input, str):
-        mtype = mtype_input
-        if len(mtype_input) > 1:
-            layer = mtype_input[1]
-    return mtype, layer
+    except RuntimeError:  # this can happen if duplicates are being written as the same time
+        return output_file
 
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):
     """Create a db row and convert morphology."""
-    name, data = _data
-    mtype, layer = _get_layer_mtype(data["mtype"])
+    index, data = _data
     m = MorphInfo(
-        name=name,
-        mtype=mtype,
-        layer=layer,
+        name=data["morph_name"],
+        mtype=data["mtype"],
+        layer=int(data["layer"]),
         use_dendrite=data["has_basal"],
         use_axon=data["has_axon"],
     )
@@ -381,11 +371,47 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
         data[f"repair_release_morph_path_{extension[1:]}"] = _convert(
             data["repair_morph_path"], repair_release_path
         )
-    return name, data, m
+    return index, data, m
 
 
-def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extensions):
+def set_layer_column(df):
+    """Set layer values from mtype name if no layer column is present."""
+    for gid in df.index:
+        if df.loc[gid, "layer"] is None:
+            mtype = df.loc[gid, "mtype"]
+            if isinstance(mtype, str):
+                if len(mtype) > 1:
+                    try:
+                        layer = int(mtype[1])
+                    except ValueError:
+                        layer = 0
+            else:
+                layer = 0
+            df.loc[gid, "layer"] = layer
+            df.loc[gid, "mtype"] = mtype
+
+
+def add_duplicated_layers(df):
+    """Duplicate entries if layer name has mixed layers, i.e. L23_PC."""
+    for mtype in df.mtype.unique():
+        layer = mtype.split("_")[0][1:]
+        if len(layer) > 1:
+            _df = df[df.mtype == mtype]
+            _df.layer = int(layer[1])
+            df = pd.concat([df, _df]).reset_index(drop=True)
+    return df
+
+
+def make_release(
+    df, _, zero_diameter_path, unravel_path, repair_path, extensions, duplicate_layers=True
+):
     """Make morphology release."""
+    set_layer_column(df)
+
+    df_tmp = df.reset_index()
+    if duplicate_layers:
+        df_tmp = add_duplicated_layers(df_tmp)
+
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:
@@ -411,26 +437,36 @@ def make_release(df, _, zero_diameter_path, unravel_path, repair_path, extension
         )
 
         _m = []
+        written = set()
         with Pool() as pool:
-            for name, row, m in pool.imap(__create_db_row, df.loc[df["is_valid"]].iterrows()):
-                df.loc[name] = pd.Series(row)
+            for index, row, m in tqdm(
+                pool.imap(__create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()),
+                total=len(df_tmp),
+            ):
+                if row["morph_name"] in df.index and row["morph_name"] not in written:
+                    df.loc[row["morph_name"]] = pd.Series(row)
+                    written.add(row["morph_name"])
+                df_tmp.loc[index] = pd.Series(row)
                 _m.append(m)
 
         db = MorphDB(_m)
         if _zero_diameter_path is not None:
             db.write(_zero_diameter_path / "neurondb.xml")
-            df.loc[df["is_valid"], f"zero_diameter_morph_db_path_{extension[:1]}"] = (
-                _zero_diameter_path / "neurondb.xml"
-            )
+            col_name = f"zero_diameter_morph_db_path_{extension[:1]}"
+            db_path = _zero_diameter_path / "neurondb.xml"
+            df.loc[df["is_valid"], col_name] = db_path
+            df_tmp.loc[df_tmp["is_valid"], col_name] = db_path
 
         if _unravel_path is not None:
             db.write(_unravel_path / "neurondb.xml")
-            df.loc[df["is_valid"], f"unravel_morph_db_path_{extension[1:]}"] = (
-                _unravel_path / "neurondb.xml"
-            )
+            col_name = f"unravel_morph_db_path_{extension[1:]}"
+            db_path = _unravel_path / "neurondb.xml"
+            df.loc[df["is_valid"], col_name] = db_path
+            df_tmp.loc[df_tmp["is_valid"], col_name] = db_path
 
         if _repair_path is not None:
             db.write(_repair_path / "neurondb.xml")
-            df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
-                _repair_path / "neurondb.xml"
-            )
+            col_name = f"repair_morph_db_path_{extension[1:]}"
+            db_path = _repair_path / "neurondb.xml"
+            df.loc[df["is_valid"], col_name] = db_path
+            df_tmp.loc[df_tmp["is_valid"], col_name] = db_path

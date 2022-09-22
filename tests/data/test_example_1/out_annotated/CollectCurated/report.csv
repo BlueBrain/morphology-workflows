@@ -25,4 +25,4 @@ soma_multiple_frustums,True,0,,,out_annotated/CollectCurated/data/soma_multiple_
 soma_single_frustum,True,0,,,out_annotated/CollectCurated/data/soma_single_frustum.swc,False,L1_AAA:C,
 soma_three_points_cylinder,True,0,,,out_annotated/CollectCurated/data/soma_three_points_cylinder.swc,False,L1_AAA:C,
 spine,True,0,,,out_annotated/CollectCurated/data/spine.asc,False,L1_AAA:C,
-three_point_soma,True,0,,,out_annotated/CollectCurated/data/three_point_soma.swc,True,L1_AAA:C,
+three_point_soma,True,0,,,out_annotated/CollectCurated/data/three_point_soma.swc,True,L23_AAA:C,
