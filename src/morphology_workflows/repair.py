@@ -412,7 +412,6 @@ def make_release(
     if duplicate_layers:
         df_tmp = add_duplicated_layers(df_tmp)
 
-    df.reset_index(inplace=True)
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:
@@ -438,41 +437,36 @@ def make_release(
         )
 
         _m = []
+        written = set()
         with Pool() as pool:
             for index, row, m in tqdm(
                 pool.imap(__create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()),
                 total=len(df_tmp),
             ):
-                if index in df.index:
-                    df.loc[index] = pd.Series(row)
+                if row["morph_name"] in df.index and row["morph_name"] not in written:
+                    df.loc[row["morph_name"]] = pd.Series(row)
+                    written.add(row["morph_name"])
                 df_tmp.loc[index] = pd.Series(row)
                 _m.append(m)
 
         db = MorphDB(_m)
         if _zero_diameter_path is not None:
             db.write(_zero_diameter_path / "neurondb.xml")
-            df.loc[df["is_valid"], f"zero_diameter_morph_db_path_{extension[:1]}"] = (
-                _zero_diameter_path / "neurondb.xml"
-            )
-            df_tmp.loc[df_tmp["is_valid"], f"zero_diameter_morph_db_path_{extension[:1]}"] = (
-                _zero_diameter_path / "neurondb.xml"
-            )
+            col_name = f"zero_diameter_morph_db_path_{extension[:1]}"
+            db_path = _zero_diameter_path / "neurondb.xml"
+            df.loc[df["is_valid"], col_name] = db_path
+            df_tmp.loc[df_tmp["is_valid"], col_name] = db_path
 
         if _unravel_path is not None:
             db.write(_unravel_path / "neurondb.xml")
-            df.loc[df["is_valid"], f"unravel_morph_db_path_{extension[1:]}"] = (
-                _unravel_path / "neurondb.xml"
-            )
-            df_tmp.loc[df_tmp["is_valid"], f"unravel_morph_db_path_{extension[1:]}"] = (
-                _unravel_path / "neurondb.xml"
-            )
+            col_name = f"unravel_morph_db_path_{extension[1:]}"
+            db_path = _unravel_path / "neurondb.xml"
+            df.loc[df["is_valid"], col_name] = db_path
+            df_tmp.loc[df_tmp["is_valid"], col_name] = db_path
 
         if _repair_path is not None:
             db.write(_repair_path / "neurondb.xml")
-            df.loc[df["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
-                _repair_path / "neurondb.xml"
-            )
-            df_tmp.loc[df_tmp["is_valid"], f"repair_morph_db_path_{extension[1:]}"] = (
-                _repair_path / "neurondb.xml"
-            )
-    df.set_index("morph_name", inplace=True)
+            col_name = f"repair_morph_db_path_{extension[1:]}"
+            db_path = _repair_path / "neurondb.xml"
+            df.loc[df["is_valid"], col_name] = db_path
+            df_tmp.loc[df_tmp["is_valid"], col_name] = db_path

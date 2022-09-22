@@ -25,4 +25,4 @@ soma_multiple_frustums,out_curated/DetectErrors/data/soma_multiple_frustums.swc,
 soma_single_frustum,out_curated/DetectErrors/data/soma_single_frustum.swc,,False,False,False,,out_curated/Resample/data/soma_single_frustum.swc,L1_AAA:C,,"[0.5, 0.0, 0.0]"
 soma_three_points_cylinder,out_curated/DetectErrors/data/soma_three_points_cylinder.swc,,False,False,False,,out_curated/Resample/data/soma_three_points_cylinder.swc,L1_AAA:C,,"[0.0, 0.0, 0.0]"
 spine,out_curated/DetectErrors/data/spine.asc,out_curated/DetectErrors/data/spine.yaml,False,False,True,,out_curated/Resample/data/spine.asc,L1_AAA:C,,"[1.0, 1.0, 1.0]"
-three_point_soma,out_curated/DetectErrors/data/three_point_soma.swc,out_curated/DetectErrors/data/three_point_soma.yaml,True,False,True,,out_curated/Resample/data/three_point_soma.swc,L1_AAA:C,,"[0.0, 0.0, 0.0]"
+three_point_soma,out_curated/DetectErrors/data/three_point_soma.swc,out_curated/DetectErrors/data/three_point_soma.yaml,True,False,True,,out_curated/Resample/data/three_point_soma.swc,L23_AAA:C,,"[0.0, 0.0, 0.0]"
