@@ -179,11 +179,11 @@ def plot_repair(row, data_dir, with_plotly=True):
 
 
 def smooth_diameters(row, data_dir):
-    """Smooth diameters using diameter-synthesis."""
+    """Smooth diameters using diameter-synthesis simpler algorithm."""
     morph = Morphology(row.morph_path)
-    new_morph = diametrize_single_neuron(morph)
+    diametrize_single_neuron(morph)
     morph_path = data_dir / Path(row.morph_path).name
-    new_morph.write(morph_path)
+    morph.write(morph_path)
     return ValidationResult(is_valid=True, morph_path=morph_path)
 
 
