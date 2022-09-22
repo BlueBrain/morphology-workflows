@@ -142,11 +142,50 @@ def plot_markers(row, data_dir, with_plotly=True):
     return ValidationResult(is_valid=True, plot_marker_path=plot_path)
 
 
-def sanitize(row, data_dir):
-    """Sanitize morphologies."""
+def _reconnect_to_soma(m):
+    """Reconnect a neurite to soma if it is not."""
+
+    def _copy(section, section_base):
+        """Recursively copy downstream from section_base to section."""
+        for base_child in section_base.children:
+            section.append_section(base_child)
+        for child, base_child in zip(section.children, section_base.children):
+            _copy(child, base_child)
+
+    for root in m.root_sections:
+        for section in root.iter():
+            if section.type != root.type:
+                L.warning("We found root sections not at soma, reconnecting.")
+                new_sec = m.append_root_section(section)
+                _copy(new_sec, section)
+                m.delete_section(section, recursive=True)
+                return True
+    return False
+
+
+def sanitize(row, data_dir, ensure_roots_at_soma=True):
+    """Sanitize morphologies.
+
+    With `ensure_roots_at_soma` we disconnect neurites not at the soma and connect
+    at the soma. This may happen for dendrite bearing axons morphologies in .swc format.
+    Weirdness may happen, for example upon converting to .asc, the axon will become a basal.
+    """
     new_morph_path = data_dir / Path(row.morph_path).name
+    m = Morphology(row.morph_path)
+    if ensure_roots_at_soma:
+        retry = True
+        while retry:
+            if not _reconnect_to_soma(m):
+                # if sanitize fails for another reason, we let it crash after
+                break
+            try:
+                _sanitize(m, new_morph_path)
+                retry = False
+            except CorruptedMorphology:
+                retry = True
+
     try:
-        _sanitize(row.morph_path, new_morph_path)
+        _sanitize(m, new_morph_path)
     except CorruptedMorphology as exc:
         return ValidationResult(is_valid=False, comment=exc, morph_path=None)
     return ValidationResult(is_valid=True, morph_path=new_morph_path)

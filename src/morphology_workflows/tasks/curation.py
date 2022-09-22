@@ -166,9 +166,16 @@ class Sanitize(ElementValidationTask):
     here means that the soma does not have a valid type.
     """
 
+    ensure_roots_at_soma = luigi.BoolParameter(
+        default=True, description=":bool: Reconnect root sections at soma if they are not"
+    )
     output_columns = {"morph_path": None}
 
     validation_function = sanitize
+
+    def kwargs(self):
+        """ """
+        return {"ensure_roots_at_soma": self.ensure_roots_at_soma}
 
     def inputs(self):
         """ """
