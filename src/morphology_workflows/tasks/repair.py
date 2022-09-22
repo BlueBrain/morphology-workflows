@@ -256,6 +256,6 @@ class PlotSmoothDiameters(SkippableMixin(True), ElementValidationTask):
     def inputs(self):
         """ """
         return {
-            RepairNeurites: {"morph_path": "morph_path"},
+            FixZeroDiameters: {"morph_path": "morph_path"},
             SmoothDiameters: {"morph_path": "smooth_morph_path"},
         }
