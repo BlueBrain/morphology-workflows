@@ -2,15 +2,24 @@
 
 ## [0.4.1](https://github.com/BlueBrain/morphology-workflows/compare/0.4.0..0.4.1)
 
-> 12 August 2022
+> 22 September 2022
+
+### Refactoring and Updates
+
+- Update from template (Adrien Berchet - [#58](https://github.com/BlueBrain/morphology-workflows/pull/58))
+- Apply Copier template (Adrien Berchet - [#57](https://github.com/BlueBrain/morphology-workflows/pull/57))
 
 ### CI Improvements
 
+- Setup pre-commit and format the files accordingly (Adrien Berchet - [#55](https://github.com/BlueBrain/morphology-workflows/pull/55))
 - Fix action to publish new releases on Pypi (Adrien Berchet - [#54](https://github.com/BlueBrain/morphology-workflows/pull/54))
 
-### CI Improvements
+### Uncategorized Changes
 
-- Setup pre-commit and format the files accordingly (Adrien Berchet - [75cfc3c](https://github.com/BlueBrain/morphology-workflows/commit/75cfc3c33d311cacb0162348227b093fa032b43b))
+- Reconnect axons to soma (Alexis Arnaudon - [#62](https://github.com/BlueBrain/morphology-workflows/pull/62))
+- Simpler smooth algorithm (Alexis Arnaudon - [#56](https://github.com/BlueBrain/morphology-workflows/pull/56))
+- Add duplicate layers to releases (Alexis Arnaudon - [#60](https://github.com/BlueBrain/morphology-workflows/pull/60))
+- Fail if spaces in morph name (Alexis Arnaudon - [#59](https://github.com/BlueBrain/morphology-workflows/pull/59))
 
 ## [0.4.0](https://github.com/BlueBrain/morphology-workflows/compare/0.3.2..0.4.0)
 
