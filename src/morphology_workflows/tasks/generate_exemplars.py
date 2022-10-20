@@ -1,4 +1,5 @@
 """Workflow to create exemplar morphologies."""
+import yaml
 import pandas as pd
 from data_validation_framework.target import TaggedOutputLocalTarget
 from data_validation_framework.task import TagResultOutputMixin
@@ -18,7 +19,7 @@ class GenerateExemplar(TagResultOutputMixin, WorkflowTask):
         description=":str: Path to dataset csv file with morphologies", exists=True, default=None
     )
     exemplar_morphology = PathParameter(
-        default="exemplar_morphology.swc", description=":str: Path to the exemplar morphology."
+        default="exemplar_morphologies", description=":str: Path to the exemplar morphology."
     )
     mtype = OptionalParameter(
         default=None,
@@ -32,18 +33,26 @@ class GenerateExemplar(TagResultOutputMixin, WorkflowTask):
 
     def run(self):
         morph_df = pd.read_csv(self.input_morph_df_path)
-
+        self.output().pathlib_path.mkdir(exist_ok=True)
+        mtype = "no_mtype"
         if "mtype" in morph_df.columns:
             morph_df = morph_df[morph_df.mtype == self.mtype]
+            mtype = self.mtype
 
         if self.mode == "single_compartment":
             exemplar = single_compartment_exemplar(morph_df)
+            name = f"exemplar_{mtype}.swc"
+            exemplar.write(self.output().pathlib_path / name)
+            exemplar_data = {"path": name}
+
         elif self.mode == "full":
-            exemplar = full_exemplar(morph_df)
+            exemplar_data = full_exemplar(morph_df)
         else:
             raise Exception(f"Mode {self.mode} not understood.")
 
-        exemplar.write(self.output().path)
+        yaml.safe_dump(
+            exemplar_data, open(self.output().pathlib_path / f"exemplar_data_{mtype}.yaml", "w")
+        )
 
     def output(self):
         return TaggedOutputLocalTarget(self.exemplar_morphology)
