@@ -2,7 +2,6 @@
 import numpy as np
 
 from morphio.mut import Morphology
-import neurom as nm
 from morph_tool.morphdb import MorphDB
 
 
@@ -10,10 +9,7 @@ def single_compartment_exemplar(morph_df, neurite_fraction=0.2):
     """We create a single compartment morphology representative of the perisomatic surface area.
 
     The effective radius is computed as a weighted sum of the radiuses of the different sections.
-
-    Adapted from /gpfs/bbp.cscs.ch/project/proj136/placeholder_singlecell/optimisation_local_luigi_OLD
     """
-
     db = MorphDB()
     db.df = morph_df
     config = {
@@ -43,8 +39,6 @@ def single_compartment_exemplar(morph_df, neurite_fraction=0.2):
 
 
 def full_exemplar():
-    """We create a full exemplar from the population.
-
-    TODO
-    """
+    """We create a full exemplar from the population."""
+    # To write
     pass
