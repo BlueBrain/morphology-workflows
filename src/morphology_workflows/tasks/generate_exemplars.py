@@ -46,7 +46,7 @@ class GenerateExemplar(TagResultOutputMixin, WorkflowTask):
             exemplar_data = {"path": name}
 
         elif self.mode == "full":
-            exemplar_data = full_exemplar(morph_df)
+            exemplar_data = full_exemplar(morph_df, figure_folder=self.output().path)
         else:
             raise Exception(f"Mode {self.mode} not understood.")
 
