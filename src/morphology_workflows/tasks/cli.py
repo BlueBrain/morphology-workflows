@@ -16,6 +16,7 @@ import morphology_workflows
 from morphology_workflows.tasks import workflows
 from morphology_workflows.tasks.fetch import Fetch
 from morphology_workflows.tasks.placeholders import Placeholders
+from morphology_workflows.tasks.generate_exemplars import GenerateExemplar
 
 L = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ WORKFLOW_TASKS = {
     "Curate": workflows.Curate,
     "Annotate": workflows.Annotate,
     "Repair": workflows.Repair,
+    "GenerateExemplars": GenerateExemplar,
 }
 
 LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
