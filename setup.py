@@ -7,12 +7,8 @@ from setuptools import setup
 reqs = [
     "data-validation-framework>=0.3.0",
     "diameter-synthesis>=0.5.2,<0.6",
-    "Jinja2<3.1",
     "luigi>=3.1",
     "luigi-tools>=0.0.18",
-    # Markupsafe dependency is only due to an incompatibility with Jinja2==2.11.3 but it might be
-    # fixed later
-    "MarkupSafe<2.1",
     "matplotlib",
     "morphapi",
     "morph_tool>=2.9.0,<3.0",
@@ -25,17 +21,16 @@ reqs = [
     "PyYAML",
     "rst2pdf",
     "scipy>=1.6",
-    "sphinx<4",
+    "sphinx<5",
     "tqdm",
 ]
 
 doc_reqs = [
     "graphviz",
     "m2r2",
-    "mistune<2",
-    "sphinx-autoapi<1.6",
-    "sphinx-bluebrain-theme",
     "sphinx-argparse",
+    "sphinx-autoapi",
+    "sphinx-bluebrain-theme",
 ]
 
 test_reqs = [
@@ -71,7 +66,7 @@ setup(
     extras_require={
         "docs": doc_reqs,
         "test": test_reqs,
-        "allen_brain": ["allensdk"],
+        "allen_brain": ["allensdk>=2.13.5"],
         "mouselight": ["bg_atlasapi"],
     },
     entry_points={
