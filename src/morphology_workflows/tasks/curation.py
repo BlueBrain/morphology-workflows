@@ -253,7 +253,7 @@ class Align(SkippableMixin(True), ElementValidationTask):
     neurite_type = luigi.Parameter(
         default="apical", description=":str: Neurite to use to align morphology"
     )
-    direction = luigi.ListParameter(default=None)
+    direction = luigi.OptionalListParameter(default=None)
     custom_orientation_json_path = luigi.OptionalStrParameter(
         default=None, description=":str: Path to json with custom orientations"
     )

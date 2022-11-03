@@ -103,7 +103,7 @@ class RepairNeurites(ElementValidationTask):
     with_plot = BoolParameter(
         default=False, description=":bool: Save plots with highlighted repaired branches"
     )
-    repair_params = luigi.DictParameter(
+    repair_params = luigi.OptionalDictParameter(
         default=None, description=":dict: Repair internal parameters"
     )
 
@@ -156,10 +156,10 @@ class MakeCollage(SkippableMixin(), SetValidationTask):
 class MakeRelease(SetValidationTask):
     """Make a morpology release, with three possible folders: zero-diameter, unravel or repair."""
 
-    zero_diameter_path = luigi.Parameter(
+    zero_diameter_path = luigi.OptionalParameter(
         default=None, description=":str: Path to zero diameter morphologies (not created if None)"
     )
-    unravel_path = luigi.Parameter(
+    unravel_path = luigi.OptionalParameter(
         default=None, description=":str: Path to unravel morphologies (not created if None)"
     )
     repair_path = luigi.Parameter(
