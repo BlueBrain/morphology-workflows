@@ -167,25 +167,6 @@ IMPORT_MAPPING = {
 _PARAM_NO_VALUE = [luigi.parameter._no_value, None]  # pylint: disable=protected-access
 
 
-def _process_param(param):
-    desc = param.description
-    choices = None
-    interval = None
-    optional = False
-    if isinstance(param, luigi.OptionalParameter):
-        optional = True
-    if isinstance(param, luigi.ChoiceParameter):
-        desc, choices = desc.rsplit("Choices: ", 1)
-    if isinstance(param, luigi.NumericalParameter):
-        desc, interval = desc.rsplit("permitted values: ", 1)
-    try:
-        param_type, param_doc = re.match("(:.*?:)? *(.*)", desc).groups()
-    except AttributeError:
-        param_type = None
-        param_doc = desc
-    return param_doc, param_type, choices, interval, optional
-
-
 # pylint: disable=unused-argument
 def maybe_skip_member(app, what, name, obj, skip, options):
     """Skip useless members and format documentation of others."""
