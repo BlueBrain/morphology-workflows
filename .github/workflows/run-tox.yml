@@ -26,7 +26,7 @@ jobs:
     - name: Cache APT Packages
       uses: awalsh128/cache-apt-pkgs-action@latest
       with:
-        packages: graphviz
+        packages: graphviz libhdf5-dev
         version: 1.0
         execute_install_scripts: true
     - name: Cache tox and precommit environments
@@ -40,7 +40,7 @@ jobs:
       run: |
         sudo dot -c
         python -m pip install --upgrade pip setuptools
-        pip install tox-gh-actions numpy
+        pip install "tox<4" tox-gh-actions
     - name: Clear results in tox environments
       run: |
         rm -rf .tox/*/tmp
