@@ -40,7 +40,7 @@ jobs:
       run: |
         sudo dot -c
         python -m pip install --upgrade pip setuptools
-        pip install tox-gh-actions
+        pip install tox-gh-actions numpy
     - name: Clear results in tox environments
       run: |
         rm -rf .tox/*/tmp
