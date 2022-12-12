@@ -9,20 +9,20 @@ reqs = [
     "diameter-synthesis>=0.5.2,<0.6",
     "luigi>=3.1",
     "luigi-tools>=0.0.18",
-    "matplotlib>=3.3",
-    "morphapi>=0.1.6",
+    "matplotlib",
+    "morphapi",
     "morph_tool>=2.9.0,<3.0",
     "morphio>=3.1,<4.0",
     "neurom>=3.2.0,<4.0",
     "neuror>=1.5.0,<2.0",
     "numpy>=1.21",
-    "pandas>=1.5",
+    "pandas",
     "plotly-helper>=0.0.8,<1.0",
     "PyYAML",
     "rst2pdf",
     "scipy>=1.6",
     "sphinx<5",
-    "tqdm>=4.60",
+    "tqdm",
 ]
 
 doc_reqs = [
@@ -84,6 +84,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
 )
