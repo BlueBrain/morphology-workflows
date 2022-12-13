@@ -40,7 +40,7 @@ jobs:
       run: |
         sudo dot -c
         python -m pip install --upgrade pip setuptools
-        pip install "tox<4" tox-gh-actions
+        pip install tox tox-gh-actions
     - name: Clear results in tox environments
       run: |
         rm -rf .tox/*/tmp
