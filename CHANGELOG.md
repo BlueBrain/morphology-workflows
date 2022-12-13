@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.2](https://github.com/BlueBrain/morphology-workflows/compare/0.4.1..0.4.2)
+
+> 13 December 2022
+
+### Chores And Housekeeping
+
+- Remove dead code in conf.py (Adrien Berchet - [#68](https://github.com/BlueBrain/morphology-workflows/pull/68))
+- Bump AllenSDK and Sphinx and use proper optional parameters (Adrien Berchet - [#67](https://github.com/BlueBrain/morphology-workflows/pull/67))
+- Fix language detection (Adrien Berchet - [#64](https://github.com/BlueBrain/morphology-workflows/pull/64))
+
+### CI Improvements
+
+- Use tox 4 (Adrien Berchet - [#70](https://github.com/BlueBrain/morphology-workflows/pull/70))
+- Apply Copier template (Adrien Berchet - [#69](https://github.com/BlueBrain/morphology-workflows/pull/69))
+
+### Uncategorized Changes
+
+- Update README.md (alex4200 - [53b70d4](https://github.com/BlueBrain/morphology-workflows/commit/53b70d41c4b271f47fef00ba24b27b48747bf68b))
+
 ## [0.4.1](https://github.com/BlueBrain/morphology-workflows/compare/0.4.0..0.4.1)
 
 > 22 September 2022
