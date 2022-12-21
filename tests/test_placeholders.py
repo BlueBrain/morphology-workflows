@@ -62,6 +62,29 @@ def test_placeholders(prepare_dir, data_dir):
     pd.testing.assert_frame_equal(result, expected)
 
 
+def test_placeholders_no_metadata(prepare_dir, data_dir):
+    """Test placeholders computation with no metadata.csv file."""
+    for i in (prepare_dir / "morphologies").iterdir():
+        if not i.stem.startswith("C") or i.suffix != ".asc":
+            i.unlink()
+    task = Placeholders(
+        input_dir=prepare_dir / "morphologies",
+        region="targeted region",
+        mtype="targeted mtype",
+    )
+    with pytest.warns(
+        UserWarning,
+        match="No metadata.csv file found in the input directory, loading all morphologies",
+    ):
+        assert luigi.build([task], local_scheduler=True)
+
+    result = pd.read_csv(task.output().path, header=[0, 1])
+
+    expected = pd.read_csv(data_dir / "placeholders.csv", header=[0, 1])
+
+    pd.testing.assert_frame_equal(result, expected.loc[[0, 1]])
+
+
 def test_placeholders_empty_population(prepare_dir):
     """Test that the default placeholders are used when the population is empty."""
     region = "unknown region"
