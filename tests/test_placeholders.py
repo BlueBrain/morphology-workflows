@@ -82,7 +82,9 @@ def test_placeholders_no_metadata(prepare_dir, data_dir):
 
     expected = pd.read_csv(data_dir / "placeholders.csv", header=[0, 1])
 
-    pd.testing.assert_frame_equal(result.sort_values(("property", "name")), expected.loc[[0, 1]])
+    pd.testing.assert_frame_equal(
+        result.sort_values(("property", "name")).reset_index(drop=True), expected.loc[[0, 1]]
+    )
 
 
 def test_placeholders_empty_population(prepare_dir):
