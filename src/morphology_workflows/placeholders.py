@@ -1,5 +1,6 @@
 """Placeholders functions."""
 import logging
+import warnings
 from pathlib import Path
 from typing import Optional
 
@@ -60,9 +61,16 @@ def select_population(input_morphologies: str, region: str, mtype: str) -> neuro
 
     # Load the morphologies for a selected region - mtype couple
     input_dir = Path(input_morphologies)
-    metadata = pd.read_csv(input_dir / "metadata.csv")
-    metadata = metadata.loc[(metadata["brain_region"] == region) & (metadata["cell_type"] == mtype)]
-    population = neurom.load_morphologies(input_dir / metadata["morphology"])
+    metadata_path = input_dir / "metadata.csv"
+    if metadata_path.exists():
+        metadata = pd.read_csv(metadata_path)
+        metadata = metadata.loc[
+            (metadata["brain_region"] == region) & (metadata["cell_type"] == mtype)
+        ]
+        population = neurom.load_morphologies(input_dir / metadata["morphology"])
+    else:
+        warnings.warn("No metadata.csv file found in the input directory, loading all morphologies")
+        population = neurom.load_morphologies(input_dir)
 
     return population
 
