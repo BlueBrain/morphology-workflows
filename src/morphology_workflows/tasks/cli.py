@@ -204,6 +204,8 @@ def _build_parser():
 
 def main(arguments=None):
     """Main function."""
+    logging.getLogger("luigi-interface").propagate = False
+
     if arguments is None:
         arguments = sys.argv[1:]
 
