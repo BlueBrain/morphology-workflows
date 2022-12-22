@@ -48,7 +48,7 @@ class Placeholders(TagResultOutputMixin, WorkflowTask):
     def run(self):
         input_dir = self.input_dir or self.input()["morphologies"]
         if self.config is not None:
-            with self.config.open() as f:
+            with self.config.open() as f:  # pylint: disable=no-member
                 config = json.load(f)
         else:
             config = None

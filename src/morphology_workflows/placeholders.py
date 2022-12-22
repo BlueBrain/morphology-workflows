@@ -89,7 +89,6 @@ def compute_placeholders(
     region: str = None,
     mtype: str = None,
     config: Optional[dict] = None,
-    output_path: Optional[str] = None,
 ) -> pd.DataFrame:
     """Compute the placeholder values for a given region - mtype couple."""
     # Select morphologies
