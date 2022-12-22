@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.0](https://github.com/BlueBrain/morphology-workflows/compare/0.4.2..0.5.0)
+
+> 22 December 2022
+
+### New Features
+
+- Placeholders can be computed without metadata.csv file (Adrien Berchet - [#72](https://github.com/BlueBrain/morphology-workflows/pull/72))
+
+### Fixes
+
+- Make the rerun parameter work with CLI (Adrien Berchet - [#73](https://github.com/BlueBrain/morphology-workflows/pull/73))
+
 ## [0.4.2](https://github.com/BlueBrain/morphology-workflows/compare/0.4.1..0.4.2)
 
 > 13 December 2022
