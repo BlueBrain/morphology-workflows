@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 import neurom
+import numpy as np
 import pandas as pd
 from neurom.apps import morph_stats
 from pkg_resources import resource_filename
@@ -64,9 +65,15 @@ def select_population(input_morphologies: str, region: str, mtype: str) -> neuro
     metadata_path = input_dir / "metadata.csv"
     if metadata_path.exists():
         metadata = pd.read_csv(metadata_path)
-        metadata = metadata.loc[
-            (metadata["brain_region"] == region) & (metadata["cell_type"] == mtype)
-        ]
+        if region is not None:
+            region_mask = metadata["brain_region"] == region
+        else:
+            region_mask = np.ones(len(metadata), dtype=bool)
+        if mtype is not None:
+            mtype_mask = metadata["cell_type"] == mtype
+        else:
+            mtype_mask = np.ones(len(metadata), dtype=bool)
+        metadata = metadata.loc[region_mask & mtype_mask]
         population = neurom.load_morphologies(input_dir / metadata["morphology"])
     else:
         warnings.warn("No metadata.csv file found in the input directory, loading all morphologies")
@@ -77,8 +84,8 @@ def select_population(input_morphologies: str, region: str, mtype: str) -> neuro
 
 def compute_placeholders(
     input_morphologies: str,
-    region: str,
-    mtype: str,
+    region: str = None,
+    mtype: str = None,
     config: Optional[dict] = None,
     output_path: Optional[str] = None,
 ) -> pd.DataFrame:
