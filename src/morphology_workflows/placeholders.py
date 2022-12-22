@@ -56,7 +56,9 @@ DEFAULT_CONFIG = {
 }
 
 
-def select_population(input_morphologies: str, region: str, mtype: str) -> neurom.core.Population:
+def select_population(
+    input_morphologies: str, region: Optional[str], mtype: Optional[str]
+) -> neurom.core.Population:
     """Compute the placeholder values for a given region - mtype couple."""
     logger.debug("Get population for %s in %s from %s", mtype, region, input_morphologies)
 
@@ -120,9 +122,5 @@ def compute_placeholders(
     # Add region and mtype to the dataframe
     df_placeholder[("Metadata", "Region")] = region
     df_placeholder[("Metadata", "Mtype")] = mtype
-
-    # Export csv file
-    if output_path is not None:
-        df_placeholder.to_csv(output_path)
 
     return df_placeholder
