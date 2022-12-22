@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/BlueBrain/morphology-workflows/compare/0.5.0..0.5.1)
+
+> 22 December 2022
+
+### Chores And Housekeeping
+
+- Use optional params for region and mtype and improve default logger (Adrien Berchet - [#75](https://github.com/BlueBrain/morphology-workflows/pull/75))
+
 ## [0.5.0](https://github.com/BlueBrain/morphology-workflows/compare/0.4.2..0.5.0)
 
 > 22 December 2022
