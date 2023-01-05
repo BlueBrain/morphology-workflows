@@ -21,7 +21,7 @@ reqs = [
     "PyYAML",
     "rst2pdf",
     "scipy>=1.6",
-    "sphinx<5",
+    "sphinx",
     "tqdm",
 ]
 
