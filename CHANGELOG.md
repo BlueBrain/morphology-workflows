@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.2](https://github.com/BlueBrain/morphology-workflows/compare/0.5.1..0.5.2)
+
+> 5 January 2023
+
+### Build
+
+- Bump Sphinx (Adrien Berchet - [#77](https://github.com/BlueBrain/morphology-workflows/pull/77))
+
 ## [0.5.1](https://github.com/BlueBrain/morphology-workflows/compare/0.5.0..0.5.1)
 
 > 22 December 2022
