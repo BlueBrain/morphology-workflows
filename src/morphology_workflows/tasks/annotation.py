@@ -42,7 +42,9 @@ class MType(ElementValidationTask):
 
     output_columns = {"mtype": None}
     validation_function = assign_mtypes
-    mtype_regex = luigi.OptionalListParameter(default=None)
+    mtype_regex = luigi.OptionalListParameter(
+        default=None, schema={"type": "array", "items": {"type": "string"}}
+    )
 
     def kwargs(self):
         """ """

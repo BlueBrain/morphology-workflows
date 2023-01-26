@@ -7,7 +7,7 @@ from setuptools import setup
 reqs = [
     "data-validation-framework>=0.3.0",
     "diameter-synthesis>=0.5.2,<0.6",
-    "luigi>=3.1",
+    "luigi>=3.2",
     "luigi-tools>=0.0.18",
     "matplotlib",
     "morphapi",
