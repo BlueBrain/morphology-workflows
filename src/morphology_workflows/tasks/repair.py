@@ -132,7 +132,10 @@ class MakeCollage(SkippableMixin(), SetValidationTask):
 
     collage_path = luigi.Parameter(default="collage.pdf", description=":str: Path to collage plot")
     separation = luigi.FloatParameter(default=1500)
-    layer_thickness = luigi.ListParameter(default=[700.0, 525.0, 190.0, 353.0, 149.0, 165.0])
+    layer_thickness = luigi.ListParameter(
+        default=[700.0, 525.0, 190.0, 353.0, 149.0, 165.0],
+        schema={"type": "array", "items": {"type": "number"}},
+    )
     dpi = luigi.IntParameter(default=1000)
     n_morph_per_page = luigi.IntParameter(default=10)
 
