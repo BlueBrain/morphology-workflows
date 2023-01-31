@@ -17,7 +17,6 @@ class MarkerSet:
     """Container of several markers for a single morphology."""
 
     def __init__(self):
-        """ """
         self.markers = None
         self.morph_name = None
         self.morph_path = None

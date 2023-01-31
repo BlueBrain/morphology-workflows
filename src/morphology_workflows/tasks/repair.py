@@ -47,7 +47,6 @@ class FixZeroDiameters(ElementValidationTask):
     validation_function = fix_zero_diameters
 
     def inputs(self):
-        """ """
         return {CollectAnnotated: {"morph_path": "morph_path"}}
 
 
@@ -72,11 +71,9 @@ class Unravel(ElementValidationTask):
     validation_function = unravel
 
     def kwargs(self):
-        """ """
         return {"window_half_length": self.window_half_length}
 
     def inputs(self):
-        """ """
         return {
             SmoothDiameters: {"morph_path": "morph_path"},
             CollectAnnotated: {
@@ -108,11 +105,9 @@ class RepairNeurites(ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {"with_plot": self.with_plot, "repair_params": self.repair_params}
 
     def inputs(self):
-        """ """
         return {
             CollectAnnotated: {
                 "has_axon": "has_axon",
@@ -140,7 +135,6 @@ class MakeCollage(SkippableMixin(), SetValidationTask):
     n_morph_per_page = luigi.IntParameter(default=10)
 
     def kwargs(self):
-        """ """
         return {
             "collage_path": self.collage_path,
             "separation": self.separation,
@@ -152,7 +146,6 @@ class MakeCollage(SkippableMixin(), SetValidationTask):
     validation_function = make_collage
 
     def inputs(self):
-        """ """
         return {RepairNeurites: {"morph_path": "morph_path"}}
 
 
@@ -192,7 +185,6 @@ class MakeRelease(SetValidationTask):
     validation_function = make_release
 
     def kwargs(self):
-        """ """
         return {
             "zero_diameter_path": self.zero_diameter_path,
             "unravel_path": self.unravel_path,
@@ -202,7 +194,6 @@ class MakeRelease(SetValidationTask):
         }
 
     def inputs(self):
-        """ """
         return {
             FixZeroDiameters: {"morph_path": "zero_diameter_morph_path"},
             Unravel: {"morph_path": "unravel_morph_path"},
@@ -219,11 +210,9 @@ class PlotRepair(SkippableMixin(), ElementValidationTask):
     with_plotly = BoolParameter(default=False, description=":bool: Use Plotly for plotting")
 
     def kwargs(self):
-        """ """
         return {"with_plotly": self.with_plotly}
 
     def inputs(self):
-        """ """
         return {
             Unravel: {"unravelled_cut_leaves_path": "cut_leaves_path"},
             RepairNeurites: {"morph_path": "morph_path"},
@@ -243,7 +232,6 @@ class SmoothDiameters(SkippableMixin(True), ElementValidationTask):
     validation_function = smooth_diameters
 
     def inputs(self):
-        """ """
         return {
             FixZeroDiameters: {"morph_path": "morph_path"},
             CollectAnnotated: {"apical_point_path": "apical_point_path"},
@@ -257,7 +245,6 @@ class PlotSmoothDiameters(SkippableMixin(True), ElementValidationTask):
     validation_function = plot_smooth_diameters
 
     def inputs(self):
-        """ """
         return {
             FixZeroDiameters: {"morph_path": "morph_path"},
             SmoothDiameters: {"morph_path": "smooth_morph_path"},
