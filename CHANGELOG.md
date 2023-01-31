@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.5.3](https://github.com/BlueBrain/morphology-workflows/compare/0.5.2..0.5.3)
+
+> 31 January 2023
+
+### Chores And Housekeeping
+
+- Add JSON schemas to ListParameters (Adrien Berchet - [#79](https://github.com/BlueBrain/morphology-workflows/pull/79))
+
+### CI Improvements
+
+- Bump pre-commit hooks (Adrien Berchet - [#80](https://github.com/BlueBrain/morphology-workflows/pull/80))
+
 ## [0.5.2](https://github.com/BlueBrain/morphology-workflows/compare/0.5.1..0.5.2)
 
 > 5 January 2023
