@@ -5,24 +5,23 @@ from setuptools import find_namespace_packages
 from setuptools import setup
 
 reqs = [
-    "data-validation-framework>=0.3.0",
+    "data-validation-framework>=0.6.0",
     "diameter-synthesis>=0.5.2,<0.6",
     "luigi>=3.2",
-    "luigi-tools>=0.0.18",
-    "matplotlib",
-    "morphapi",
+    "luigi-tools>=0.0.19",
+    "matplotlib>=3.4",
+    "morphapi>=0.1.8",
     "morph_tool>=2.9.0,<3.0",
-    "morphio>=3.1,<4.0",
+    "morphio>=3.1.1,<4.0",
     "neurom>=3.2.0,<4.0",
-    "neuror>=1.5.0,<2.0",
+    "neuror>=1.6,<2.0",
     "numpy>=1.21",
-    "pandas",
+    "pandas>=1.5",
     "plotly-helper>=0.0.8,<1.0",
-    "PyYAML",
-    "rst2pdf",
+    "PyYAML>=5.3",
+    "rst2pdf>=0.90",
     "scipy>=1.6",
-    "sphinx",
-    "tqdm",
+    "tqdm>=4.44",
 ]
 
 doc_reqs = [
@@ -35,12 +34,12 @@ doc_reqs = [
 
 test_reqs = [
     "diff-pdf-visually>=1.5.1",
-    "dir-content-diff>=0.2",
-    "mock",
-    "pytest",
-    "pytest-cov",
-    "pytest-html",
-    "pytest-xdist",
+    "dir-content-diff>=1.2",
+    "mock>=3",
+    "pytest>=6",
+    "pytest-cov>=3",
+    "pytest-html>=2",
+    "pytest-xdist>=2",
 ]
 
 setup(
@@ -84,6 +83,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
 )
