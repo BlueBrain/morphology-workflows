@@ -10,7 +10,13 @@ from plotly_helper.object_creator import scatter
 from plotly_helper.object_creator import scatter_line
 from plotly_helper.object_creator import vector
 
+from morphology_workflows import MorphologyWorkflowsError
+
 logger = logging.getLogger(__name__)
+
+
+class MarkerHelperError(MorphologyWorkflowsError):
+    """Exception for Marker helpers."""
 
 
 class MarkerSet:
@@ -27,11 +33,11 @@ class MarkerSet:
         obj = cls()
 
         if len({marker.morph_name for marker in markers}) > 1:
-            raise Exception("Markers of different morphologies were provided.")
+            raise MarkerHelperError("Markers of different morphologies were provided.")
         obj.morph_name = markers[0].morph_name
 
         if len({marker.morph_path for marker in markers}) > 1:
-            raise Exception("Markers of different morphology paths were provided.")
+            raise MarkerHelperError("Markers of different morphology paths were provided.")
         obj.morph_path = markers[0].morph_path
 
         obj.markers = cls.check_labels(markers)
@@ -212,7 +218,9 @@ class Marker:
         if self.marker_type == "line":
             valid = len(np.shape(self.data)) == 2
         if not valid:
-            raise Exception(f"Marker {self.marker_type} is not valid with data {self.data}.")
+            raise MarkerHelperError(
+                f"Marker {self.marker_type} is not valid with data {self.data}."
+            )
 
     @property
     def list_data(self):
