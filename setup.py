@@ -36,10 +36,10 @@ test_reqs = [
     "diff-pdf-visually>=1.5.1",
     "dir-content-diff>=1.2",
     "mock>=3",
-    "pytest>=6",
-    "pytest-cov>=3",
-    "pytest-html>=2",
-    "pytest-xdist>=2",
+    "pytest>=7",
+    "pytest-cov>=4",
+    "pytest-html>=3",
+    "pytest-xdist>=3.0.2",
 ]
 
 setup(
