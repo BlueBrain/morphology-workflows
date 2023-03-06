@@ -68,7 +68,7 @@ def main():
         df.loc[gid, "morph_path"] = filename
 
     df["morph_name"] = df["neuron_name"]
-    df[["morph_path", "morph_name", "brain_region"]].to_csv("dataset.csv")
+    df[["morph_path", "morph_name", "brain_region"]].to_csv("dataset.csv", index=False)
 
 
 if __name__ == "__main__":

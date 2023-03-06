@@ -258,7 +258,7 @@ def make_collage(
                 for shift, morph_name in enumerate(batch):
                     try:
                         layer_pos = layer_centers[int(mtype[1]) - 1]
-                    except (TypeError, IndexError):
+                    except (TypeError, IndexError, ValueError):
                         layer_pos = layer_centers.mean()
                     neuron = load_morphology(_df.loc[morph_name, "morph_path"])
 
@@ -294,16 +294,18 @@ def make_collage(
                         realistic_diameters=False,
                     )
                     ax.text(
-                        shift * separation - separation / 2.0,
+                        shift * separation,
                         layer_boundaries[0] - 100,
                         morph_name,
                         fontsize="x-small",
                         rotation=45,
+                        horizontalalignment="center",
                     )
 
                 for lb in layer_boundaries:
                     ax.axhline(lb, color="r", ls="--", alpha=0.3)
 
+                ax.autoscale_view()
                 ax.set_rasterized(rasterized)
                 ax.set_title(f"{mtype}, page {page + 1} / {len(name_batches)}")
                 ax.set_ylim(layer_boundaries[0] - 150, top_panel_shift + 100)
@@ -377,7 +379,14 @@ def set_layer_column(df):
 def add_duplicated_layers(df):
     """Duplicate entries if layer name has mixed layers, i.e. L23_PC."""
     for mtype in df.mtype.unique():
-        layer = mtype.split("_")[0][1:]
+        if pd.isnull(mtype):
+            layer = "0"
+        else:
+            split = mtype.split("_")
+            if len(split) > 0 and len(split[0]) > 0:
+                layer = [0][1:]
+            else:
+                layer = "0"
         if len(layer) > 1:
             _df = df[df.mtype == mtype]
             _df.layer = int(layer[1])
