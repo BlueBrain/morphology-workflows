@@ -119,6 +119,7 @@ class Annotate(ValidationWorkflow):
             Annotate.dataset_df.exists = False
             self.dataset_df = input_path
             CollectCurated.extra_requires = lambda x: curate_task
+            Annotate.extra_requires = lambda x: curate_task
 
         return {
             CollectCurated: {},
@@ -130,9 +131,6 @@ class Annotate(ValidationWorkflow):
             PlotCutLeaves: {},
             PlotHardLimit: {},
         }
-
-    def extra_requires(self):
-        return Curate()
 
 
 class Repair(ValidationWorkflow):
@@ -173,6 +171,7 @@ class Repair(ValidationWorkflow):
             Repair.dataset_df.exists = False
             self.dataset_df = input_path
             CollectAnnotated.extra_requires = lambda x: annotate_task
+            Repair.extra_requires = lambda x: annotate_task
 
         inputs = {
             CollectAnnotated: {
@@ -198,14 +197,10 @@ class Repair(ValidationWorkflow):
                 "unravel_release_morph_path",
                 "repair_release_morph_path",
             ]
-            inputs[MakeRelease] = {}
-            for extension in MakeRelease().extensions:
+            mapping = {}
+            for extension in MakeRelease.extensions:
                 ext = extension[1:]
-                inputs[MakeRelease].update(
-                    {f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders}
-                )
+                mapping.update({f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders})
+            inputs[MakeRelease] = mapping
 
         return inputs
-
-    def extra_requires(self):
-        return Annotate()
