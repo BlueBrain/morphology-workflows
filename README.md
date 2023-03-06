@@ -120,13 +120,21 @@ The inputs should consist in:
 * a CSV file with the following columns:
     1. ``morph_path``: the path to the morphology file.
     2. ``morph_name``: the name of the morphology.
-    3. any other column is kept into the results but not used in the workflows.
+    3. ``mtype``: the morphology-type of the morphology (this column is optional).
+
+  Any other column is kept into the results but not used in the workflows.
+
+  Note that the column names should not contain spaces between commas and names.
 * a ``luigi.cfg`` file containing the configuration for all the tasks of the workflow.
 * an optional ``logging.conf`` file containing the logging configuration. If you prefer default logging
   behavior, remove this file and comment line in ``logging_conf_file = logging.conf`` in ``luigi.cfg``.
 
 The [examples](https://github.com/BlueBrain/morphology-workflows/tree/main/examples) folder contains
 examples for the ``luigi.cfg`` and ``logging.conf`` files.
+
+These inputs can be created using the **Fetch** workflow that downloads morphlogies from online
+databases and create the dataset in the correct format.
+
 
 ### Run the workflows
 
@@ -147,12 +155,39 @@ using the `-m / --master-scheduler` trigger:
 morphology_workflows -m Curate
 ```
 
-More details can be found in the command line interface section of the documentation or by running
-the command:
+Once the **Curate** workflow has run, the **Annotate** and **Repair** workflows can be run
+directly, they will just take the results of the **Curate** workflow as input:
 
 ```bash
+morphology_workflows Annotate
+morphology_workflows Repair
+```
+
+Note that it is also possible to run the 3 workflows directly because each workflow depends on each other:
+```bash
+morphology_workflows Repair
+```
+
+More details can be found in the command line interface section of the documentation or by running
+the commands:
+
+```bash
+morphology_workflows --help
 morphology_workflows <workflow> --help
 ```
+
+
+## Results
+
+Each workflow will create several new directories, one for each sub-step. These new directories can
+be nested into a global result directory for each workflow, using the ``result_path`` parameter.
+These directories contain intermediate data so it is possible to understand why a morphology
+could not be validated at a given step.
+The main workflows (**Curate**, **Annotate** and **Repair**) will also create a final CSV file
+which contains most of the relevant data of the workflow (main sub-step results and final
+morphology paths). Also, the **Repair** workflow can generate morphology releases that contain
+the final morphologies that could be validated and fixed by the workflow. Usually these morphologies
+are the most relevant ones for later use.
 
 
 ## Examples
