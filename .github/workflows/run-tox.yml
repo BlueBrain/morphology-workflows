@@ -82,6 +82,7 @@ jobs:
         rm -rf .tox/py*/tmp/**/out_repaired/PlotRepair/data
         rm -rf .tox/py*/tmp/**/*_release-swc
         rm -rf .tox/py*/tmp/**/*_release-asc
+        rm -rf .tox/py*/tmp/*current
     - name: Upload test artifacts
       uses: actions/upload-artifact@v3
       if: always()
