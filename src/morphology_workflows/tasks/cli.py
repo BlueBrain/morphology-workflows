@@ -187,6 +187,10 @@ class ArgParser:
             except (AttributeError, TypeError):
                 pass
 
+        utils_subparser = workflow_parser.add_parser("create_inputs", help="Create inputs from a directory for the Curate workflow")
+        utils_subparser.add_argument("input_dir", help="The directory containing the morphologies")
+        utils_subparser.add_argument("output_file", help="The CSV file to which the dataset will be exported")
+
         return parsers
 
     def parse_args(self, argv):
