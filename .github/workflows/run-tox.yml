@@ -73,6 +73,15 @@ jobs:
         files: ./reports/coverage-*.xml
         flags: pytest
         name: "morphology-workflows-py${{ matrix.python-version }}"
+    - name: Clear heavy results in tox environments before uploading artifacts
+      run: |
+        rm -rf .tox/py*/tmp/**/out_annotated/PlotApicalPoint/data
+        rm -rf .tox/py*/tmp/**/out_annotated/PlotCutLeaves/data
+        rm -rf .tox/py*/tmp/**/out_annotated/PlotHardLimit/data
+        rm -rf .tox/py*/tmp/**/out_curated/PlotErrors/data
+        rm -rf .tox/py*/tmp/**/out_repaired/PlotRepair/data
+        rm -rf .tox/py*/tmp/**/*_release-swc
+        rm -rf .tox/py*/tmp/**/*_release-asc
     - name: Upload test artifacts
       uses: actions/upload-artifact@v3
       if: always()
@@ -80,6 +89,6 @@ jobs:
         name: tests-${{ matrix.python-version }}
         retention-days: 4
         path: |
+          .tox/py*/tmp
           docs/build
           reports
-        # .tox/py*/tmp  <= Uncomment and reindent this line to export test results as CI artifacts
