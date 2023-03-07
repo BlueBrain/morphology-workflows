@@ -80,6 +80,6 @@ jobs:
         name: tests-${{ matrix.python-version }}
         retention-days: 4
         path: |
-          .tox/py*/tmp
           docs/build
           reports
+        # .tox/py*/tmp  <= Uncomment and reindent this line to export test results as CI artifacts
