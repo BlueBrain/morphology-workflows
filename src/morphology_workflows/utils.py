@@ -4,6 +4,7 @@ from contextlib import contextmanager
 from functools import wraps
 from pathlib import Path
 
+import pandas as pd
 from morphio.mut import Morphology
 from tqdm import tqdm
 
@@ -61,3 +62,14 @@ def disable_loggers(*logger_names):
     finally:
         for i, j in disabled_loggers:
             i.disabled = j
+
+
+def create_dataset_from_dir(dir_path, output_path):
+    """Generate a dataset from a directory."""
+    dir_path = Path(dir_path)
+    morph_files = []
+    for i in dir_path.iterdir():
+        if i.suffix in [".asc", ".h5", ".swc"]:
+            morph_files.append((i.with_suffix("").name, str(i)))
+    df = pd.DataFrame(morph_files, columns=["morph_name", "morph_path"])
+    df.to_csv(output_path, index=False)
