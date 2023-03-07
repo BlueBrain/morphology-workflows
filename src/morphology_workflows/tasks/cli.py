@@ -174,7 +174,7 @@ class ArgParser:
                         doc,
                         flags=re.DOTALL,
                     ).strip()
-                subparser = workflow_parser.add_parser(workflow_name, help=doc)
+                subparser = workflow_parser.add_parser(workflow_name, help=doc, description=doc)
                 for param, param_obj in task.get_params():
                     param_name = "--" + param.replace("_", "-")
                     subparser.add_argument(

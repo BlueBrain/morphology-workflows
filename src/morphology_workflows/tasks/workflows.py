@@ -35,18 +35,22 @@ from morphology_workflows.tasks.repair import SmoothDiameters
 from morphology_workflows.tasks.repair import Unravel
 
 
-def save_reduced_df(
-    df, data_dir, df_path="reduced_df.csv", parents=None
-):  # pylint: disable=unused-argument
-    """Save reduced version of the report."""
-    _to_remove = ["exception", "is_valid", "ret_code", "comment"]
+def path_reduced_df(data_dir, df_path="reduced_df.csv", parents=None):
+    """Build the path to the reduced version of the report."""
     if parents:
         out_dir = list(data_dir.parents)[parents - 1]
     else:
         out_dir = data_dir
+    return out_dir / df_path
+
+
+def save_reduced_df(df, data_dir, df_path="reduced_df.csv", parents=None):
+    """Save reduced version of the report."""
+    _to_remove = ["exception", "is_valid", "ret_code", "comment"]
+    target_path = path_reduced_df(data_dir, df_path=df_path, parents=parents)
     df.loc[
         df.is_valid, [col for col in df.columns if isinstance(col, str) and col not in _to_remove]
-    ].rename_axis(index="morph_name").reset_index().to_csv(out_dir / df_path, index=False)
+    ].rename_axis(index="morph_name").reset_index().to_csv(target_path, index=False)
 
 
 class Curate(ValidationWorkflow):
@@ -62,7 +66,7 @@ class Curate(ValidationWorkflow):
     input_index_col = luigi.Parameter(default="morph_name")
     args = ["curated_dataset.csv", 2]
 
-    validation_function = staticmethod(save_reduced_df)
+    validation_function = save_reduced_df
 
     def inputs(self):
         return {
@@ -103,9 +107,20 @@ class Annotate(ValidationWorkflow):
     input_index_col = luigi.Parameter(default="morph_name")
     args = ["annotated_dataset.csv", 2]
 
-    validation_function = staticmethod(save_reduced_df)
+    validation_function = save_reduced_df
 
     def inputs(self):
+        if self.dataset_df is None:
+            # If no dataset is given, the Curate workflow must be executed before.
+            curate_task = Curate()
+            input_path = path_reduced_df(
+                curate_task.output()["data"].pathlib_path, *curate_task.args
+            )
+            Annotate.dataset_df.exists = False
+            self.dataset_df = input_path
+            CollectCurated.extra_requires = lambda x: curate_task
+            Annotate.extra_requires = lambda x: curate_task
+
         return {
             CollectCurated: {},
             MType: {"mtype": "mtype"},
@@ -134,7 +149,7 @@ class Repair(ValidationWorkflow):
     )
     args = ["repaired_dataset.csv", 2]
 
-    validation_function = staticmethod(save_reduced_df)
+    validation_function = save_reduced_df
 
     report_config = {
         "extensions": [
@@ -147,6 +162,17 @@ class Repair(ValidationWorkflow):
     }
 
     def inputs(self):
+        if self.dataset_df is None:
+            # If no dataset is given, the Annotate workflow must be executed before.
+            annotate_task = Annotate()
+            input_path = path_reduced_df(
+                annotate_task.output()["data"].pathlib_path, *annotate_task.args
+            )
+            Repair.dataset_df.exists = False
+            self.dataset_df = input_path
+            CollectAnnotated.extra_requires = lambda x: annotate_task
+            Repair.extra_requires = lambda x: annotate_task
+
         inputs = {
             CollectAnnotated: {
                 "morph_path": "morph_path",
@@ -171,11 +197,10 @@ class Repair(ValidationWorkflow):
                 "unravel_release_morph_path",
                 "repair_release_morph_path",
             ]
-            inputs[MakeRelease] = {}
-            for extension in MakeRelease().extensions:
+            mapping = {}
+            for extension in MakeRelease.extensions:
                 ext = extension[1:]
-                inputs[MakeRelease].update(
-                    {f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders}
-                )
+                mapping.update({f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders})
+            inputs[MakeRelease] = mapping
 
         return inputs
