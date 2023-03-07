@@ -25,7 +25,7 @@ class TestCLI:
         )
 
     def test_dependency_graph(self, tmpdir, data_dir):
-        """Test the --help argument."""
+        """Test the --create-dependency-graph argument."""
         output_path = (data_dir / "neuromorpho_config_download.json").resolve()
         cli.main(
             arguments=[
@@ -40,3 +40,4 @@ class TestCLI:
         )
 
         assert output_path.exists()
+        assert (tmpdir / "dependency_graph.png").exists()

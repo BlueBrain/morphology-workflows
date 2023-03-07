@@ -28,6 +28,7 @@ test_venv
 
 # docs
 docs/build
+docs/luigi.cfg
 docs/source/generated
 docs/source/autoapi/
 docs/source/examples
