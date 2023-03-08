@@ -9,7 +9,6 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-import configparser
 import importlib
 import os
 import re
@@ -18,6 +17,7 @@ from importlib import metadata
 from pathlib import Path
 
 import luigi
+from luigi_tools.util import luigi_config_to_dict
 from luigi_tools.util import set_luigi_config
 from sphinx.util import logging
 
@@ -210,13 +210,7 @@ def generate_images(*args, **kwargs):
     input_dir = Path(*Path(__file__).parts[:-3]) / "tests/examples_test/"
 
     # Import luigi configuration
-    luigi_config = configparser.ConfigParser()
-    luigi_config.read(input_dir / "luigi.cfg")
-    dict_config = {}
-    for section in luigi_config.sections():
-        dict_config[section] = {}
-        for option in luigi_config.options(section):
-            dict_config[section][option] = luigi_config.get(section, option)
+    dict_config = luigi_config_to_dict(input_dir / "luigi.cfg")
 
     # Update dataset_df values just to point to existing files
     dict_config["Curate"]["dataset_df"] = str(input_dir / "dataset.csv")

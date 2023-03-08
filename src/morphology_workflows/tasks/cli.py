@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import sys
+import textwrap
 from pathlib import Path
 
 import luigi
@@ -13,6 +14,7 @@ from luigi_tools.util import graphviz_dependency_graph
 from luigi_tools.util import render_dependency_graph
 
 import morphology_workflows
+from morphology_workflows.utils import create_dataset_from_dir
 from morphology_workflows.tasks import workflows
 from morphology_workflows.tasks.fetch import Fetch
 from morphology_workflows.tasks.placeholders import Placeholders
@@ -160,6 +162,35 @@ class ArgParser:
 
         workflow_parser = parser.add_subparsers(help="Possible workflows", dest="workflow")
 
+        init_subparser = workflow_parser.add_parser(
+            "Initialize",
+            help="Create default inputs for curation workflows.",
+            description=textwrap.dedent("""
+                Create default inputs for a given workflow that users can then update according to their needs.
+                There are 2 initialization types:
+                  * one for a project where the morphologies are fetched from an online database.
+                  * one for a project where the morphologies are provided by the user.
+            """),
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
+        init_subsubparser = init_subparser.add_subparsers(help="Workflows to initialize")
+        fetch_subparser = init_subsubparser.add_parser("Fetching-morphologies", help="Create default inputs for morphologies fetched from online databases")
+        curate_subparser = init_subsubparser.add_parser("Providing-morphologies", help="Create default inputs for morphologies provided by the user")
+
+        # Fetching morphologies
+        fetch_subparser.add_argument(
+            "--source-database",
+            help="The database from which the morphologies will be fetched",
+            choices=Fetch.source._choices,
+        )
+
+        # Providing morphologies
+        curate_subparser.add_argument("--input-dir", help="The directory containing the input morphologies")
+        curate_subparser.add_argument("--output-dir", help="The directory in which the project inputs will be exported")
+        curate_subparser.add_argument("--dataset-filename", default="dataset.csv", help="The name of the CSV file to which the dataset will be exported")
+        # curate_subparser.add_argument("--export-luigi-config", action="store_true", help="Build a default configuration file that can be used to run the workflows")
+        # curate_subparser.add_argument("--luigi-config-filename", default="luigi.cfg", help="The name of the configuration file")
+
         for workflow_name, task in WORKFLOW_TASKS.items():
             try:
                 task_name = task.__name__
@@ -186,10 +217,6 @@ class ArgParser:
                 parsers[workflow_name] = subparser
             except (AttributeError, TypeError):
                 pass
-
-        utils_subparser = workflow_parser.add_parser("create_inputs", help="Create inputs from a directory for the Curate workflow")
-        utils_subparser.add_argument("input_dir", help="The directory containing the morphologies")
-        utils_subparser.add_argument("output_file", help="The CSV file to which the dataset will be exported")
 
         return parsers
 
@@ -223,6 +250,13 @@ def main(arguments=None):
     if args is None or args.workflow is None:
         L.critical("Arguments must contain one workflow. Check help with -h/--help argument.")
         parser.parser.print_help()
+        sys.exit()
+
+    if args.workflow == "Initialize":
+        # import pdb
+        # pdb.set_trace()
+        print("CALLED CREATE_INPUTS")
+        create_dataset_from_dir()
         sys.exit()
 
     # Set luigi.cfg path
