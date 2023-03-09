@@ -13,6 +13,7 @@ from luigi_tools.task import WorkflowTask
 from morphapi.api.mouselight import MouseLightAPI
 from morphapi.api.neuromorphorg import NeuroMorpOrgAPI
 
+from morphology_workflows.utils import create_dataset_from_dir
 from morphology_workflows.utils import silent_logger
 
 logger = logging.getLogger(__name__)
@@ -63,19 +64,19 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
             downloaded_neurons = []
             page = 0
             remaining = conf_element.get("nb_morphologies", float("inf"))
+            criteria = copy.deepcopy(conf_element)
+            criteria.pop("nb_morphologies", None)
+            criteria.pop("seed", None)
 
             while remaining > 0:
                 size = min(500, remaining)  # Can get the metadata for up to 500 neurons at a time
                 remaining = remaining - size
                 logger.debug("Downloading page %s for: %s", page, conf_element)
                 try:
-                    metadata, total = api.get_neurons_metadata(
-                        size=size,
-                        page=page,
-                        species=conf_element.get("species", None),
-                        cell_type=conf_element.get("cell_type", None),
-                        brain_region=conf_element.get("brain_region", None),
-                    )
+                    criteria["page"] = page
+                    criteria["size"] = size
+
+                    metadata, total = api.get_neurons_metadata(**criteria)
 
                     logger.debug(
                         "Found %s morphologies to download for %s", len(metadata), conf_element
@@ -84,7 +85,9 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                     # Download these neurons
                     downloaded_neurons.extend(
                         self._neuron_paths(
-                            api.download_neurons(metadata, load_neurons=False),
+                            api.download_neurons(
+                                metadata, load_neurons=False, use_neuron_names=True
+                            ),
                             api.neuromorphorg_cache,
                         )
                     )
@@ -222,6 +225,10 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
         df = pd.DataFrame(formatted_result)
         df.to_csv(self.output()["metadata"].path, index=False)
 
+        create_dataset_from_dir(
+            self.output()["morphologies"].pathlib_path, self.output()["dataset"].pathlib_path
+        )
+
     def output(self):
         return {
             "morphologies": TaggedOutputLocalTarget(
@@ -230,6 +237,10 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
             ),
             "metadata": TaggedOutputLocalTarget(
                 self.result_path / "metadata.csv",
+                create_parent=True,
+            ),
+            "dataset": TaggedOutputLocalTarget(
+                self.result_path.parent / "dataset.csv",
                 create_parent=True,
             ),
         }
