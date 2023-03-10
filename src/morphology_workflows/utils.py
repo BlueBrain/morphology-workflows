@@ -1,8 +1,8 @@
 """Util functions."""
 import logging
 import shutil
+import warnings
 from contextlib import contextmanager
-from functools import wraps
 from pathlib import Path
 
 import luigi
@@ -28,26 +28,23 @@ def is_morphology(filename):
         return False, None
 
 
-def silent_logger(log_name):
-    """A decorator to silent a logger during the function execution."""
+@contextmanager
+def silent_warnings(*warning_classes):
+    """A context manager to silent warnings during the body execution.
 
-    def _silent_logger(function):
-        @wraps(function)
-        def decorated_func(*args, **kwargs):
-            func_logger = logging.getLogger(log_name)
-            func_logger.disabled = True
-            try:
-                return function(*args, **kwargs)
-            finally:
-                func_logger.disabled = False
-
-        return decorated_func
-
-    return _silent_logger
+    Args:
+        *warning_classes (class): The warning classes to be filtered.
+    """
+    if not warning_classes:
+        warning_classes = [Warning]
+    with warnings.catch_warnings():
+        for warning in warning_classes:
+            warnings.simplefilter("ignore", warning)
+        yield
 
 
 @contextmanager
-def disable_loggers(*logger_names):
+def silent_loggers(*logger_names):
     """A context manager to silent loggers during the body execution.
 
     Args:
@@ -77,11 +74,22 @@ def create_dataset_from_dir(dir_path, output_path):
 
     L = logging.getLogger(".".join(__name__.split(".")[:-1]))
     for i in dir_path.iterdir():
-        if is_morphology(i)[0]:
-            morph_files.append((i.relative_to(output_path.parent).with_suffix("").name, str(i)))
+        if i.suffix.lower() in EXTS:
+            morph_files.append((i.with_suffix("").name, str(i)))
         else:
             L.info(f"The file '{i}' is not a valid morphology and is thus discarded")
     df = pd.DataFrame(morph_files, columns=["morph_name", "morph_path"])
+
+    # Deduplicate names
+    for idx, name in df.loc[df["morph_name"].duplicated(), "morph_name"].iteritems():
+        i = 2
+        new_name = name + f"_{i}"
+        while (df["morph_name"] == new_name).any():
+            i += 1
+            new_name = name + f"_{i}"
+        df.loc[idx, "morph_name"] = new_name
+
+    df.sort_values("morph_name", inplace=True)
     df.to_csv(output_path, index=False)
 
 
@@ -130,10 +138,12 @@ def create_inputs(
     if fetch_config_file is not None:
         shutil.copyfile(template_dir / fetch_config_file, output_dir / fetch_config_file)
         cfg["Fetch"]["source"] = source_db
-
-    cfg["Fetch"]["config_file"] = fetch_config_file
+        cfg["Fetch"]["config_file"] = fetch_config_file
     cfg["Curate"]["dataset_df"] = dataset_filename
 
     luigi_cfg.read_dict(cfg)
     with (output_dir / "luigi.cfg").open("w") as f:
         luigi_cfg.write(f)
+
+    if input_dir is not None:
+        create_dataset_from_dir(input_dir, output_dir / dataset_filename)

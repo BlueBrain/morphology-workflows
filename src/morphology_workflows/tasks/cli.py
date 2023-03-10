@@ -252,7 +252,7 @@ def main(arguments=None):
     if args is None or args.workflow is None:
         L.critical("Arguments must contain one workflow. Check help with -h/--help argument.")
         parser.parser.print_help()
-        sys.exit()
+        return
 
     if args.workflow == "Initialize":
         create_inputs(
@@ -261,7 +261,7 @@ def main(arguments=None):
             output_dir=args.output_dir,
             dataset_filename=args.dataset_filename,
         )
-        sys.exit()
+        return
 
     # Set luigi.cfg path
     if args.config_path is not None:

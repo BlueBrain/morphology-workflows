@@ -6,6 +6,7 @@ import logging
 import luigi
 import numpy as np
 import pandas as pd
+import urllib3
 from data_validation_framework.target import TaggedOutputLocalTarget
 from data_validation_framework.task import TagResultOutputMixin
 from luigi.parameter import PathParameter
@@ -14,7 +15,8 @@ from morphapi.api.mouselight import MouseLightAPI
 from morphapi.api.neuromorphorg import NeuroMorpOrgAPI
 
 from morphology_workflows.utils import create_dataset_from_dir
-from morphology_workflows.utils import silent_logger
+from morphology_workflows.utils import silent_loggers
+from morphology_workflows.utils import silent_warnings
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +56,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
     def _neuron_paths(neurons, root_path):
         return [i.data_file.relative_to(root_path).as_posix() for i in neurons]
 
+    @silent_warnings(urllib3.exceptions.HTTPWarning)
     def neuromorpho_download(self, config):
         """Download morphologies from the NeuromMorpho.org database."""
         api = NeuroMorpOrgAPI()
@@ -75,7 +78,6 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                 try:
                     criteria["page"] = page
                     criteria["size"] = size
-
                     metadata, total = api.get_neurons_metadata(**criteria)
 
                     logger.debug(
@@ -150,8 +152,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                 downloaded_neurons, api.mouselight_cache
             )
 
-    @silent_logger("allensdk.api.api")
-    @silent_logger("allensdk.api.api.retrieve_file_over_http")
+    @silent_loggers("allensdk.api.api", "allensdk.api.api.retrieve_file_over_http")
     def allen_download(self, config):
         """Download morphologies from the Allen database."""
         try:

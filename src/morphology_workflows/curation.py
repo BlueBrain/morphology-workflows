@@ -36,8 +36,8 @@ from plotly_helper.neuron_viewer import NeuronBuilder
 
 from morphology_workflows.marker_helper import Marker
 from morphology_workflows.marker_helper import MarkerSet
-from morphology_workflows.utils import disable_loggers
 from morphology_workflows.utils import is_morphology
+from morphology_workflows.utils import silent_loggers
 
 L = logging.getLogger(__name__)
 matplotlib.use("Agg")
@@ -678,7 +678,7 @@ def plot_morphology(row, data_dir, with_plotly=True, realistic_diameters=True):
         bbox = np.array([[-1000, -1000, 1000], [1000, 1000, 1000]])
 
     plot_path = (data_dir / row.name).with_suffix(".pdf")
-    with disable_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(
+    with silent_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(
         plot_path
     ) as pdf:
         for plane, axis in {"xy": [0, 1], "xz": [0, 2], "yz": [1, 2]}.items():

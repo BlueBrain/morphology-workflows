@@ -7,6 +7,7 @@ import numpy as np
 import pytest
 from dir_content_diff import assert_equal_trees
 
+from morphology_workflows.tasks import cli
 from morphology_workflows.tasks import workflows
 
 from . import clean_exception
@@ -15,13 +16,9 @@ from . import clean_exception
 @pytest.fixture()
 def example_1(tmp_working_dir, examples_dir):
     """Setup the working directory."""
-    shutil.copyfile(examples_dir / "logging.conf", tmp_working_dir / "logging.conf")
-    shutil.copyfile(examples_dir / "luigi.cfg", tmp_working_dir / "luigi.cfg")
     shutil.copyfile(examples_dir / "dataset.csv", tmp_working_dir / "dataset.csv")
-    shutil.copyfile(examples_dir / "builder_recipe.xml", tmp_working_dir / "builder_recipe.xml")
-    shutil.copyfile(examples_dir / "placement_rules.xml", tmp_working_dir / "placement_rules.xml")
-    shutil.copyfile(examples_dir / "transform_rules.xml", tmp_working_dir / "transform_rules.xml")
     shutil.copytree(examples_dir / "morphologies", tmp_working_dir / "morphologies")
+    cli.main(["Initialize"])
 
     # Set current config in luigi
     luigi_config = luigi.configuration.get_config()
