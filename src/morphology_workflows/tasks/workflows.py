@@ -33,6 +33,7 @@ from morphology_workflows.tasks.repair import PlotSmoothDiameters
 from morphology_workflows.tasks.repair import RepairNeurites
 from morphology_workflows.tasks.repair import SmoothDiameters
 from morphology_workflows.tasks.repair import Unravel
+from morphology_workflows.utils import StrIndexMixin
 
 
 def path_reduced_df(data_dir, df_path="reduced_df.csv", parents=None):
@@ -53,7 +54,7 @@ def save_reduced_df(df, data_dir, df_path="reduced_df.csv", parents=None):
     ].rename_axis(index="morph_name").reset_index().to_csv(target_path, index=False)
 
 
-class Curate(ValidationWorkflow):
+class Curate(StrIndexMixin, ValidationWorkflow):
     """Run Curation phase.
 
     The complete phase has the following dependency graph:
@@ -94,7 +95,7 @@ class Curate(ValidationWorkflow):
         }
 
 
-class Annotate(ValidationWorkflow):
+class Annotate(StrIndexMixin, ValidationWorkflow):
     """Run Annotation phase.
 
     The complete phase has the following dependency graph:
@@ -133,7 +134,7 @@ class Annotate(ValidationWorkflow):
         }
 
 
-class Repair(ValidationWorkflow):
+class Repair(StrIndexMixin, ValidationWorkflow):
     """Run Repair phase.
 
     The complete phase has the following dependency graph:

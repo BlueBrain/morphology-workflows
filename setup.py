@@ -5,10 +5,10 @@ from setuptools import find_namespace_packages
 from setuptools import setup
 
 reqs = [
-    "data-validation-framework>=0.6.0",
+    "data-validation-framework>=0.7.0",
     "diameter-synthesis>=0.5.2,<0.6",
     "luigi>=3.2",
-    "luigi-tools>=0.0.19",
+    "luigi-tools>=0.3.3",
     "matplotlib>=3.4",
     "morphapi>=0.1.8",
     "morph_tool>=2.9.0,<3.0",

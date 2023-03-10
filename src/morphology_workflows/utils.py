@@ -24,6 +24,15 @@ tqdm.pandas()
 EXTS = {".asc", ".h5", ".swc"}  # allowed extensions
 
 
+class StrIndexMixin:
+    """Mixin to ensure the dataset index is casted to str."""
+
+    def transform_index(self, df):
+        """The index is always casted to str."""
+        df.index = df.index.astype(str)
+        return df
+
+
 def is_morphology(filename):
     """Returns True if the extension is supported."""
     try:

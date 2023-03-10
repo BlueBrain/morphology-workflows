@@ -24,11 +24,12 @@ from morphology_workflows.curation import plot_morphology
 from morphology_workflows.curation import recenter
 from morphology_workflows.curation import resample
 from morphology_workflows.curation import sanitize
+from morphology_workflows.utils import StrIndexMixin
 
 logger = logging.getLogger(__name__)
 
 
-class Collect(ElementValidationTask):
+class Collect(StrIndexMixin, ElementValidationTask):
     """Collect external dataset from .csv file.
 
     Original dataset has to have a 'morph_name' and 'morph_path' columns, with the name and path to
@@ -41,7 +42,7 @@ class Collect(ElementValidationTask):
     validation_function = collect
 
 
-class ExtractMarkers(SkippableMixin(), ElementValidationTask):
+class ExtractMarkers(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Extract marker information from the original morphology files, if any.
 
     Markers are additional spatial information contained in some reconstructed morphologies.
@@ -56,7 +57,7 @@ class ExtractMarkers(SkippableMixin(), ElementValidationTask):
         return {Collect: {"morph_path": "morph_path"}}
 
 
-class PlotMarkers(SkippableMixin(), ElementValidationTask):
+class PlotMarkers(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot markers on morphologies.
 
     Plot the markers extracted from :class:`tasks.curation.ExtractMarkers` on the morphologies.
@@ -76,7 +77,7 @@ class PlotMarkers(SkippableMixin(), ElementValidationTask):
         }
 
 
-class CheckNeurites(ElementValidationTask):
+class CheckNeurites(StrIndexMixin, ElementValidationTask):
     """Detect which neurites are present in the morphology, and add soma if missing.
 
     This task adds three important boolean flags:
@@ -145,7 +146,7 @@ class CheckNeurites(ElementValidationTask):
         return {Collect: {"morph_path": "morph_path"}}
 
 
-class Sanitize(ElementValidationTask):
+class Sanitize(StrIndexMixin, ElementValidationTask):
     """Sanitize the morphologies.
 
     Sanitization is done with :func:`neuror.sanitize.sanitize` and does the following:
@@ -175,7 +176,7 @@ class Sanitize(ElementValidationTask):
         return {CheckNeurites: {"morph_path": "morph_path"}}
 
 
-class Recenter(SkippableMixin(), ElementValidationTask):
+class Recenter(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Recenter morphologies.
 
     Often, morphologies do not have a soma centered at ``[0, 0, 0]``, so we recenter and save
@@ -189,7 +190,7 @@ class Recenter(SkippableMixin(), ElementValidationTask):
         return {Sanitize: {"morph_path": "morph_path"}}
 
 
-class Orient(ElementValidationTask):
+class Orient(StrIndexMixin, ElementValidationTask):
     """Orient morphologies.
 
     Sometimes, morphologies are oriented along non-standard axis. At BBP, the standard axis is
@@ -214,7 +215,7 @@ class Orient(ElementValidationTask):
         return {Recenter: {"morph_path": "morph_path"}}
 
 
-class Align(SkippableMixin(True), ElementValidationTask):
+class Align(StrIndexMixin, SkippableMixin(True), ElementValidationTask):
     """Align morphologies.
 
     Sometimes, a morphology is not aligned with any consistent direction, so we can try here to
@@ -263,7 +264,7 @@ class Align(SkippableMixin(True), ElementValidationTask):
         return {Orient: {"morph_path": "morph_path"}}
 
 
-class EnsureNeuritesOutsideSoma(SkippableMixin(True), ElementValidationTask):
+class EnsureNeuritesOutsideSoma(StrIndexMixin, SkippableMixin(True), ElementValidationTask):
     """Fix radius of the soma of each morphology and cut the root section of neurites if needed."""
 
     output_columns = {"morph_path": None}
@@ -273,7 +274,7 @@ class EnsureNeuritesOutsideSoma(SkippableMixin(True), ElementValidationTask):
         return {Align: {"morph_path": "morph_path"}}
 
 
-class DetectErrors(SkippableMixin(), ElementValidationTask):
+class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Detect errors in reconstructions.
 
     Reconstructions may contain errors, which are detected here.
@@ -310,7 +311,7 @@ class DetectErrors(SkippableMixin(), ElementValidationTask):
         return {CheckNeurites: {"morph_path": "morph_path"}}
 
 
-class PlotErrors(SkippableMixin(), ElementValidationTask):
+class PlotErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot detected errors.
 
     From the detected errors in :class:`tasks.curation.DetectErrors`, plot them on the morphologies.
@@ -331,7 +332,7 @@ class PlotErrors(SkippableMixin(), ElementValidationTask):
         }
 
 
-class ErrorsReport(SkippableMixin(), SetValidationTask):
+class ErrorsReport(StrIndexMixin, SkippableMixin(), SetValidationTask):
     """Save error report for all morphologies."""
 
     error_report_path = luigi.Parameter(
@@ -348,7 +349,7 @@ class ErrorsReport(SkippableMixin(), SetValidationTask):
         }
 
 
-class Resample(SkippableMixin(), ElementValidationTask):
+class Resample(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Resample morphologies.
 
     This tasks ensures a constant sampling rate of points along all branches.
@@ -368,7 +369,7 @@ class Resample(SkippableMixin(), ElementValidationTask):
         return {EnsureNeuritesOutsideSoma: {"morph_path": "morph_path"}}
 
 
-class PlotMorphologies(SkippableMixin(), ElementValidationTask):
+class PlotMorphologies(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot curated morphologies.
 
     This tasks creates a single pdf with all morphologies to visualise them after curation.

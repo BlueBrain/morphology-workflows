@@ -16,11 +16,12 @@ from morphology_workflows.repair import plot_smooth_diameters
 from morphology_workflows.repair import repair
 from morphology_workflows.repair import smooth_diameters
 from morphology_workflows.repair import unravel
+from morphology_workflows.utils import StrIndexMixin
 
 logger = logging.getLogger(__name__)
 
 
-class CollectAnnotated(ElementValidationTask):
+class CollectAnnotated(StrIndexMixin, ElementValidationTask):
     """Collect annotated dataset to work with on this phase."""
 
     output_columns = {
@@ -35,7 +36,7 @@ class CollectAnnotated(ElementValidationTask):
     validation_function = collect
 
 
-class FixZeroDiameters(ElementValidationTask):
+class FixZeroDiameters(StrIndexMixin, ElementValidationTask):
     """Fix zero diameters.
 
     This task applies a fix on zero diameters on dendrites, by calling
@@ -50,7 +51,7 @@ class FixZeroDiameters(ElementValidationTask):
         return {CollectAnnotated: {"morph_path": "morph_path"}}
 
 
-class Unravel(ElementValidationTask):
+class Unravel(StrIndexMixin, ElementValidationTask):
     """Unravel morphologies.
 
     In-vitro morphologies produce recostruction with too much tortuosity, which is corrected for
@@ -83,7 +84,7 @@ class Unravel(ElementValidationTask):
         }
 
 
-class RepairNeurites(ElementValidationTask):
+class RepairNeurites(StrIndexMixin, ElementValidationTask):
     """RepairNeurites morphologies.
 
     Using the cut leaves, we recreate missing branches using neuror.main.repair.
@@ -122,7 +123,7 @@ class RepairNeurites(ElementValidationTask):
         }
 
 
-class MakeCollage(SkippableMixin(), SetValidationTask):
+class MakeCollage(StrIndexMixin, SkippableMixin(), SetValidationTask):
     """Make collage plot of morphologies."""
 
     collage_path = luigi.Parameter(default="collage.pdf", description=":str: Path to collage plot")
@@ -149,7 +150,7 @@ class MakeCollage(SkippableMixin(), SetValidationTask):
         return {RepairNeurites: {"morph_path": "morph_path"}}
 
 
-class MakeRelease(SetValidationTask):
+class MakeRelease(StrIndexMixin, SetValidationTask):
     """Make a morpology release, with three possible folders: zero-diameter, unravel or repair."""
 
     zero_diameter_path = luigi.OptionalParameter(
@@ -201,7 +202,7 @@ class MakeRelease(SetValidationTask):
         }
 
 
-class PlotRepair(SkippableMixin(), ElementValidationTask):
+class PlotRepair(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot the cut leaves on repaired cells."""
 
     output_columns = {"plot_repair_path": None}
@@ -219,7 +220,7 @@ class PlotRepair(SkippableMixin(), ElementValidationTask):
         }
 
 
-class SmoothDiameters(SkippableMixin(True), ElementValidationTask):
+class SmoothDiameters(StrIndexMixin, SkippableMixin(True), ElementValidationTask):
     """Smooth diameters with :mod:`diameter_synthesis`.
 
     We use actual diameters to learn a diameter model used to diametrize the morphology.
@@ -238,7 +239,7 @@ class SmoothDiameters(SkippableMixin(True), ElementValidationTask):
         }
 
 
-class PlotSmoothDiameters(SkippableMixin(True), ElementValidationTask):
+class PlotSmoothDiameters(StrIndexMixin, SkippableMixin(True), ElementValidationTask):
     """Plot smoothed diameters versus originals."""
 
     output_columns = {"plot_smooth_path": None}
