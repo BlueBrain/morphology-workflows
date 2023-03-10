@@ -12,10 +12,16 @@ from morphio.mut import Morphology
 from pkg_resources import resource_filename
 from tqdm import tqdm
 
+_TEMPLATES = Path(
+    resource_filename(
+        "morphology_workflows",
+        "_templates",
+    )
+)
+
 tqdm.pandas()
 
 EXTS = {".asc", ".h5", ".swc"}  # allowed extensions
-EXAMPLE_PATH = Path(__file__).parent.parent.parent / "examples"
 
 
 def is_morphology(filename):
@@ -77,7 +83,7 @@ def create_dataset_from_dir(dir_path, output_path):
         if i.suffix.lower() in EXTS:
             morph_files.append((i.with_suffix("").name, str(i)))
         else:
-            L.info(f"The file '{i}' is not a valid morphology and is thus discarded")
+            L.info("The file '%s' is not a valid morphology and is thus discarded", i)
     df = pd.DataFrame(morph_files, columns=["morph_name", "morph_path"])
 
     # Deduplicate names
@@ -107,18 +113,12 @@ def create_inputs(
         try:
             output_dir.mkdir(parents=True)
         except FileExistsError:
+            # pylint: disable=raise-missing-from
             raise FileExistsError(
                 f"The directory {output_dir} already exists, please use another name"
             )
 
-    template_dir = Path(
-        resource_filename(
-            "morphology_workflows",
-            "_templates",
-        )
-    )
-
-    shutil.copyfile(template_dir / "logging.conf", output_dir / "logging.conf")
+    shutil.copyfile(_TEMPLATES / "logging.conf", output_dir / "logging.conf")
 
     fetch_config_file = None
     if source_db == "Allen":
@@ -131,12 +131,12 @@ def create_inputs(
         raise ValueError(f"The value '{source_db}' is not valid for the 'source_db' parameter")
 
     luigi_cfg = luigi.configuration.cfg_parser.LuigiConfigParser()
-    luigi_cfg.read(template_dir / "luigi.cfg")
+    luigi_cfg.read(_TEMPLATES / "luigi.cfg")
 
     cfg = configparser_to_dict(luigi_cfg)
 
     if fetch_config_file is not None:
-        shutil.copyfile(template_dir / fetch_config_file, output_dir / fetch_config_file)
+        shutil.copyfile(_TEMPLATES / fetch_config_file, output_dir / fetch_config_file)
         cfg["Fetch"]["source"] = source_db
         cfg["Fetch"]["config_file"] = fetch_config_file
     cfg["Curate"]["dataset_df"] = dataset_filename

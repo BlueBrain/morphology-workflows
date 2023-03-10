@@ -10,6 +10,7 @@ import pytest
 from pkg_resources import resource_filename
 
 from morphology_workflows.placeholders import DEFAULT_CONFIG
+from morphology_workflows.tasks import _TEMPLATES
 from morphology_workflows.tasks.placeholders import Placeholders
 
 
@@ -33,8 +34,8 @@ def build_metadata(input_dir):
 @pytest.fixture()
 def prepare_dir(tmp_working_dir, examples_dir):
     """Setup the working directory."""
-    shutil.copyfile(examples_dir / "luigi.cfg", tmp_working_dir / "luigi.cfg")
-    shutil.copyfile(examples_dir / "logging.conf", tmp_working_dir / "logging.conf")
+    shutil.copyfile(_TEMPLATES / "luigi.cfg", tmp_working_dir / "luigi.cfg")
+    shutil.copyfile(_TEMPLATES / "logging.conf", tmp_working_dir / "logging.conf")
     shutil.copytree(examples_dir / "morphologies", tmp_working_dir / "morphologies")
 
     build_metadata(tmp_working_dir / "morphologies")

@@ -87,9 +87,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                     # Download these neurons
                     downloaded_neurons.extend(
                         self._neuron_paths(
-                            api.download_neurons(
-                                metadata, load_neurons=False, use_neuron_names=True
-                            ),
+                            api.download_neurons(metadata, load_neurons=False),
                             api.neuromorphorg_cache,
                         )
                     )

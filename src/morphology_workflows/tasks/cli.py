@@ -189,7 +189,7 @@ class ArgParser:
         init_subparser.add_argument(
             "--source-database",
             help="The database from which the morphologies will be fetched.",
-            choices=Fetch.source._choices,
+            choices=Fetch.source._choices,  # pylint: disable=protected-access
         )
         init_subparser.add_argument(
             "--input-dir",
@@ -249,6 +249,30 @@ def _build_parser():
     return tmp
 
 
+def export_dependency_graph(task, output_file, dpi=None):
+    """Export the dependency graph of the given task."""
+    g = get_dependency_graph(task, allow_orphans=True)
+
+    # Create URLs
+    base_f = Path(inspect.getfile(morphology_workflows)).parent
+    node_kwargs = {}
+    for _, child in g:
+        if child is None:
+            continue
+        url = (
+            Path(inspect.getfile(child.__class__)).relative_to(base_f).with_suffix("")
+            / "index.html"
+        )
+        anchor = "#" + ".".join(child.__module__.split(".")[1:] + [child.__class__.__name__])
+        node_kwargs[child] = {"URL": "../../" + url.as_posix() + anchor}
+
+    graph_attrs = {}
+    if dpi is not None:
+        graph_attrs["dpi"] = dpi
+    dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs, graph_attrs=graph_attrs)
+    render_dependency_graph(dot, output_file)
+
+
 def main(arguments=None):
     """Main function."""
     logging.getLogger("luigi-interface").propagate = False
@@ -294,26 +318,7 @@ def main(arguments=None):
 
     # Export the dependency graph of the workflow instead of running it
     if args.create_dependency_graph is not None:
-        g = get_dependency_graph(task, allow_orphans=True)
-
-        # Create URLs
-        base_f = Path(inspect.getfile(morphology_workflows)).parent
-        node_kwargs = {}
-        for _, child in g:
-            if child is None:
-                continue
-            url = (
-                Path(inspect.getfile(child.__class__)).relative_to(base_f).with_suffix("")
-                / "index.html"
-            )
-            anchor = "#" + ".".join(child.__module__.split(".")[1:] + [child.__class__.__name__])
-            node_kwargs[child] = {"URL": "../../" + url.as_posix() + anchor}
-
-        graph_attrs = {}
-        if args.dependency_graph_dpi is not None:
-            graph_attrs["dpi"] = args.dependency_graph_dpi
-        dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs, graph_attrs=graph_attrs)
-        render_dependency_graph(dot, args.create_dependency_graph)
+        export_dependency_graph(task, args.create_dependency_graph, dpi=args.dependency_graph_dpi)
         return
 
     # Run the luigi task

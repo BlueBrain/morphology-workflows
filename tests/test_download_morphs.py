@@ -9,14 +9,15 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from morphology_workflows.tasks import _TEMPLATES
 from morphology_workflows.tasks.fetch import Fetch
 
 
 @pytest.fixture()
-def prepare_dir(tmp_working_dir, examples_dir):
+def prepare_dir(tmp_working_dir):
     """Setup the working directory."""
     config = configparser.ConfigParser()
-    config.read(examples_dir / "logging.conf")
+    config.read(_TEMPLATES / "logging.conf")
     config["logger_root"]["level"] = "DEBUG"
     config["logger_luigi"]["level"] = "DEBUG"
     with (tmp_working_dir / "logging.conf").open("w", encoding="utf-8") as f:
