@@ -19,7 +19,7 @@ reqs = [
     "pandas>=1.5",
     "plotly-helper>=0.0.8,<1.0",
     "PyYAML>=5.3",
-    "rst2pdf>=0.90",
+    "rst2pdf>=0.99",
     "scipy>=1.6",
     "tqdm>=4.44",
 ]
