@@ -105,7 +105,7 @@ class ArgParser:
             description="Run the workflow",
         )
 
-        parser.add_argument("-c", "--config-path", help="Path to the Luigi config file")
+        parser.add_argument("-c", "--config-path", help="Path to the Luigi config file.")
 
         parser.add_argument(
             "-m",
@@ -143,6 +143,12 @@ class ArgParser:
             ),
         )
 
+        parser.add_argument(
+            "-dgdpi",
+            "--dependency-graph-dpi",
+            help="The DPI used for the dependency graph export.",
+        )
+
         return self._get_workflow_parsers(parser)
 
     @staticmethod
@@ -169,28 +175,36 @@ class ArgParser:
                 """
                 Create default inputs for a given workflow that users can then update according to
                 their needs.
-                There are 2 initialization types:
-                  * one for a project where the morphologies are fetched from an online database.
-                  * one for a project where the morphologies are provided by the user.
+                Usually, the initialization consists in one these two types:
+
+                * the morphologies are fetched from an online database.
+                * the morphologies are provided by the user.
+
+                In the first case, the '--input-dir' argument should usually not be used.
+                In the second case, the '--source-database' argument should usually not be used.
                 """
             ),
             formatter_class=argparse.RawDescriptionHelpFormatter,
         )
         init_subparser.add_argument(
             "--source-database",
-            help="The database from which the morphologies will be fetched",
+            help="The database from which the morphologies will be fetched.",
             choices=Fetch.source._choices,
         )
         init_subparser.add_argument(
-            "--input-dir", help="The directory containing the input morphologies"
+            "--input-dir",
+            help=(
+                "The directory containing the input morphologies if they are not fetched from a "
+                "database."
+            ),
         )
         init_subparser.add_argument(
-            "--output-dir", help="The directory in which the project inputs will be exported"
+            "--output-dir", help="The directory in which the project inputs will be exported."
         )
         init_subparser.add_argument(
             "--dataset-filename",
             default="dataset.csv",
-            help="The name of the CSV file to which the dataset will be exported",
+            help="The name of the CSV file to which the dataset will be exported.",
         )
 
         for workflow_name, task in WORKFLOW_TASKS.items():
@@ -295,7 +309,10 @@ def main(arguments=None):
             anchor = "#" + ".".join(child.__module__.split(".")[1:] + [child.__class__.__name__])
             node_kwargs[child] = {"URL": "../../" + url.as_posix() + anchor}
 
-        dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs)
+        graph_attrs = {}
+        if args.dependency_graph_dpi is not None:
+            graph_attrs["dpi"] = args.dependency_graph_dpi
+        dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs, graph_attrs=graph_attrs)
         render_dependency_graph(dot, args.create_dependency_graph)
         return
 
