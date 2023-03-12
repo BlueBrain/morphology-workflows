@@ -293,6 +293,10 @@ def main(arguments=None):
         return
 
     if args.workflow == "Initialize":
+        luigi_config = luigi.configuration.get_config()
+        logging_conf = luigi_config.get("core", "logging_conf_file", "logging.conf")
+        if Path(logging_conf).exists():
+            logging.config.fileConfig(str(logging_conf))
         create_inputs(
             source_db=args.source_database,
             input_dir=args.input_dir,

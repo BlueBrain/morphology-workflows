@@ -22,6 +22,7 @@ _TEMPLATES = Path(
 tqdm.pandas()
 
 EXTS = {".asc", ".h5", ".swc"}  # allowed extensions
+L = logging.getLogger(__name__)
 
 
 class StrIndexMixin:
@@ -87,7 +88,6 @@ def create_dataset_from_dir(dir_path, output_path):
     output_path = Path(output_path)
     morph_files = []
 
-    L = logging.getLogger(".".join(__name__.split(".")[:-1]))
     for i in dir_path.iterdir():
         if i.suffix.lower() in EXTS:
             morph_files.append((i.with_suffix("").name, str(i)))
@@ -106,6 +106,7 @@ def create_dataset_from_dir(dir_path, output_path):
 
     df.sort_values("morph_name", inplace=True)
     df.to_csv(output_path, index=False)
+    L.info("Created dataset in %s", output_path)
 
 
 def create_inputs(
@@ -153,6 +154,8 @@ def create_inputs(
     luigi_cfg.read_dict(cfg)
     with (output_dir / "luigi.cfg").open("w") as f:
         luigi_cfg.write(f)
+
+    L.info("Created inputs in %s", output_dir)
 
     if input_dir is not None:
         create_dataset_from_dir(input_dir, output_dir / dataset_filename)

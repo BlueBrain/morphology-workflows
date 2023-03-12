@@ -32,11 +32,11 @@ def build_metadata(input_dir):
 
 
 @pytest.fixture()
-def prepare_dir(tmp_working_dir, examples_dir):
+def prepare_dir(tmp_working_dir, examples_test_dir):
     """Setup the working directory."""
     shutil.copyfile(_TEMPLATES / "luigi.cfg", tmp_working_dir / "luigi.cfg")
     shutil.copyfile(_TEMPLATES / "logging.conf", tmp_working_dir / "logging.conf")
-    shutil.copytree(examples_dir / "morphologies", tmp_working_dir / "morphologies")
+    shutil.copytree(examples_test_dir / "morphologies", tmp_working_dir / "morphologies")
 
     build_metadata(tmp_working_dir / "morphologies")
 

@@ -33,8 +33,8 @@ doc_reqs = [
 ]
 
 test_reqs = [
-    "diff-pdf-visually>=1.5.1",
-    "dir-content-diff>=1.2",
+    "diff-pdf-visually>=1.7",
+    "dir-content-diff>=1.4",
     "mock>=3",
     "pytest>=6",
     "pytest-cov>=3",

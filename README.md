@@ -10,6 +10,8 @@
 # Morphology Workflows
 
 This project contains several workflows for processing morphologies:
+- **Initialize:** create the initial configuration files that the user can then update according to
+  its needs.
 - **Fetch:** download morphologies from online database (like Allen, NeuroMorpho or MouseLight).
 - **Placeholders:** compute the place holders for a given region and mtype set.
 - **Curate:** from raw morphologies, ensures that morphologies can be used with the rest of
@@ -49,7 +51,31 @@ pip install morphology-workflows
 
 ## Usage
 
-### Create inputs for the Fetch workflow
+### Create inputs for the workflows using the **Initialize** workflow
+
+Usually, user should create a new project folder using this workflow. It will create the files
+required to run the other workflows. For example, the command:
+
+```bash
+morphology-workflows Initialize --source-database NeuroMorpho
+```
+
+will create the inputs to download the morphologies from the NeuroMorpho database and the run the
+other workflows on these morphologies.
+
+If the user wants to provide arbitrary morphologies to the **Curate** / **Annotate** / **Repair**
+workflows, the following command can be used:
+
+```bash
+morphology-workflows Initialize --input-dir <path-to-the-morphologies>
+```
+
+in order to create the dataset required by these workflows.
+
+Once the **Initialize** workflows is complete, the user can update the outputs according to its
+needs (see the next sections for details about each workflow).
+
+### Create inputs for the **Fetch** workflow
 
 This workflow helps fetching morphologies from online databases. This workflow only needs a
 configuration file, which depends on the source from which the morphologies are fetched.
@@ -107,7 +133,7 @@ filters.
 Note that all attributes are optional, so it's possible to pass an empty object to fetch all the
 morphologies from the database, though it is not recommended.
 
-### Create inputs for the Curate, Annotate and Repair workflow
+### Create inputs for the **Curate**, **Annotate** and **Repair** workflows
 
 The **Annotate** and **Repair** workflows should usually be run after the **Curate** workflow since
 their inputs should be the outputs of the **Curate** workflow. But it is still possible to run them
