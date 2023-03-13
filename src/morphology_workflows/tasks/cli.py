@@ -17,6 +17,7 @@ import morphology_workflows
 from morphology_workflows.tasks import workflows
 from morphology_workflows.tasks.fetch import Fetch
 from morphology_workflows.tasks.placeholders import Placeholders
+from morphology_workflows.utils import _TEMPLATES
 from morphology_workflows.utils import create_inputs
 
 L = logging.getLogger(__name__)
@@ -275,12 +276,19 @@ def export_dependency_graph(task, output_file, dpi=None):
 
 def main(arguments=None):
     """Main function."""
+    # Setup logging
+    logging.getLogger("luigi").propagate = False
     logging.getLogger("luigi-interface").propagate = False
-
-    if arguments is None:
-        arguments = sys.argv[1:]
+    luigi_config = luigi.configuration.get_config()
+    logging_conf = luigi_config.get("core", "logging_conf_file", "logging.conf")
+    if Path(logging_conf).exists():
+        logging.config.fileConfig(str(logging_conf), disable_existing_loggers=False)
+    else:
+        logging.config.fileConfig(str(_TEMPLATES / "logging.conf"), disable_existing_loggers=False)
 
     # Parse arguments
+    if arguments is None:
+        arguments = sys.argv[1:]
     parser = ArgParser()
     args = parser.parse_args(arguments)
 
@@ -293,10 +301,6 @@ def main(arguments=None):
         return
 
     if args.workflow == "Initialize":
-        luigi_config = luigi.configuration.get_config()
-        logging_conf = luigi_config.get("core", "logging_conf_file", "logging.conf")
-        if Path(logging_conf).exists():
-            logging.config.fileConfig(str(logging_conf))
         create_inputs(
             source_db=args.source_database,
             input_dir=args.input_dir,

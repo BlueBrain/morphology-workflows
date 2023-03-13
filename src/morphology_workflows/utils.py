@@ -1,5 +1,6 @@
 """Util functions."""
 import logging
+import re
 import shutil
 import warnings
 from contextlib import contextmanager
@@ -154,6 +155,13 @@ def create_inputs(
     luigi_cfg.read_dict(cfg)
     with (output_dir / "luigi.cfg").open("w") as f:
         luigi_cfg.write(f)
+
+    # Fix end-of-file because of ConfigParser.write()
+    with (output_dir / "luigi.cfg").open("r") as f:
+        data = f.read()
+    data = re.sub(r"[\n]{2,}", "\n\n", data + "\n")[:-1]
+    with (output_dir / "luigi.cfg").open("w") as f:
+        f.write(data)
 
     L.info("Created inputs in %s", output_dir)
 
