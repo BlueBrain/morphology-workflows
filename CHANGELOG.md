@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.6.0](https://github.com/BlueBrain/morphology-workflows/compare/0.5.3..0.6.0)
+
+> 13 March 2023
+
+### New Features
+
+- Add helpers to create inputs (Adrien Berchet - [#85](https://github.com/BlueBrain/morphology-workflows/pull/85))
+
+### Chores And Housekeeping
+
+- Bump Copier template (Adrien Berchet - [#82](https://github.com/BlueBrain/morphology-workflows/pull/82))
+
+### CI Improvements
+
+- Do not export all test results as artifacts and fix dependency graphs in docs (Adrien Berchet - [#84](https://github.com/BlueBrain/morphology-workflows/pull/84))
+
+### General Changes
+
+- Add propagation between workflows, fix MakeCollage and fix empty mtypes (Adrien Berchet - [#83](https://github.com/BlueBrain/morphology-workflows/pull/83))
+
 ## [0.5.3](https://github.com/BlueBrain/morphology-workflows/compare/0.5.2..0.5.3)
 
 > 31 January 2023
@@ -55,7 +75,7 @@
 - Use tox 4 (Adrien Berchet - [#70](https://github.com/BlueBrain/morphology-workflows/pull/70))
 - Apply Copier template (Adrien Berchet - [#69](https://github.com/BlueBrain/morphology-workflows/pull/69))
 
-### Uncategorized Changes
+### General Changes
 
 - Update README.md (alex4200 - [53b70d4](https://github.com/BlueBrain/morphology-workflows/commit/53b70d41c4b271f47fef00ba24b27b48747bf68b))
 
@@ -73,7 +93,7 @@
 - Setup pre-commit and format the files accordingly (Adrien Berchet - [#55](https://github.com/BlueBrain/morphology-workflows/pull/55))
 - Fix action to publish new releases on Pypi (Adrien Berchet - [#54](https://github.com/BlueBrain/morphology-workflows/pull/54))
 
-### Uncategorized Changes
+### General Changes
 
 - Reconnect axons to soma (Alexis Arnaudon - [#62](https://github.com/BlueBrain/morphology-workflows/pull/62))
 - Simpler smooth algorithm (Alexis Arnaudon - [#56](https://github.com/BlueBrain/morphology-workflows/pull/56))
@@ -94,7 +114,7 @@
 - Add the Placeholders workflow in the doc (Adrien Berchet - [#49](https://github.com/BlueBrain/morphology-workflows/pull/49))
 - Improve instructions to create inputs (Adrien Berchet - [#47](https://github.com/BlueBrain/morphology-workflows/pull/47))
 
-### Uncategorized Changes
+### General Changes
 
 - Remove warning from scipy (Adrien Berchet - [#48](https://github.com/BlueBrain/morphology-workflows/pull/48))
 - Add workflow to compute placeholders (Adrien Berchet - [#22](https://github.com/BlueBrain/morphology-workflows/pull/22))
