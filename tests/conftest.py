@@ -7,7 +7,8 @@ import dir_content_diff.pandas
 import pytest
 
 DATA = Path(__file__).parent / "data"
-EXAMPLES = Path(__file__).parent / "examples_test"
+EXAMPLES = Path(__file__).parent.parent / "examples"
+EXAMPLES_TEST = Path(__file__).parent / "examples_test"
 
 dir_content_diff.pandas.register()
 
@@ -31,3 +32,9 @@ def data_dir():
 def examples_dir():
     """The examples directory."""
     return EXAMPLES
+
+
+@pytest.fixture()
+def examples_test_dir():
+    """The examples directory."""
+    return EXAMPLES_TEST

@@ -42,7 +42,10 @@ examples/*_release-*
 examples/*.log
 examples/.ipynb_checkpoints
 examples/dataset.csv
+examples/logging.conf
+examples/luigi.cfg
 examples/morphologies
+examples/neuromorpho_config.json
 examples/out_*
 
 # Node

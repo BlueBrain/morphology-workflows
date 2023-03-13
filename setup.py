@@ -5,10 +5,10 @@ from setuptools import find_namespace_packages
 from setuptools import setup
 
 reqs = [
-    "data-validation-framework>=0.6.0",
+    "data-validation-framework>=0.7.0",
     "diameter-synthesis>=0.5.2,<0.6",
     "luigi>=3.2",
-    "luigi-tools>=0.0.19",
+    "luigi-tools>=0.3.3",
     "matplotlib>=3.4",
     "morphapi>=0.1.8",
     "morph_tool>=2.9.0,<3.0",
@@ -19,7 +19,7 @@ reqs = [
     "pandas>=1.5",
     "plotly-helper>=0.0.8,<1.0",
     "PyYAML>=5.3",
-    "rst2pdf>=0.90",
+    "rst2pdf>=0.99",
     "scipy>=1.6",
     "tqdm>=4.44",
 ]
@@ -33,8 +33,8 @@ doc_reqs = [
 ]
 
 test_reqs = [
-    "diff-pdf-visually>=1.5.1",
-    "dir-content-diff>=1.2",
+    "diff-pdf-visually>=1.7",
+    "dir-content-diff>=1.4",
     "mock>=3",
     "pytest>=6",
     "pytest-cov>=3",

@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import sys
+import textwrap
 from pathlib import Path
 
 import luigi
@@ -16,6 +17,8 @@ import morphology_workflows
 from morphology_workflows.tasks import workflows
 from morphology_workflows.tasks.fetch import Fetch
 from morphology_workflows.tasks.placeholders import Placeholders
+from morphology_workflows.utils import _TEMPLATES
+from morphology_workflows.utils import create_inputs
 
 L = logging.getLogger(__name__)
 
@@ -103,7 +106,7 @@ class ArgParser:
             description="Run the workflow",
         )
 
-        parser.add_argument("-c", "--config-path", help="Path to the Luigi config file")
+        parser.add_argument("-c", "--config-path", help="Path to the Luigi config file.")
 
         parser.add_argument(
             "-m",
@@ -141,6 +144,12 @@ class ArgParser:
             ),
         )
 
+        parser.add_argument(
+            "-dgdpi",
+            "--dependency-graph-dpi",
+            help="The DPI used for the dependency graph export.",
+        )
+
         return self._get_workflow_parsers(parser)
 
     @staticmethod
@@ -159,6 +168,45 @@ class ArgParser:
         parsers = {"root": parser}
 
         workflow_parser = parser.add_subparsers(help="Possible workflows", dest="workflow")
+
+        init_subparser = workflow_parser.add_parser(
+            "Initialize",
+            help="Create default inputs for curation workflows.",
+            description=textwrap.dedent(
+                """
+                Create default inputs for a given workflow that users can then update according to
+                their needs.
+                Usually, the initialization consists in one these two types:
+
+                * the morphologies are fetched from an online database.
+                * the morphologies are provided by the user.
+
+                In the first case, the '--input-dir' argument should usually not be used.
+                In the second case, the '--source-database' argument should usually not be used.
+                """
+            ),
+            formatter_class=argparse.RawDescriptionHelpFormatter,
+        )
+        init_subparser.add_argument(
+            "--source-database",
+            help="The database from which the morphologies will be fetched.",
+            choices=Fetch.source._choices,  # pylint: disable=protected-access
+        )
+        init_subparser.add_argument(
+            "--input-dir",
+            help=(
+                "The directory containing the input morphologies if they are not fetched from a "
+                "database."
+            ),
+        )
+        init_subparser.add_argument(
+            "--output-dir", help="The directory in which the project inputs will be exported."
+        )
+        init_subparser.add_argument(
+            "--dataset-filename",
+            default="dataset.csv",
+            help="The name of the CSV file to which the dataset will be exported.",
+        )
 
         for workflow_name, task in WORKFLOW_TASKS.items():
             try:
@@ -202,14 +250,45 @@ def _build_parser():
     return tmp
 
 
+def export_dependency_graph(task, output_file, dpi=None):
+    """Export the dependency graph of the given task."""
+    g = get_dependency_graph(task, allow_orphans=True)
+
+    # Create URLs
+    base_f = Path(inspect.getfile(morphology_workflows)).parent
+    node_kwargs = {}
+    for _, child in g:
+        if child is None:
+            continue
+        url = (
+            Path(inspect.getfile(child.__class__)).relative_to(base_f).with_suffix("")
+            / "index.html"
+        )
+        anchor = "#" + ".".join(child.__module__.split(".")[1:] + [child.__class__.__name__])
+        node_kwargs[child] = {"URL": "../../" + url.as_posix() + anchor}
+
+    graph_attrs = {}
+    if dpi is not None:
+        graph_attrs["dpi"] = dpi
+    dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs, graph_attrs=graph_attrs)
+    render_dependency_graph(dot, output_file)
+
+
 def main(arguments=None):
     """Main function."""
+    # Setup logging
+    logging.getLogger("luigi").propagate = False
     logging.getLogger("luigi-interface").propagate = False
-
-    if arguments is None:
-        arguments = sys.argv[1:]
+    luigi_config = luigi.configuration.get_config()
+    logging_conf = luigi_config.get("core", "logging_conf_file", "logging.conf")
+    if Path(logging_conf).exists():
+        logging.config.fileConfig(str(logging_conf), disable_existing_loggers=False)
+    else:
+        logging.config.fileConfig(str(_TEMPLATES / "logging.conf"), disable_existing_loggers=False)
 
     # Parse arguments
+    if arguments is None:
+        arguments = sys.argv[1:]
     parser = ArgParser()
     args = parser.parse_args(arguments)
 
@@ -219,7 +298,16 @@ def main(arguments=None):
     if args is None or args.workflow is None:
         L.critical("Arguments must contain one workflow. Check help with -h/--help argument.")
         parser.parser.print_help()
-        sys.exit()
+        return
+
+    if args.workflow == "Initialize":
+        create_inputs(
+            source_db=args.source_database,
+            input_dir=args.input_dir,
+            output_dir=args.output_dir,
+            dataset_filename=args.dataset_filename,
+        )
+        return
 
     # Set luigi.cfg path
     if args.config_path is not None:
@@ -238,23 +326,7 @@ def main(arguments=None):
 
     # Export the dependency graph of the workflow instead of running it
     if args.create_dependency_graph is not None:
-        g = get_dependency_graph(task, allow_orphans=True)
-
-        # Create URLs
-        base_f = Path(inspect.getfile(morphology_workflows)).parent
-        node_kwargs = {}
-        for _, child in g:
-            if child is None:
-                continue
-            url = (
-                Path(inspect.getfile(child.__class__)).relative_to(base_f).with_suffix("")
-                / "index.html"
-            )
-            anchor = "#" + ".".join(child.__module__.split(".")[1:] + [child.__class__.__name__])
-            node_kwargs[child] = {"URL": "../../" + url.as_posix() + anchor}
-
-        dot = graphviz_dependency_graph(g, node_kwargs=node_kwargs)
-        render_dependency_graph(dot, args.create_dependency_graph)
+        export_dependency_graph(task, args.create_dependency_graph, dpi=args.dependency_graph_dpi)
         return
 
     # Run the luigi task

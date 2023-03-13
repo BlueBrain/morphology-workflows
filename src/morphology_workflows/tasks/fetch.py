@@ -6,6 +6,7 @@ import logging
 import luigi
 import numpy as np
 import pandas as pd
+import urllib3
 from data_validation_framework.target import TaggedOutputLocalTarget
 from data_validation_framework.task import TagResultOutputMixin
 from luigi.parameter import PathParameter
@@ -13,7 +14,9 @@ from luigi_tools.task import WorkflowTask
 from morphapi.api.mouselight import MouseLightAPI
 from morphapi.api.neuromorphorg import NeuroMorpOrgAPI
 
-from morphology_workflows.utils import silent_logger
+from morphology_workflows.utils import create_dataset_from_dir
+from morphology_workflows.utils import silent_loggers
+from morphology_workflows.utils import silent_warnings
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +56,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
     def _neuron_paths(neurons, root_path):
         return [i.data_file.relative_to(root_path).as_posix() for i in neurons]
 
+    @silent_warnings(urllib3.exceptions.HTTPWarning)
     def neuromorpho_download(self, config):
         """Download morphologies from the NeuromMorpho.org database."""
         api = NeuroMorpOrgAPI()
@@ -63,19 +67,18 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
             downloaded_neurons = []
             page = 0
             remaining = conf_element.get("nb_morphologies", float("inf"))
+            criteria = copy.deepcopy(conf_element)
+            criteria.pop("nb_morphologies", None)
+            criteria.pop("seed", None)
 
             while remaining > 0:
                 size = min(500, remaining)  # Can get the metadata for up to 500 neurons at a time
                 remaining = remaining - size
                 logger.debug("Downloading page %s for: %s", page, conf_element)
                 try:
-                    metadata, total = api.get_neurons_metadata(
-                        size=size,
-                        page=page,
-                        species=conf_element.get("species", None),
-                        cell_type=conf_element.get("cell_type", None),
-                        brain_region=conf_element.get("brain_region", None),
-                    )
+                    criteria["page"] = page
+                    criteria["size"] = size
+                    metadata, total = api.get_neurons_metadata(**criteria)
 
                     logger.debug(
                         "Found %s morphologies to download for %s", len(metadata), conf_element
@@ -147,8 +150,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                 downloaded_neurons, api.mouselight_cache
             )
 
-    @silent_logger("allensdk.api.api")
-    @silent_logger("allensdk.api.api.retrieve_file_over_http")
+    @silent_loggers("allensdk.api.api", "allensdk.api.api.retrieve_file_over_http")
     def allen_download(self, config):
         """Download morphologies from the Allen database."""
         try:
@@ -222,6 +224,10 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
         df = pd.DataFrame(formatted_result)
         df.to_csv(self.output()["metadata"].path, index=False)
 
+        create_dataset_from_dir(
+            self.output()["morphologies"].pathlib_path, self.output()["dataset"].pathlib_path
+        )
+
     def output(self):
         return {
             "morphologies": TaggedOutputLocalTarget(
@@ -230,6 +236,10 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
             ),
             "metadata": TaggedOutputLocalTarget(
                 self.result_path / "metadata.csv",
+                create_parent=True,
+            ),
+            "dataset": TaggedOutputLocalTarget(
+                self.result_path.parent / "dataset.csv",
                 create_parent=True,
             ),
         }

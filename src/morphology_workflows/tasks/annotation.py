@@ -14,11 +14,12 @@ from morphology_workflows.annotation import plot_apical_point
 from morphology_workflows.annotation import plot_cut_leaves
 from morphology_workflows.annotation import plot_hard_limits
 from morphology_workflows.curation import collect
+from morphology_workflows.utils import StrIndexMixin
 
 logger = logging.getLogger(__name__)
 
 
-class CollectCurated(ElementValidationTask):
+class CollectCurated(StrIndexMixin, ElementValidationTask):
     """Collect curated dataset to work with on this phase."""
 
     output_columns = {
@@ -31,7 +32,7 @@ class CollectCurated(ElementValidationTask):
     validation_function = collect
 
 
-class MType(ElementValidationTask):
+class MType(StrIndexMixin, ElementValidationTask):
     """Assign mtypes to morphologies.
 
     Currently, we only check if the mtype corresponds to the provided list of regex.
@@ -53,7 +54,7 @@ class MType(ElementValidationTask):
         return {CollectCurated: {"mtype": "mtype"}}
 
 
-class HardLimit(ElementValidationTask):
+class HardLimit(StrIndexMixin, ElementValidationTask):
     """Compute hard limits.
 
     Hard limits are markers used to place morphologies in a circuit. They can be automatically
@@ -87,7 +88,7 @@ class HardLimit(ElementValidationTask):
         return {CollectCurated: {"morph_path": "morph_path"}}
 
 
-class PlotHardLimit(SkippableMixin(), ElementValidationTask):
+class PlotHardLimit(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot the hard limits.
 
     Plot hard limits as lines on morphologies with plotly.
@@ -108,7 +109,7 @@ class PlotHardLimit(SkippableMixin(), ElementValidationTask):
         }
 
 
-class ApicalPoint(SkippableMixin(), ElementValidationTask):
+class ApicalPoint(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Detect apical point.
 
     For morphologies with apical dendrites we estimate the location of the apical point with
@@ -129,7 +130,7 @@ class ApicalPoint(SkippableMixin(), ElementValidationTask):
         return {CollectCurated: {"morph_path": "morph_path", "has_apical": "has_apical"}}
 
 
-class PlotApicalPoint(SkippableMixin(), ElementValidationTask):
+class PlotApicalPoint(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot apical point.
 
     Plot apical point as a single scatter point on a morphology with plotly.
@@ -150,7 +151,7 @@ class PlotApicalPoint(SkippableMixin(), ElementValidationTask):
         }
 
 
-class CutLeaves(ElementValidationTask):
+class CutLeaves(StrIndexMixin, ElementValidationTask):
     """Detect the cut leaves.
 
     Cut leaves are considered to represent boundaries of slices of in-vitro reconstructions.
@@ -174,7 +175,7 @@ class CutLeaves(ElementValidationTask):
         return {CollectCurated: {"morph_path": "morph_path", "rotation_matrix": "rotation_matrix"}}
 
 
-class PlotCutLeaves(SkippableMixin(), ElementValidationTask):
+class PlotCutLeaves(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot the cut leaves.
 
     We plot the cut-leaves as scatter markers, as the terminal points on dendrites intersecting
