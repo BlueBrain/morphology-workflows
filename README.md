@@ -168,7 +168,7 @@ These workflows are based on the ``luigi`` library but can be run via the comman
 For example, you can run the ``Curate`` workflow with the following command:
 
 ```bash
-morphology_workflows Curate
+morphology-workflows Curate
 ```
 
 > **NOTE:** This command must be executed from a directory containing a ``luigi.cfg`` file.
@@ -178,28 +178,28 @@ By default, a local scheduler is used but it is also possible to use a Luigi's m
 using the `-m / --master-scheduler` trigger:
 
 ```bash
-morphology_workflows -m Curate
+morphology-workflows -m Curate
 ```
 
 Once the **Curate** workflow has run, the **Annotate** and **Repair** workflows can be run
 directly, they will just take the results of the **Curate** workflow as input:
 
 ```bash
-morphology_workflows Annotate
-morphology_workflows Repair
+morphology-workflows Annotate
+morphology-workflows Repair
 ```
 
 Note that it is also possible to run the 3 workflows directly because each workflow depends on each other:
 ```bash
-morphology_workflows Repair
+morphology-workflows Repair
 ```
 
 More details can be found in the command line interface section of the documentation or by running
 the commands:
 
 ```bash
-morphology_workflows --help
-morphology_workflows <workflow> --help
+morphology-workflows --help
+morphology-workflows <workflow> --help
 ```
 
 
@@ -209,11 +209,13 @@ Each workflow will create several new directories, one for each sub-step. These 
 be nested into a global result directory for each workflow, using the ``result_path`` parameter.
 These directories contain intermediate data so it is possible to understand why a morphology
 could not be validated at a given step.
+The invalid morphologies should be manually fixed before being processed again by the workflows.
+
 The main workflows (**Curate**, **Annotate** and **Repair**) will also create a final CSV file
 which contains most of the relevant data of the workflow (main sub-step results and final
-morphology paths). Also, the **Repair** workflow can generate morphology releases that contain
-the final morphologies that could be validated and fixed by the workflow. Usually these morphologies
-are the most relevant ones for later use.
+morphology paths). Finally, the **Repair** workflow can generate morphology releases that contain
+the final morphologies that could be validated and automatically fixed by the workflow. Usually
+these morphologies are the most relevant ones for later use.
 
 
 ## Examples
