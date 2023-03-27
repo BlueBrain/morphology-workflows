@@ -70,7 +70,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "morphology_workflows=morphology_workflows.tasks.cli:main",
+            "morphology-workflows=morphology_workflows.tasks.cli:main",
         ],
     },
     include_package_data=True,

@@ -395,7 +395,14 @@ def add_duplicated_layers(df):
 
 
 def make_release(
-    df, _, zero_diameter_path, unravel_path, repair_path, extensions, duplicate_layers=True
+    df,
+    _,
+    release_path,
+    zero_diameter_path,
+    unravel_path,
+    repair_path,
+    extensions,
+    duplicate_layers=True,
 ):
     """Make morphology release."""
     set_layer_column(df)
@@ -404,20 +411,22 @@ def make_release(
     if duplicate_layers:
         df_tmp = add_duplicated_layers(df_tmp)
 
+    release_path = Path(release_path or "")
+
     for extension in extensions:
         _zero_diameter_path = None
         if zero_diameter_path is not None:
-            _zero_diameter_path = Path(f"{zero_diameter_path}-{extension[1:]}")
+            _zero_diameter_path = release_path / f"{zero_diameter_path}/{extension[1:]}"
             _zero_diameter_path.mkdir(exist_ok=True, parents=True)
 
         _unravel_path = None
         if unravel_path is not None:
-            _unravel_path = Path(f"{unravel_path}-{extension[1:]}")
+            _unravel_path = release_path / f"{unravel_path}/{extension[1:]}"
             _unravel_path.mkdir(exist_ok=True, parents=True)
 
         _repair_path = None
         if repair_path is not None:
-            _repair_path = Path(f"{repair_path}-{extension[1:]}")
+            _repair_path = release_path / f"{repair_path}/{extension[1:]}"
             _repair_path.mkdir(exist_ok=True, parents=True)
 
         __create_db_row = partial(

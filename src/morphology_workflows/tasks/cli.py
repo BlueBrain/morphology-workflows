@@ -176,7 +176,7 @@ class ArgParser:
                 """
                 Create default inputs for a given workflow that users can then update according to
                 their needs.
-                Usually, the initialization consists in one these two types:
+                Usually, the initialization consists in one of these two types:
 
                 * the morphologies are fetched from an online database.
                 * the morphologies are provided by the user.

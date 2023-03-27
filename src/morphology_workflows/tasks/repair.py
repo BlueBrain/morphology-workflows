@@ -153,6 +153,10 @@ class MakeCollage(StrIndexMixin, SkippableMixin(), SetValidationTask):
 class MakeRelease(StrIndexMixin, SetValidationTask):
     """Make a morpology release, with three possible folders: zero-diameter, unravel or repair."""
 
+    release_path = luigi.OptionalParameter(
+        default=None,
+        description=":str: Path to the directory in which all the releases will be exported",
+    )
     zero_diameter_path = luigi.OptionalParameter(
         default=None, description=":str: Path to zero diameter morphologies (not created if None)"
     )
@@ -187,6 +191,7 @@ class MakeRelease(StrIndexMixin, SetValidationTask):
 
     def kwargs(self):
         return {
+            "release_path": self.release_path,
             "zero_diameter_path": self.zero_diameter_path,
             "unravel_path": self.unravel_path,
             "repair_path": self.repair_path,
