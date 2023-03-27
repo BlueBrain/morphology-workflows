@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.1](https://github.com/BlueBrain/morphology-workflows/compare/0.6.0..0.6.1)
+
+> 27 March 2023
+
+### New Features
+
+- Update command and doc (Adrien Berchet - [#88](https://github.com/BlueBrain/morphology-workflows/pull/88))
+
 ## [0.6.0](https://github.com/BlueBrain/morphology-workflows/compare/0.5.3..0.6.0)
 
 > 13 March 2023
