@@ -1,4 +1,5 @@
 """Repair tasks."""
+import copy
 import logging
 
 import luigi
@@ -6,6 +7,7 @@ from data_validation_framework.task import ElementValidationTask
 from data_validation_framework.task import SetValidationTask
 from data_validation_framework.task import SkippableMixin
 from luigi_tools.parameter import BoolParameter
+from neuror.main import _PARAM_SCHEMA
 
 from morphology_workflows.curation import collect
 from morphology_workflows.repair import fix_zero_diameters
@@ -19,6 +21,9 @@ from morphology_workflows.repair import unravel
 from morphology_workflows.utils import StrIndexMixin
 
 logger = logging.getLogger(__name__)
+
+_REPAIR_SCHEMA = copy.deepcopy(_PARAM_SCHEMA)
+_REPAIR_SCHEMA["required"] = []  # Here the parameters can be partially filled
 
 
 class CollectAnnotated(StrIndexMixin, ElementValidationTask):
@@ -102,7 +107,9 @@ class RepairNeurites(StrIndexMixin, ElementValidationTask):
         default=False, description=":bool: Save plots with highlighted repaired branches"
     )
     repair_params = luigi.OptionalDictParameter(
-        default=None, description=":dict: Repair internal parameters"
+        default=None,
+        description=":dict: Repair internal parameters",
+        schema=_REPAIR_SCHEMA,
     )
 
     def kwargs(self):
