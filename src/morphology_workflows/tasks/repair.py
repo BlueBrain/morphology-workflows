@@ -108,7 +108,10 @@ class RepairNeurites(StrIndexMixin, ElementValidationTask):
     )
     repair_params = luigi.OptionalDictParameter(
         default=None,
-        description=":dict: Repair internal parameters",
+        description=(
+            ":dict: Repair internal parameters (see details in "
+            "https://neuror.readthedocs.io/en/stable/neuror.main.html#neuror.main.Repair)"
+        ),
         schema=_REPAIR_SCHEMA,
     )
 
