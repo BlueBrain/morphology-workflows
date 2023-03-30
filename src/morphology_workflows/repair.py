@@ -19,9 +19,9 @@ from morph_tool.morphdb import MorphInfo
 from morphio.mut import Morphology
 from neurom import load_morphology
 from neurom import view
-from neuror.main import RepairType
 from neuror.main import repair as _repair
 from neuror.unravel import unravel as _unravel
+from neuror.utils import RepairType
 from neuror.zero_diameter_fixer import fix_zero_diameters as _fix_zero_diameters
 from scipy.spatial import KDTree
 from tqdm import tqdm

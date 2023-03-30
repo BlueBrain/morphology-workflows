@@ -2,8 +2,8 @@
 
 rm -rf out_* *_release-*
 
-morphology_workflows Initialize --source-database NeuroMorpho
-morphology_workflows Fetch
-morphology_workflows Curate
-morphology_workflows Annotate
-morphology_workflows Repair
+morphology-workflows Initialize --source-database NeuroMorpho
+morphology-workflows Fetch
+morphology-workflows Curate
+morphology-workflows Annotate
+morphology-workflows Repair
