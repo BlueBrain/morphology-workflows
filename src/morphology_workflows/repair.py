@@ -331,7 +331,7 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
     m = MorphInfo(
         name=data["morph_name"],
         mtype=data["mtype"] if isinstance(data["mtype"], str) else "",
-        layer=int(data["layer"]),
+        layer=data["layer"],
         use_dendrite=data["has_basal"],
         use_axon=data["has_axon"],
     )
