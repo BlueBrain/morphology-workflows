@@ -52,7 +52,7 @@ def collect(row, data_dir, morph_path_col="morph_path"):
             comment=f"The file {row[morph_path_col]} does not exist.",
             morph_path=None,
         )
-    is_morph, ext = is_morphology(row[morph_path_col])
+    morph, is_morph, ext = is_morphology(row[morph_path_col])
     if is_morph:
         if " " in row.name:
             return ValidationResult(
@@ -61,7 +61,7 @@ def collect(row, data_dir, morph_path_col="morph_path"):
                 morph_path=None,
             )
         full_new_morph_path = str(data_dir / row.name) + ext
-        shutil.copy(row[morph_path_col], full_new_morph_path)
+        morph.write(full_new_morph_path)
         return ValidationResult(is_valid=True, morph_path=full_new_morph_path)
     return ValidationResult(
         is_valid=False,

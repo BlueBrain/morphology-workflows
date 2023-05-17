@@ -9,6 +9,7 @@ from pathlib import Path
 import luigi
 import pandas as pd
 from luigi_tools.util import configparser_to_dict
+from morphio import Option
 from morphio.mut import Morphology
 from pkg_resources import resource_filename
 from tqdm import tqdm
@@ -38,11 +39,11 @@ class StrIndexMixin:
 def is_morphology(filename):
     """Returns True if the extension is supported."""
     try:
-        Morphology(filename)
+        morph = Morphology(filename, options=Option.nrn_order)
         ext = Path(filename).suffix.lower()
-        return ext in EXTS, ext
+        return morph, ext in EXTS, ext
     except Exception:  # pylint: disable=broad-except
-        return False, None
+        return None, False, None
 
 
 @contextmanager
