@@ -105,6 +105,11 @@ class ArgParser:
         parser = argparse.ArgumentParser(
             description="Run the workflow",
         )
+        parser.add_argument(
+            "--version",
+            action="version",
+            version=f"%(prog)s, version {morphology_workflows.__version__}",
+        )
 
         parser.add_argument("-c", "--config-path", help="Path to the Luigi config file.")
 

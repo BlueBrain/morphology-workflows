@@ -38,6 +38,7 @@ test_reqs = [
     "dir-content-diff>=1.4",
     "mock>=3",
     "pytest>=6",
+    "pytest-console-scripts>=1.3",
     "pytest-cov>=3",
     "pytest-html>=2",
     "pytest-xdist>=2",

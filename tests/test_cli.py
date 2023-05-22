@@ -41,3 +41,11 @@ class TestCLI:
 
         assert output_path.exists()
         assert (tmpdir / "dependency_graph.png").exists()
+
+
+def test_entry_point(script_runner):
+    """Test the entry point."""
+    ret = script_runner.run("morphology-workflows", "--version")
+    assert ret.success
+    assert ret.stdout.startswith("morphology-workflows, version ")
+    assert ret.stderr == ""
