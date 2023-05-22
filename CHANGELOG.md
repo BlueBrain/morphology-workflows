@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.7.0](https://github.com/BlueBrain/morphology-workflows/compare/0.6.1..0.7.0)
+
+> 22 May 2023
+
+### New Features
+
+- Change entry point from morphology_workflows to morphology-workflows (Adrien Berchet - [#98](https://github.com/BlueBrain/morphology-workflows/pull/98))
+
+### Fixes
+
+- Compatibility with Pandas&gt;=2 and urllib3&gt;=2 (Adrien Berchet - [#96](https://github.com/BlueBrain/morphology-workflows/pull/96))
+
+### Documentation Changes
+
+- Add link to the schema of the Repair params (Adrien Berchet - [#91](https://github.com/BlueBrain/morphology-workflows/pull/91))
+
+### General Changes
+
+- Fix layers not int (Alexis Arnaudon - [#92](https://github.com/BlueBrain/morphology-workflows/pull/92))
+- Use JSON schema from NeuroR.main.Repair and fix CLI command in docs (Adrien Berchet - [#90](https://github.com/BlueBrain/morphology-workflows/pull/90))
+
 ## [0.6.1](https://github.com/BlueBrain/morphology-workflows/compare/0.6.0..0.6.1)
 
 > 27 March 2023
