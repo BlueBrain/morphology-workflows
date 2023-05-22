@@ -93,11 +93,11 @@ def create_dataset_from_dir(dir_path, output_path):
         if i.suffix.lower() in EXTS:
             morph_files.append((i.with_suffix("").name, str(i)))
         else:
-            L.info("The file '%s' is not a valid morphology and is thus discarded", i)
+            L.info("The file '%s' is not detected as a morphology file and is thus discarded", i)
     df = pd.DataFrame(morph_files, columns=["morph_name", "morph_path"])
 
     # Deduplicate names
-    for idx, name in df.loc[df["morph_name"].duplicated(), "morph_name"].iteritems():
+    for idx, name in df.loc[df["morph_name"].duplicated(), "morph_name"].items():
         i = 2
         new_name = name + f"_{i}"
         while (df["morph_name"] == new_name).any():
