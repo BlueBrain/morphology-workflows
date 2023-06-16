@@ -166,7 +166,7 @@ def plot_repair(row, data_dir, with_plotly=True):
                 ax = plt.gca()
 
                 view.plot_morph(
-                    neuron, ax, realistic_diameters=True, plane="xz", soma_outline=False
+                    neuron, ax, realistic_diameters=True, plane=plane, soma_outline=False
                 )
                 if points is not None:
                     plt.scatter(*points, color="g", s=2, marker="o")
