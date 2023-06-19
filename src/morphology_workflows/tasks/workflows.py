@@ -205,3 +205,10 @@ class Repair(StrIndexMixin, ValidationWorkflow):
             inputs[MakeRelease] = mapping
 
         return inputs
+
+
+class MCAR(luigi.WrapperTask):
+    """Run all MCAR workflows: Curate, Annotate and Repair."""
+    def inputs(self):
+        """ """
+        return [Curate(), Annotate(), Repair()]
