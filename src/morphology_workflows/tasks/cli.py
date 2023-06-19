@@ -29,6 +29,7 @@ WORKFLOW_TASKS = {
     "Curate": workflows.Curate,
     "Annotate": workflows.Annotate,
     "Repair": workflows.Repair,
+    "MCAR": workflows.MCAR,
 }
 
 LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
@@ -296,7 +297,7 @@ def main(arguments=None):
         arguments = sys.argv[1:]
     parser = ArgParser()
     args = parser.parse_args(arguments)
-
+    print(args)
     L.debug("Args: %s", args)
 
     # Check that one workflow is in arguments
