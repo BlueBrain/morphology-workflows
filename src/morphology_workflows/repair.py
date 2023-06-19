@@ -335,6 +335,7 @@ def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extensi
         use_dendrite=data["has_basal"],
         use_axon=data["has_axon"],
     )
+
     if zero_diameter_path is not None:
         zero_diameter_release_path = (
             str(zero_diameter_path / Path(data["zero_diameter_morph_path"]).stem) + extension
