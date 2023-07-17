@@ -325,6 +325,8 @@ def _convert(input_file, output_file):
     """Handles crashes in conversion of writing of morphologies."""
     try:
         convert(input_file, output_file)
+        # to ensure nrn_order
+        write_neuron(Morphology(output_file), output_file)
         return output_file
     except MorphToolException:
         return "cannot save"
