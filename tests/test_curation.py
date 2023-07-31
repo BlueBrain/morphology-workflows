@@ -4,6 +4,7 @@ import json
 import numpy as np
 import pandas as pd
 import pytest
+from morphio import SomaType
 from morphio.mut import Morphology
 from numpy.testing import assert_array_almost_equal
 
@@ -542,12 +543,13 @@ class TestCheckNeurites:
     def test_no_soma(self, simple_morph, res_path):
         """Check neurites with default options on a morph without any soma."""
         morph = Morphology(simple_morph)
+        morph.soma.type = SomaType.SOMA_UNDEFINED
         morph.soma.points = np.array([], dtype=morph.soma.points.dtype).reshape((0, 3))
         morph.soma.diameters = np.array([], dtype=morph.soma.diameters.dtype)
         morph.write(simple_morph)
         row = pd.Series({"morph_path": simple_morph}, name="test_name")
 
-        # Test with spherical soma
+        # Test with spherical soma (the default value)
         res = curation.check_neurites(
             row,
             res_path,
