@@ -543,7 +543,6 @@ class TestCheckNeurites:
     def test_no_soma(self, simple_morph, res_path):
         """Check neurites with default options on a morph without any soma."""
         morph = Morphology(simple_morph)
-        morph.soma.type = SomaType.SOMA_UNDEFINED
         try:
             morph.soma.type = SomaType.SOMA_UNDEFINED
         except AttributeError:
