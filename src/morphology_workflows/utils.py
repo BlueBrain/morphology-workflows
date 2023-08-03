@@ -167,3 +167,19 @@ def create_inputs(
 
     if input_dir is not None:
         create_dataset_from_dir(input_dir, output_dir / dataset_filename)
+
+
+def placeholders_to_nested_dict(df: pd.DataFrame) -> dict:
+    """Convert a DataFrame containing placeholders into a nested dict."""
+    first_cols = [("Metadata", "Region"), ("Metadata", "Mtype")]
+    if ("property", "name") in df.columns:
+        first_cols.append(("property", "name"))
+    values = df.set_index(first_cols).reorder_levels([1, 0], axis=1).stack().stack()
+    d = values.to_dict()
+    result = {}
+    for key, value in d.items():
+        target = result
+        for k in key[:-1]:  # traverse all keys except the last one
+            target = target.setdefault(k, {})
+        target[key[-1]] = value
+    return result

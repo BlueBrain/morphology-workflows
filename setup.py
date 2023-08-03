@@ -34,6 +34,7 @@ doc_reqs = [
 ]
 
 test_reqs = [
+    "dictdiffer>=0.8",
     "diff-pdf-visually>=1.7",
     "dir-content-diff>=1.4",
     "mock>=3",

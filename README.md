@@ -13,7 +13,7 @@ This project contains several workflows for processing morphologies:
 - **Initialize:** create the initial configuration files that the user can then update according to
   its needs.
 - **Fetch:** download morphologies from online database (like Allen, NeuroMorpho or MouseLight).
-- **Placeholders:** compute the place holders for a given region and mtype set.
+- **Placeholders:** compute the placeholders for a given region and mtype set.
 - **Curate:** from raw morphologies, ensures that morphologies can be used with the rest of
   BBP codes.
   [![](autoapi/tasks/workflows/Curate.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Curate)
