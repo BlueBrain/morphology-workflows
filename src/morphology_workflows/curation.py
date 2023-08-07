@@ -390,9 +390,9 @@ def check_neurites(
             _add_stub_axon(morph)
     fix_root_section(morph, min_length_first_section)
     morph.write(new_morph_path)
-    has_axon = row.get("use_axon", _has_axon(row.morph_path, n_section_min=axon_n_section_min))
-    has_basal = row.get("use_dendrites", _has_basal(row.morph_path))
-    has_apical = row.get("use_dendrites", _has_apical(row.morph_path))
+    has_axon = row.get("use_axon", _has_axon(new_morph_path, n_section_min=axon_n_section_min))
+    has_basal = row.get("use_dendrites", _has_basal(new_morph_path))
+    has_apical = row.get("use_dendrites", _has_apical(new_morph_path))
 
     return ValidationResult(
         is_valid=True,

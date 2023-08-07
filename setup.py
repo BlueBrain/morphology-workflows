@@ -18,10 +18,11 @@ reqs = [
     "numpy>=1.21",
     "pandas>=1.5",
     "plotly-helper>=0.0.8,<1.0",
-    "PyYAML>=5.3",
+    "PyYAML>=5.4",
     "rst2pdf>=0.99",
     "scipy>=1.6",
     "tqdm>=4.44",
+    "urllib3>=1.26,<2; python_version < '3.9'",
 ]
 
 doc_reqs = [
@@ -37,6 +38,7 @@ test_reqs = [
     "dir-content-diff>=1.4",
     "mock>=3",
     "pytest>=6",
+    "pytest-console-scripts>=1.3",
     "pytest-cov>=3",
     "pytest-html>=2",
     "pytest-xdist>=2",

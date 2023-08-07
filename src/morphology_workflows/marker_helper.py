@@ -120,7 +120,6 @@ class MarkerSet:
     def plot(self, filename="markers.html", with_plotly=True, plane="3d", **kwargs):
         """Plot morphology with markers."""
         if with_plotly:
-
             neuron = load_morphology(self.morph_path)
             builder = NeuronBuilder(neuron, plane, line_width=4, title=f"{self.morph_name}")
 
