@@ -16,8 +16,8 @@ from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
-from morphio.mut import Morphology
 from morphio import Option
+from morphio.mut import Morphology
 from neurom import load_morphology
 from neurom import view
 from neuror.main import repair as _repair
@@ -26,7 +26,6 @@ from neuror.utils import RepairType
 from neuror.zero_diameter_fixer import fix_zero_diameters as _fix_zero_diameters
 from scipy.spatial import KDTree
 from tqdm import tqdm
-
 
 from morphology_workflows import MorphologyWorkflowsError
 from morphology_workflows.marker_helper import MarkerSet
