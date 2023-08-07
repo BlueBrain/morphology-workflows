@@ -16,6 +16,7 @@ from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
+from morphio import Option
 from morphio.mut import Morphology
 from neurom import load_morphology
 from neurom import view
@@ -38,12 +39,17 @@ class RepairError(MorphologyWorkflowsError):
     """Exception for Repair step."""
 
 
+def write_neuron(neuron, filename):
+    """Write a NEURON ordered version of the morphology."""
+    Morphology(neuron, options=Option.nrn_order).write(filename)
+
+
 def fix_zero_diameters(row, data_dir):
     """Assign mtype to morphologies."""
     neuron = Morphology(row.morph_path)
     _fix_zero_diameters(neuron)
     morph_path = data_dir / Path(row.morph_path).name
-    neuron.write(morph_path)
+    write_neuron(neuron, morph_path)
     return ValidationResult(is_valid=True, morph_path=morph_path)
 
 
@@ -70,7 +76,7 @@ def unravel(row, data_dir, window_half_length=10):
     """Unravel morphologies and update cut plane."""
     neuron, mapping = _unravel(row.morph_path, window_half_length=window_half_length)
     morph_path = data_dir / Path(row.morph_path).name
-    neuron.write(morph_path)
+    write_neuron(neuron, morph_path)
 
     # transform original cut leaves
     if not row.isnull()["cut_leaves_path"]:
@@ -188,7 +194,7 @@ def smooth_diameters(row, data_dir):
     morph = Morphology(row.morph_path)
     diametrize_single_neuron(morph)
     morph_path = data_dir / Path(row.morph_path).name
-    morph.write(morph_path)
+    write_neuron(morph, morph_path)
     return ValidationResult(is_valid=True, morph_path=morph_path)
 
 
@@ -318,6 +324,8 @@ def _convert(input_file, output_file):
     """Handles crashes in conversion of writing of morphologies."""
     try:
         convert(input_file, output_file)
+        # to ensure nrn_order
+        write_neuron(Morphology(output_file), output_file)
         return output_file
     except MorphToolException:
         return "cannot save"
