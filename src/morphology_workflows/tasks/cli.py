@@ -285,11 +285,11 @@ def main(arguments=None):
     logging.getLogger("luigi").propagate = False
     logging.getLogger("luigi-interface").propagate = False
     luigi_config = luigi.configuration.get_config()
-    logging_conf = luigi_config.get("core", "logging_conf_file", "logging.conf")
-    if Path(logging_conf).exists():
-        logging.config.fileConfig(str(logging_conf), disable_existing_loggers=False)
-    else:
-        logging.config.fileConfig(str(_TEMPLATES / "logging.conf"), disable_existing_loggers=False)
+    logging_conf = luigi_config.get("core", "logging_conf_file", None)
+    if logging_conf is None:
+        logging_conf = str(_TEMPLATES / "logging.conf")
+        luigi_config.set("core", "logging_conf_file", logging_conf)
+    logging.config.fileConfig(str(logging_conf), disable_existing_loggers=False)
 
     # Parse arguments
     if arguments is None:
