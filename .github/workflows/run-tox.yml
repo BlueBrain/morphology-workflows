@@ -70,7 +70,7 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         fail_ci_if_error: false
-        files: ./reports/coverage-*.xml
+        directory: ./reports
         flags: pytest
         name: "morphology-workflows-py${{ matrix.python-version }}"
     - name: Clear heavy results in tox environments before uploading artifacts
