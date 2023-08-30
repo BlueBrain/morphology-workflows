@@ -1,6 +1,8 @@
 # data
 .eggs
 .idea
+*.log
+*.png
 *.pyc
 *.swp
 *py~
@@ -38,7 +40,7 @@ docs/_images
 reports
 
 # examples
-examples/*_release-*
+examples/*_release*
 examples/*.log
 examples/.ipynb_checkpoints
 examples/dataset.csv
