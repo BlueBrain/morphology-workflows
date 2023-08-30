@@ -286,6 +286,12 @@ def main(arguments=None):
     logging.getLogger("luigi-interface").propagate = False
     luigi_config = luigi.configuration.get_config()
     logging_conf = luigi_config.get("core", "logging_conf_file", None)
+    if logging_conf is not None and not Path(logging_conf).exists():
+        L.warning(
+            "The core->logging_conf_file entry is not a valid path so the default logging "
+            "configuration is taken."
+        )
+        logging_conf = None
     if logging_conf is None:
         logging_conf = str(_TEMPLATES / "logging.conf")
         luigi_config.set("core", "logging_conf_file", logging_conf)
