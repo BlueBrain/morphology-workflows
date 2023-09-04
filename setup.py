@@ -31,6 +31,7 @@ doc_reqs = [
     "sphinx-argparse",
     "sphinx-autoapi",
     "sphinx-bluebrain-theme",
+    "sphinx-jsonschema",
 ]
 
 test_reqs = [

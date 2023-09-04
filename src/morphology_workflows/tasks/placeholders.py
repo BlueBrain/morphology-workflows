@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class Placeholders(TagResultOutputMixin, WorkflowTask):
-    """Compute the placeholders for a given region and mtype set."""
+    """Compute the placeholders for a given region and mtype set from a given config."""
 
     config = OptionalPathParameter(
         description=":str: The path to the JSON config file.",

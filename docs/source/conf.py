@@ -68,6 +68,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinxarg.ext",
+    "sphinx-jsonschema",
     "m2r2",
 ]
 

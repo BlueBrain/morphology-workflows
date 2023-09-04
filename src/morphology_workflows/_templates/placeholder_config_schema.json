@@ -1,0 +1,84 @@
+{
+    "title": "Config file schema",
+    "description": "Description of the config file format.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "populations": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "The name used for this population when the aggregation mode is set to 'population'.",
+                            "default": "__aggregated_population__"
+                        },
+                        "region": {
+                            "type": "string",
+                            "description": "The name of the region used to select the morphologies (can be set to `null` to take the morphologies of all regions)."
+                        },
+                        "mtype": {
+                            "type": "string",
+                            "description": "The name of the mtype used to select the morphologies (can be set to `null` to take the morphologies of all mtypes)."
+                        },
+                        "mode": {
+                            "type": "string",
+                            "description": "The aggregation mode.",
+                            "enum": ["morphology", "population"],
+                            "default": "morphology"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": []
+                }
+            },
+            "config": {
+                "type": "object",
+                "properties": {
+                    "<feature type>": {
+                        "type": "object",
+                        "description": "The type of the NeuroM feature (can be 'neurite', 'morphology' or 'population').",
+                        "properties": {
+                            "<feature name>": {
+                                "type": "object",
+                                "description": "The name of the NeuroM feature (see the NeuroM documentation).",
+                                "properties": {
+                                    "kwargs": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "<kwarg name>": {
+                                                    "description": "The name and value of this entry are the kwarg name and value."
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "modes": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "description": "The name of aggregation mode.",
+                                            "enum": ["min", "max", "mean", "sum"]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "neurite_type": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                        },
+                        "description": "The neurite types used to filter the neurites.",
+                        "enum": ["AXON", "BASAL_DENDRITE", "APICAL_DENDRITE", "ALL"]
+                    }
+                },
+                "required": []
+            }
+        }
+    }
+}
