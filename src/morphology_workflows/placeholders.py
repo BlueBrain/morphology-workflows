@@ -90,6 +90,7 @@ def compute_placeholders(
     nb_jobs: int = 1,
 ) -> pd.DataFrame:
     """Compute the placeholder values for a given region - mtype couple."""
+    # pylint: disable=too-many-locals
     if not global_config:
         # global_config = {None: {None: None}}
         global_config = [{}]

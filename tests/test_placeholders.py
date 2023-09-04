@@ -56,6 +56,7 @@ def prepare_dir(tmp_working_dir, examples_test_dir):
 
 @pytest.fixture
 def default_config():
+    """Setup the default config."""
     return [
         {
             "populations": [{"region": "targeted region", "mtype": "targeted mtype"}],
@@ -66,12 +67,13 @@ def default_config():
 
 @pytest.fixture
 def config_path(prepare_dir):
+    """The path to the configuration file used in test."""
     return prepare_dir / "config.json"
 
 
 def test_placeholders(
     prepare_dir, data_dir, default_config, config_path, WorkflowTask_exception_event
-):
+):  # pylint: disable=unused-argument
     """Test placeholders computation."""
     del default_config[0]["config"]
     with config_path.open("w") as f:
@@ -113,7 +115,7 @@ def test_placeholders(
     )
     assert luigi.build([task], local_scheduler=True)
 
-    with result_path.open() as f:
+    with result_path.open("r", encoding="utf-8") as f:
         result = json.load(f)
 
     assert not list(dictdiffer.diff(result, placeholders_to_nested_dict(expected), tolerance=1e-6))
@@ -297,7 +299,12 @@ def test_placeholders_empty_population(prepare_dir, default_config, config_path)
     expected[("Metadata", "Region")] = region
     expected[("Metadata", "Mtype")] = mtype
 
-    pd.testing.assert_frame_equal(result, expected)
+    assert sorted(result) == sorted(expected)
+    expected = expected[result.columns].sort_values(("property", "name")).reset_index(drop=True)
+    pd.testing.assert_frame_equal(
+        result,
+        expected,
+    )
 
 
 def test_placeholders_aggregation_mode(prepare_dir, data_dir, default_config, config_path):
@@ -348,7 +355,7 @@ def test_placeholders_aggregation_mode(prepare_dir, data_dir, default_config, co
     )
     assert luigi.build([task], local_scheduler=True)
 
-    with result_path.open() as f:
+    with result_path.open("r", encoding="utf-8") as f:
         result_json = json.load(f)
 
     # Check the results
