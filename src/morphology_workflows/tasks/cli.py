@@ -74,7 +74,7 @@ def format_description(
     try:
         param_doc, param_type, choices, interval, optional = _process_param(param)
         if optional:
-            param_doc = optional_str + param_doc
+            param_doc = optional_str.format(doc=param_doc)
         if param_type is not None:
             param_doc = type_str.format(doc=param_doc, type=param_type.replace(":", ""))
         if choices is not None:

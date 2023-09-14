@@ -68,6 +68,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinxarg.ext",
+    "sphinx-jsonschema",
     "m2r2",
 ]
 
@@ -196,7 +197,7 @@ def maybe_skip_member(app, what, name, obj, skip, options):
                 obj.docstring = cli.format_description(
                     actual_obj,
                     default_str="{doc}\n\n:default value: {default}",
-                    optional_str="(optional) {doc}",
+                    optional_str="(Optional) {doc}",
                     type_str="{doc}\n\n:type: {type}",
                     choices_str="{doc}\n\n:choices: {choices}",
                     interval_str="{doc}\n\n:permitted values: {interval}",
