@@ -36,7 +36,10 @@ LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 LUIGI_PARAMETERS = ["workers", "log_level"]
 
 
-_PARAM_NO_VALUE = [luigi.parameter._no_value, None]  # pylint: disable=protected-access
+_PARAM_NO_VALUE = [
+    luigi.parameter._no_value,  # pylint: disable=protected-access  # noqa: SLF001
+    None,
+]
 
 
 def _process_param(param):
@@ -82,8 +85,8 @@ def format_description(
         if interval is not None:
             param_doc = interval_str.format(doc=param_doc, interval=interval)
         # pylint: disable=protected-access
-        if hasattr(param, "_default") and param._default not in param_no_value:
-            param_doc = default_str.format(doc=param_doc, default=param._default)
+        if hasattr(param, "_default") and param._default not in param_no_value:  # noqa: SLF001
+            param_doc = default_str.format(doc=param_doc, default=param._default)  # noqa: SLF001
     except AttributeError:
         param_doc = param.description
     return param_doc
@@ -195,7 +198,7 @@ class ArgParser:
         init_subparser.add_argument(
             "--source-database",
             help="The database from which the morphologies will be fetched.",
-            choices=Fetch.source._choices,  # pylint: disable=protected-access
+            choices=Fetch.source._choices,  # pylint: disable=protected-access  # noqa: SLF001
         )
         init_subparser.add_argument(
             "--input-dir",
@@ -234,25 +237,22 @@ class ArgParser:
                         param_name,
                         help=format_description(param_obj),
                         # pylint: disable=protected-access
-                        **param_obj._parser_kwargs(param, task_name),
+                        **param_obj._parser_kwargs(param, task_name),  # noqa: SLF001
                     )
                 parsers[workflow_name] = subparser
-            except (AttributeError, TypeError):
+            except (AttributeError, TypeError):  # noqa: PERF203
                 pass
 
         return parsers
 
     def parse_args(self, argv):
         """Parse the arguments, and return a argparse.Namespace object."""
-        args = self.parser.parse_args(argv)
-
-        return args
+        return self.parser.parse_args(argv)
 
 
 def _build_parser():
     """Build the parser."""
-    tmp = ArgParser().parser
-    return tmp
+    return ArgParser().parser
 
 
 def export_dependency_graph(task, output_file, dpi=None):

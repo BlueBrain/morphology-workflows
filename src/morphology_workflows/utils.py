@@ -40,9 +40,9 @@ def is_morphology(filename):
     try:
         Morphology(filename)
         ext = Path(filename).suffix.lower()
-        return ext in EXTS, ext
-    except Exception:  # pylint: disable=broad-except
+    except Exception:  # pylint: disable=broad-except  # noqa: BLE001
         return False, None
+    return ext in EXTS, ext
 
 
 @contextmanager
@@ -124,10 +124,9 @@ def create_inputs(
         try:
             output_dir.mkdir(parents=True)
         except FileExistsError:
-            # pylint: disable=raise-missing-from
-            raise FileExistsError(
+            raise FileExistsError(  # noqa: TRY003
                 f"The directory {output_dir} already exists, please use another name"
-            )
+            ) from None
 
     shutil.copyfile(_TEMPLATES / "logging.conf", output_dir / "logging.conf")
 
@@ -139,7 +138,9 @@ def create_inputs(
     elif source_db == "MouseLight":
         fetch_config_file = "mouselight_config.json"
     elif source_db is not None:
-        raise ValueError(f"The value '{source_db}' is not valid for the 'source_db' parameter")
+        raise ValueError(  # noqa: TRY003
+            f"The value '{source_db}' is not valid for the 'source_db' parameter"
+        )
 
     luigi_cfg = luigi.configuration.cfg_parser.LuigiConfigParser()
     luigi_cfg.read(_TEMPLATES / "luigi.cfg")

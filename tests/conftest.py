@@ -19,7 +19,7 @@ dir_content_diff.pandas.register()
 def tmp_working_dir(tmp_path, monkeypatch):
     """Change working directory before a test and change it back when the test is finished."""
     monkeypatch.chdir(tmp_path)
-    yield tmp_path
+    return tmp_path
 
 
 @pytest.fixture()
@@ -47,7 +47,7 @@ def WorkflowTask_exception_event():
     The events of the tasks are reset afterwards.
     """
     # pylint: disable=protected-access
-    current_callbacks = deepcopy(luigi.Task._event_callbacks)
+    current_callbacks = deepcopy(luigi.Task._event_callbacks)  # noqa: SLF001
 
     failed_task = []
     exceptions = []
@@ -59,4 +59,4 @@ def WorkflowTask_exception_event():
 
     yield failed_task, exceptions
 
-    luigi.Task._event_callbacks = current_callbacks
+    luigi.Task._event_callbacks = current_callbacks  # noqa: SLF001

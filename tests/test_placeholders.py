@@ -54,7 +54,7 @@ def prepare_dir(tmp_working_dir, examples_test_dir):
     luigi_config.clear()
 
 
-@pytest.fixture
+@pytest.fixture()
 def default_config():
     """Setup the default config."""
     return [
@@ -65,14 +65,14 @@ def default_config():
     ]
 
 
-@pytest.fixture
+@pytest.fixture()
 def config_path(prepare_dir):
     """The path to the configuration file used in test."""
     return prepare_dir / "config.json"
 
 
 def test_placeholders(
-    prepare_dir, data_dir, default_config, config_path, WorkflowTask_exception_event
+    prepare_dir, data_dir, default_config, config_path, WorkflowTask_exception_event  # noqa: ARG001
 ):  # pylint: disable=unused-argument
     """Test placeholders computation."""
     del default_config[0]["config"]

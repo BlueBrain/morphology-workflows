@@ -5,7 +5,7 @@ import shutil
 from functools import partial
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -40,7 +40,7 @@ from morphology_workflows.utils import is_morphology
 from morphology_workflows.utils import silent_loggers
 
 L = logging.getLogger(__name__)
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 
 def collect(row, data_dir, morph_path_col="morph_path"):
@@ -224,9 +224,8 @@ def _has_axon(morph_path, n_section_min=5):
     """Check if neuron has axon with strictly more than n_section_min sections."""
     _morph = Morphology(morph_path)
     for root in _morph.root_sections:
-        if root.type == SectionType.axon:
-            if len(list(root.iter())) > n_section_min:
-                return True
+        if root.type == SectionType.axon and len(list(root.iter())) > n_section_min:
+            return True
     return False
 
 
@@ -385,9 +384,8 @@ def check_neurites(
     morph = Morphology(row.morph_path)
     if mock_soma_type is not None:
         _add_soma(morph, mock_soma_type)
-    if ensure_stub_axon:
-        if not _has_axon(row.morph_path, n_section_min=0):
-            _add_stub_axon(morph)
+    if ensure_stub_axon and not _has_axon(row.morph_path, n_section_min=0):
+        _add_stub_axon(morph)
     fix_root_section(morph, min_length_first_section)
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(new_morph_path, n_section_min=axon_n_section_min))
@@ -520,10 +518,10 @@ def align(
 
     if method == "custom":
         if custom_orientation_json_path is None:
-            raise ValueError(
+            raise ValueError(  # noqa: TRY003
                 "Provide a custom_orientation_json_path parameter when method=='custom'"
             )
-        with open(custom_orientation_json_path, "r", encoding="utf-8") as orient_file:
+        with open(custom_orientation_json_path, encoding="utf-8") as orient_file:
             orient_dict = json.load(orient_file)
         if row.name in orient_dict:
             direction = orient_dict[row.name]
@@ -544,20 +542,17 @@ def align(
 
 
 def _convert_error_markers(row, error_markers):
-    markers = []
-    for error_marker in error_markers:
-        markers.append(
-            Marker(
-                error_marker["name"],
-                "points",
-                np.array([p[:3] for _, _points in error_marker["data"] for p in _points]),
-                morph_name=row.name,
-                morph_path=row.morph_path,
-                plot_style={"color": error_marker["color"].lower(), "width": 3},
-            )
+    return [
+        Marker(
+            error_marker["name"],
+            "points",
+            np.array([p[:3] for _, _points in error_marker["data"] for p in _points]),
+            morph_name=row.name,
+            morph_path=row.morph_path,
+            plot_style={"color": error_marker["color"].lower(), "width": 3},
         )
-
-    return markers
+        for error_marker in error_markers
+    ]
 
 
 def z_range(neuron, min_range=50):
@@ -630,10 +625,9 @@ def detect_errors(row, data_dir, min_range=50):
 def plot_errors(row, data_dir, with_plotly=True):
     """Plot error markers."""
     plot_path = None
-    if not row.isnull()["error_marker_path"]:
-        if with_plotly:
-            plot_path = (data_dir / row.name).with_suffix(".html")
-            MarkerSet.from_file(row.error_marker_path).plot(filename=plot_path)
+    if not row.isnull()["error_marker_path"] and with_plotly:
+        plot_path = (data_dir / row.name).with_suffix(".html")
+        MarkerSet.from_file(row.error_marker_path).plot(filename=plot_path)
 
     return ValidationResult(is_valid=True, plot_errors_path=plot_path)
 
