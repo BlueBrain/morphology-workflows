@@ -1,5 +1,4 @@
 """Configuration for the pytest test suite."""
-import os
 from pathlib import Path
 
 import dir_content_diff
@@ -14,12 +13,10 @@ dir_content_diff.pandas.register()
 
 
 @pytest.fixture()
-def tmp_working_dir(tmp_path):
+def tmp_working_dir(tmp_path, monkeypatch):
     """Change working directory before a test and change it back when the test is finished."""
-    cwd = os.getcwd()
-    os.chdir(tmp_path)
+    monkeypatch.chdir(tmp_path)
     yield tmp_path
-    os.chdir(cwd)
 
 
 @pytest.fixture()
