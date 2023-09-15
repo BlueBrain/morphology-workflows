@@ -5,7 +5,7 @@ from functools import partial
 from multiprocessing.pool import Pool
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -32,7 +32,7 @@ from morphology_workflows.marker_helper import MarkerSet
 from morphology_workflows.utils import silent_loggers
 
 L = logging.getLogger(__name__)
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 
 class RepairError(MorphologyWorkflowsError):
@@ -66,7 +66,7 @@ def _unravel_leaves(leaves, mapping):
     distances, indices = t.query(leaves)
     not_matching_leaves = np.where(distances > 1e-3)[0]
     if not_matching_leaves.size:
-        raise RepairError(
+        raise RepairError(  # noqa: TRY003
             f"Cannot find the following leaves in the mapping:\n{leaves[not_matching_leaves]}"
         )
     return mapping.iloc[indices][["x1", "y1", "z1"]].values
@@ -156,7 +156,7 @@ def plot_repair(row, data_dir, with_plotly=True):
             markers.plot(filename=plot_path)
 
     else:
-        matplotlib.font_manager._get_font.cache_clear()  # pylint: disable=protected-access
+        mpl.font_manager._get_font.cache_clear()  # pylint: disable=protected-access # noqa: SLF001
         plot_path = (data_dir / row.name).with_suffix(".pdf")
         neuron = load_morphology(row.morph_path)
 
@@ -226,7 +226,7 @@ def plot_smooth_diameters(row, data_dir, shift=200):
 
 
 # pylint: disable=too-many-arguments,too-many-locals
-def make_collage(
+def make_collage(  # noqa: PLR0913
     df,
     data_dir,
     collage_path="collage.pdf",
@@ -326,11 +326,11 @@ def _convert(input_file, output_file):
         convert(input_file, output_file)
         # to ensure nrn_order
         write_neuron(Morphology(output_file), output_file)
-        return output_file
     except MorphToolException:
         return "cannot save"
-    except RuntimeError:  # this can happen if duplicates are being written as the same time
-        return output_file
+    except RuntimeError:  # this can happen if duplicates are being written at the same time
+        pass
+    return output_file
 
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):

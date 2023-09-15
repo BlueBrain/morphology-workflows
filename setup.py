@@ -38,7 +38,6 @@ test_reqs = [
     "dictdiffer>=0.8",
     "diff-pdf-visually>=1.7",
     "dir-content-diff>=1.4",
-    "mock>=3",
     "pytest>=6",
     "pytest-console-scripts>=1.3",
     "pytest-cov>=3",

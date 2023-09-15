@@ -78,7 +78,11 @@ def select_population(
         metadata = metadata.loc[region_mask & mtype_mask]
         population = neurom.load_morphologies((input_dir / metadata["morphology"]).tolist())
     else:
-        warnings.warn("No metadata.csv file found in the input directory, loading all morphologies")
+        warnings.warn(
+            "No metadata.csv file found in the input directory, loading all morphologies",
+            UserWarning,
+            stacklevel=1,
+        )
         population = neurom.load_morphologies(input_dir)
 
     return population
@@ -107,7 +111,9 @@ def compute_placeholders(
             mtype = pop_filter.get("mtype", None)
             aggregation_mode = pop_filter.get("mode", "morphology")
             if aggregation_mode not in possible_modes:
-                raise ValueError(f"The 'aggregation_mode' argument must be in {possible_modes}")
+                raise ValueError(  # noqa: TRY003
+                    f"The 'aggregation_mode' argument must be in {possible_modes}"
+                )
 
             # Select morphologies
             population = select_population(input_morphologies, region, mtype)
@@ -163,4 +169,4 @@ def compute_placeholders(
         .reset_index()
     )
 
-    return placeholders
+    return placeholders  # noqa: RET504

@@ -48,7 +48,7 @@ class Placeholders(TagResultOutputMixin, WorkflowTask):
 
     def run(self):
         if self.output().pathlib_path.suffix not in [".csv", ".json"]:
-            raise ValueError(
+            raise ValueError(  # noqa: TRY003
                 "The 'result_path' parameter should have a '.csv' or '.json' extension, not "
                 f"'{self.output().pathlib_path.suffix}'."
             )
