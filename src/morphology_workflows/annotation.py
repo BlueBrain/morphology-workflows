@@ -258,12 +258,11 @@ def plot_cut_leaves(row, data_dir, with_plotly=True):
         markers = MarkerSet.from_file(row.cut_leaves_path)
 
     plot_path = None
-    if with_plotly:
-        if markers:
+    if markers:
+        if with_plotly:
             plot_path = (data_dir / row.name).with_suffix(".html")
             markers.plot(filename=plot_path)
-    else:  # pragma: no cover
-        if markers:
+        else:  # pragma: no cover
             plt.figure()
             plot_path = (data_dir / row.name).with_suffix(".pdf")
             neuron = load_morphology(row.morph_path)
