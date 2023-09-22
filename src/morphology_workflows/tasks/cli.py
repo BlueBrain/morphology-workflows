@@ -36,7 +36,10 @@ LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 LUIGI_PARAMETERS = ["workers", "log_level"]
 
 
-_PARAM_NO_VALUE = [luigi.parameter._no_value, None]  # pylint: disable=protected-access
+_PARAM_NO_VALUE = [
+    luigi.parameter._no_value,  # pylint: disable=protected-access  # noqa: SLF001
+    None,
+]
 
 
 def _process_param(param):
@@ -74,7 +77,7 @@ def format_description(
     try:
         param_doc, param_type, choices, interval, optional = _process_param(param)
         if optional:
-            param_doc = optional_str + param_doc
+            param_doc = optional_str.format(doc=param_doc)
         if param_type is not None:
             param_doc = type_str.format(doc=param_doc, type=param_type.replace(":", ""))
         if choices is not None:
@@ -82,8 +85,8 @@ def format_description(
         if interval is not None:
             param_doc = interval_str.format(doc=param_doc, interval=interval)
         # pylint: disable=protected-access
-        if hasattr(param, "_default") and param._default not in param_no_value:
-            param_doc = default_str.format(doc=param_doc, default=param._default)
+        if hasattr(param, "_default") and param._default not in param_no_value:  # noqa: SLF001
+            param_doc = default_str.format(doc=param_doc, default=param._default)  # noqa: SLF001
     except AttributeError:
         param_doc = param.description
     return param_doc
@@ -195,7 +198,7 @@ class ArgParser:
         init_subparser.add_argument(
             "--source-database",
             help="The database from which the morphologies will be fetched.",
-            choices=Fetch.source._choices,  # pylint: disable=protected-access
+            choices=Fetch.source._choices,  # pylint: disable=protected-access  # noqa: SLF001
         )
         init_subparser.add_argument(
             "--input-dir",
@@ -234,25 +237,22 @@ class ArgParser:
                         param_name,
                         help=format_description(param_obj),
                         # pylint: disable=protected-access
-                        **param_obj._parser_kwargs(param, task_name),
+                        **param_obj._parser_kwargs(param, task_name),  # noqa: SLF001
                     )
                 parsers[workflow_name] = subparser
-            except (AttributeError, TypeError):
+            except (AttributeError, TypeError):  # noqa: PERF203
                 pass
 
         return parsers
 
     def parse_args(self, argv):
         """Parse the arguments, and return a argparse.Namespace object."""
-        args = self.parser.parse_args(argv)
-
-        return args
+        return self.parser.parse_args(argv)
 
 
 def _build_parser():
     """Build the parser."""
-    tmp = ArgParser().parser
-    return tmp
+    return ArgParser().parser
 
 
 def export_dependency_graph(task, output_file, dpi=None):
@@ -285,11 +285,17 @@ def main(arguments=None):
     logging.getLogger("luigi").propagate = False
     logging.getLogger("luigi-interface").propagate = False
     luigi_config = luigi.configuration.get_config()
-    logging_conf = luigi_config.get("core", "logging_conf_file", "logging.conf")
-    if Path(logging_conf).exists():
-        logging.config.fileConfig(str(logging_conf), disable_existing_loggers=False)
-    else:
-        logging.config.fileConfig(str(_TEMPLATES / "logging.conf"), disable_existing_loggers=False)
+    logging_conf = luigi_config.get("core", "logging_conf_file", None)
+    if logging_conf is not None and not Path(logging_conf).exists():
+        L.warning(
+            "The core->logging_conf_file entry is not a valid path so the default logging "
+            "configuration is taken."
+        )
+        logging_conf = None
+    if logging_conf is None:
+        logging_conf = str(_TEMPLATES / "logging.conf")
+        luigi_config.set("core", "logging_conf_file", logging_conf)
+    logging.config.fileConfig(str(logging_conf), disable_existing_loggers=False)
 
     # Parse arguments
     if arguments is None:
