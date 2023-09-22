@@ -4,7 +4,7 @@ import logging
 import re
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from data_validation_framework.result import ValidationResult
@@ -25,7 +25,7 @@ from morphology_workflows.marker_helper import Marker
 from morphology_workflows.marker_helper import MarkerSet
 
 logger = logging.getLogger(__name__)
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 
 def _get_bbox(neuron):
@@ -51,7 +51,11 @@ def _get_bbox_no_axon(neuron):
     return min_x, max_x, min_y, max_y
 
 
-def assign_mtypes(row, data_dir, mtype_regex=None):  # pylint: disable=unused-argument
+def assign_mtypes(
+    row,
+    data_dir,  # noqa: ARG001
+    mtype_regex=None,
+):  # pylint: disable=unused-argument
     """Assign mtype to morphologies."""
     if not mtype_regex:
         return ValidationResult(is_valid=True, mtype=row.mtype, comment="No regex provided!")
@@ -104,18 +108,17 @@ def compute_hard_limits(
         y_min, y_max = calculate_y_extent(morph, SEGMENT_TO_NEURITE["axon"])
         rules[axon_hard_limit] = {"y_min": y_min, "y_max": y_max}
 
-    _markers = []
-    for name, rule in rules.items():
-        for tpe in ["y_min", "y_max"]:
-            _markers.append(
-                Marker(
-                    name + "_" + tpe,
-                    "axis",
-                    [[0.0, rule[tpe], 0.0], [1.0, rule[tpe], 0.0]],
-                    morph_name=row.name,
-                    morph_path=row.morph_path,
-                )
-            )
+    _markers = [
+        Marker(
+            name + "_" + tpe,
+            "axis",
+            [[0.0, rule[tpe], 0.0], [1.0, rule[tpe], 0.0]],
+            morph_name=row.name,
+            morph_path=row.morph_path,
+        )
+        for name, rule in rules.items()
+        for tpe in ["y_min", "y_max"]
+    ]
 
     hard_limit_path = Path(data_dir, row.name + ".yaml")
     MarkerSet.from_markers(_markers).save(filename=hard_limit_path)
@@ -140,7 +143,8 @@ def plot_hard_limits(row, data_dir, with_plotly=True):
         if with_plotly:
             plot_path = (data_dir / row.name).with_suffix(".html")
             MarkerSet.from_file(row.hard_limit_path).plot(filename=plot_path)
-        # else:
+        else:
+            pass
         #    pa = PlacementAnnotation.load(Path(row.hard_limit_path).with_suffix(""))
         #    neuron = load_morphology(row.morph_path)
         #    plt.figure()
@@ -210,7 +214,9 @@ def detect_cut_leaves(row, data_dir, bin_width=15, percentile_threshold=75):
     morph = morph.as_immutable()
 
     if not morph.root_sections:
-        raise ValueError("Can not search for cut leaves for a neuron with no neurites.")
+        raise ValueError(  # noqa: TRY003
+            "Can not search for cut leaves for a neuron with no neurites."
+        )
 
     leaves, qualities = find_cut_leaves(
         morph,

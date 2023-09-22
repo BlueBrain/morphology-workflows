@@ -33,11 +33,15 @@ class MarkerSet:
         obj = cls()
 
         if len({marker.morph_name for marker in markers}) > 1:
-            raise MarkerHelperError("Markers of different morphologies were provided.")
+            raise MarkerHelperError(  # noqa: TRY003
+                "Markers of different morphologies were provided."
+            )
         obj.morph_name = markers[0].morph_name
 
         if len({marker.morph_path for marker in markers}) > 1:
-            raise MarkerHelperError("Markers of different morphology paths were provided.")
+            raise MarkerHelperError(  # noqa: TRY003
+                "Markers of different morphology paths were provided."
+            )
         obj.morph_path = markers[0].morph_path
 
         obj.markers = cls.check_labels(markers)
@@ -58,7 +62,7 @@ class MarkerSet:
     @classmethod
     def from_file(cls, marker_path):
         """Load maker yaml file."""
-        with open(marker_path, "r", encoding="utf-8") as f:
+        with open(marker_path, encoding="utf-8") as f:
             return MarkerSet.from_dicts(yaml.safe_load(f))
 
     @classmethod
@@ -102,7 +106,9 @@ class MarkerSet:
             return bbox
 
         if not builder.neuron.neurites:
-            raise ValueError("Can not plot axis marker for a neuron with no neurites.")
+            raise ValueError(  # noqa: TRY003
+                "Can not plot axis marker for a neuron with no neurites."
+            )
         bbox = _bbox(builder.neuron, margin=margin)
 
         def _get_lim(direction=1):
@@ -146,7 +152,7 @@ class MarkerSet:
             "morph_path": self.morph_path,
             "markers": [marker.to_dict()["marker"] for marker in self.markers],
         }
-        return out_dict
+        return out_dict  # noqa: RET504
 
     def save(self, filename=None, mode="a"):
         """Save marker data.
@@ -217,7 +223,7 @@ class Marker:
         if self.marker_type == "line":
             valid = len(np.shape(self.data)) == 2
         if not valid:
-            raise MarkerHelperError(
+            raise MarkerHelperError(  # noqa: TRY003
                 f"Marker {self.marker_type} is not valid with data {self.data}."
             )
 

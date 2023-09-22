@@ -2,9 +2,9 @@
 # pylint: disable=redefined-outer-name
 import configparser
 import sys
+from unittest import mock
 
 import luigi
-import mock
 import numpy as np
 import pandas as pd
 import pytest

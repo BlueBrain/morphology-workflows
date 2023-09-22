@@ -1,3 +1,4 @@
+# noqa: INP001
 """Configuration file for the Sphinx documentation builder."""
 
 # This file only contains a selection of the most common options. For a full
@@ -50,7 +51,7 @@ if os.environ.get("READTHEDOCS_VERSION", "") == "stable":
 if not version:
     version = metadata.version("morphology-workflows")
 
-logger.info(f"Version found: {version}")
+logger.info("Version found: %s", version)
 
 # The full version, including alpha/beta/rc tags
 release = version
@@ -68,6 +69,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinxarg.ext",
+    "sphinx-jsonschema",
     "m2r2",
 ]
 
@@ -166,11 +168,9 @@ IMPORT_MAPPING = {
     "tasks": morphology_workflows.tasks,
 }
 
-_PARAM_NO_VALUE = [luigi.parameter._no_value, None]  # pylint: disable=protected-access
-
 
 # pylint: disable=unused-argument
-def maybe_skip_member(app, what, name, obj, skip, options):
+def maybe_skip_member(app, what, name, obj, skip, options):  # noqa: ARG001
     """Skip useless members and format documentation of others."""
     skip = None
     for pattern in SKIP:
@@ -191,21 +191,24 @@ def maybe_skip_member(app, what, name, obj, skip, options):
         except AttributeError:
             return skip
 
-        if isinstance(actual_obj, luigi.Parameter):
-            if hasattr(actual_obj, "description") and actual_obj.description:
-                obj.docstring = cli.format_description(
-                    actual_obj,
-                    default_str="{doc}\n\n:default value: {default}",
-                    optional_str="(optional) {doc}",
-                    type_str="{doc}\n\n:type: {type}",
-                    choices_str="{doc}\n\n:choices: {choices}",
-                    interval_str="{doc}\n\n:permitted values: {interval}",
-                )
+        if (
+            isinstance(actual_obj, luigi.Parameter)
+            and hasattr(actual_obj, "description")
+            and actual_obj.description
+        ):
+            obj.docstring = cli.format_description(
+                actual_obj,
+                default_str="{doc}\n\n:default value: {default}",
+                optional_str="(Optional) {doc}",
+                type_str="{doc}\n\n:type: {type}",
+                choices_str="{doc}\n\n:choices: {choices}",
+                interval_str="{doc}\n\n:permitted values: {interval}",
+            )
 
     return skip
 
 
-def generate_images(*args, **kwargs):
+def generate_images(*args, **kwargs):  # noqa: ARG001
     """Generate images of the workflows."""
     input_dir = Path(*Path(__file__).parts[:-3]) / "src/morphology_workflows/_templates"
 

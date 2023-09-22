@@ -76,9 +76,13 @@ def select_population(
         else:
             mtype_mask = np.ones(len(metadata), dtype=bool)
         metadata = metadata.loc[region_mask & mtype_mask]
-        population = neurom.load_morphologies(input_dir / metadata["morphology"])
+        population = neurom.load_morphologies((input_dir / metadata["morphology"]).tolist())
     else:
-        warnings.warn("No metadata.csv file found in the input directory, loading all morphologies")
+        warnings.warn(
+            "No metadata.csv file found in the input directory, loading all morphologies",
+            UserWarning,
+            stacklevel=1,
+        )
         population = neurom.load_morphologies(input_dir)
 
     return population
@@ -86,40 +90,83 @@ def select_population(
 
 def compute_placeholders(
     input_morphologies: str,
-    region: str = None,
-    mtype: str = None,
-    config: Optional[dict] = None,
+    global_config: Optional[dict] = None,
+    nb_jobs: int = 1,
 ) -> pd.DataFrame:
     """Compute the placeholder values for a given region - mtype couple."""
-    # Select morphologies
-    population = select_population(input_morphologies, region, mtype)
+    # pylint: disable=too-many-locals
+    if not global_config:
+        # global_config = {None: {None: None}}
+        global_config = [{}]
 
-    # Extract dataframe
-    if config is None:
-        config = DEFAULT_CONFIG
+    possible_modes = ["population", "morphology"]
 
-    if len(population) == 0:
-        logger.debug(
-            (
-                "The population for the %s region and %s mtype is empty so the default "
-                "placeholders are used."
-            ),
-            region,
-            mtype,
+    res = []
+
+    for config_element in global_config:
+        config = config_element.get("config", DEFAULT_CONFIG)
+        populations = config_element.get("populations", [{}])
+        for pop_filter in populations:
+            region = pop_filter.get("region", None)
+            mtype = pop_filter.get("mtype", None)
+            aggregation_mode = pop_filter.get("mode", "morphology")
+            if aggregation_mode not in possible_modes:
+                raise ValueError(  # noqa: TRY003
+                    f"The 'aggregation_mode' argument must be in {possible_modes}"
+                )
+
+            # Select morphologies
+            population = select_population(input_morphologies, region, mtype)
+            population.name = pop_filter.get("name", "__aggregated_population__")
+
+            # Extract dataframe
+            if config is None:
+                config = DEFAULT_CONFIG
+
+            if len(population) == 0:
+                logger.debug(
+                    (
+                        "The population for the %s region and %s mtype is empty so the default "
+                        "placeholders are used."
+                    ),
+                    region,
+                    mtype,
+                )
+                df_placeholder = pd.read_csv(
+                    resource_filename(
+                        "morphology_workflows",
+                        "_data/default_placeholders.csv",
+                    ),
+                    header=[0, 1],
+                )
+            else:
+                logger.debug("Compute placeholders with the following config: %s", config)
+                if aggregation_mode == "population":
+                    population = [population]
+                df_placeholder = morph_stats.extract_dataframe(
+                    population, config, n_workers=nb_jobs
+                )
+
+            # Add region and mtype to the dataframe
+            df_placeholder[("Metadata", "Region")] = region
+            df_placeholder[("Metadata", "Mtype")] = mtype
+
+            res.append(df_placeholder)
+
+    placeholders = pd.concat(res)
+    first_cols = [("Metadata", "Region"), ("Metadata", "Mtype"), ("property", "name")]
+    placeholders = placeholders.reindex(
+        columns=first_cols + [col for col in placeholders.columns if col not in first_cols]
+    )
+
+    # Deduplicate entries with same region, mtype and name
+    # (keep the first non-null value in each column)
+    placeholders = (
+        placeholders.groupby(
+            [("Metadata", "Region"), ("Metadata", "Mtype"), ("property", "name")], dropna=False
         )
-        df_placeholder = pd.read_csv(
-            resource_filename(
-                "morphology_workflows",
-                "_data/default_placeholders.csv",
-            ),
-            header=[0, 1],
-        )
-    else:
-        logger.debug("Compute placeholders with the following config: %s", config)
-        df_placeholder = morph_stats.extract_dataframe(population, config)
+        .first(min_count=1)
+        .reset_index()
+    )
 
-    # Add region and mtype to the dataframe
-    df_placeholder[("Metadata", "Region")] = region
-    df_placeholder[("Metadata", "Mtype")] = mtype
-
-    return df_placeholder
+    return placeholders  # noqa: RET504

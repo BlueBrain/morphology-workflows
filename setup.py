@@ -12,8 +12,8 @@ reqs = [
     "matplotlib>=3.4",
     "morphapi>=0.1.8",
     "morph_tool>=2.9.0,<3.0",
-    "morphio>=3.1.1,<4.0",
-    "neurom>=3.2.0,<4.0",
+    "morphio>=3.3.6,<4.0",
+    "neurom>=3.2.3,<4.0",
     "neuror>=1.6.3,<2.0",
     "numpy>=1.21",
     "pandas>=1.5",
@@ -31,12 +31,13 @@ doc_reqs = [
     "sphinx-argparse",
     "sphinx-autoapi",
     "sphinx-bluebrain-theme",
+    "sphinx-jsonschema",
 ]
 
 test_reqs = [
+    "dictdiffer>=0.8",
     "diff-pdf-visually>=1.7",
     "dir-content-diff>=1.4",
-    "mock>=3",
     "pytest>=6",
     "pytest-console-scripts>=1.3",
     "pytest-cov>=3",

@@ -91,8 +91,8 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                             api.neuromorphorg_cache,
                         )
                     )
-                except Exception as exc:  # pylint: disable=broad-except
-                    logger.error(
+                except Exception as exc:  # pylint: disable=broad-except  # noqa: BLE001
+                    logger.error(  # noqa: TRY400
                         "Could not download the morphologies for %s for the following reason: %s",
                         conf_element,
                         str(exc),
@@ -111,7 +111,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
             # pylint: disable=import-outside-toplevel
             from bg_atlasapi import BrainGlobeAtlas
         except ImportError as exc:
-            raise ImportError(
+            raise ImportError(  # noqa: TRY003
                 'You need to install the "bg_atlasapi" package to fetch morphologies from the '
                 'MouseLight database: "pip install bg_atlasapi"'
             ) from exc
@@ -138,8 +138,8 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                     replace=False,
                 ).tolist()
                 downloaded_neurons = api.download_neurons(sampled_metadata)
-            except Exception as exc:  # pylint: disable=broad-except
-                logger.error(
+            except Exception as exc:  # pylint: disable=broad-except  # noqa: BLE001
+                logger.error(  # noqa: TRY400
                     "Could not download the morphologies for %s for the following reason: %s",
                     conf_element,
                     str(exc),
@@ -157,7 +157,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
             # pylint: disable=import-outside-toplevel
             from morphapi.api.allenmorphology import AllenMorphology
         except ImportError as exc:
-            raise ImportError(
+            raise ImportError(  # noqa: TRY003
                 'You need to install the "allensdk" package to fetch morphologies from the '
                 'Allen Brain database: "pip install allensdk"'
             ) from exc
