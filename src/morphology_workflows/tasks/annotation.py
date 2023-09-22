@@ -32,13 +32,15 @@ class CollectCurated(StrIndexMixin, ElementValidationTask):
     validation_function = collect
 
 
-class MType(StrIndexMixin, ElementValidationTask):
+class MType(StrIndexMixin, SkippableMixin(True), ElementValidationTask):
     """Assign mtypes to morphologies.
 
     Currently, we only check if the mtype corresponds to the provided list of regex.
     If the list of regex is empty, we let all the morphologies pass (equivalent to skip).
 
     If they do not, we invalidate the morphologies.
+
+    By default, this task is skipped.
     """
 
     output_columns = {"mtype": None}
@@ -161,9 +163,7 @@ class CutLeaves(StrIndexMixin, ElementValidationTask):
     output_columns = {"cut_leaves_path": None, "cut_qualities": None}
     validation_function = detect_cut_leaves
 
-    bin_width = luigi.FloatParameter(
-        default=15, description=":float: Thickness of cut plane"
-    )
+    bin_width = luigi.FloatParameter(default=15, description=":float: Thickness of cut plane")
     percentile_threshold = luigi.FloatParameter(
         default=70, description=":float: Threshold percentile for finding a cut plane"
     )
