@@ -162,10 +162,10 @@ class CutLeaves(StrIndexMixin, ElementValidationTask):
     validation_function = detect_cut_leaves
 
     bin_width = luigi.FloatParameter(
-        default=15, description=":float: Thickness of cut plane, (used if legacy_detection=False)"
+        default=15, description=":float: Thickness of cut plane"
     )
     percentile_threshold = luigi.FloatParameter(
-        default=70, description=":float: Threshold percenetile for finding a cut plane"
+        default=70, description=":float: Threshold percentile for finding a cut plane"
     )
 
     def kwargs(self):

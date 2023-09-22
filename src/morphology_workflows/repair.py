@@ -162,7 +162,7 @@ def plot_repair(row, data_dir, with_plotly=True):
 
         points = None
         if markers is not None:
-            points = markers.markers[0].data.T[[0, 2]]
+            points = markers.markers[0].data.T
 
         with silent_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(
             plot_path
@@ -175,7 +175,8 @@ def plot_repair(row, data_dir, with_plotly=True):
                     neuron, ax, realistic_diameters=True, plane=plane, soma_outline=False
                 )
                 if points is not None:
-                    plt.scatter(*points, color="g", s=2, marker="o")
+                    proj = {"xy": [0, 1], "xz": [0, 2], "yz": [1, 2]}
+                    plt.scatter(*points[proj[plane]], color="g", s=2, marker="o")
                 ax.autoscale()
                 ax.axis("equal")
                 plt.title(f"{row.name}")
