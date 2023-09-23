@@ -258,26 +258,25 @@ def plot_cut_leaves(row, data_dir, with_plotly=True):
         markers = MarkerSet.from_file(row.cut_leaves_path)
 
     plot_path = None
-    if with_plotly:
-        if markers:
+    if markers:
+        if with_plotly:
             plot_path = (data_dir / row.name).with_suffix(".html")
             markers.plot(filename=plot_path)
-    else:  # pragma: no cover
-        plt.figure()
-        plot_path = (data_dir / row.name).with_suffix(".pdf")
-        neuron = load_morphology(row.morph_path)
-        view.plot_morph(
-            neuron, plt.gca(), realistic_diameters=False, plane="xz", soma_outline=False
-        )
+        else:  # pragma: no cover
+            plt.figure()
+            plot_path = (data_dir / row.name).with_suffix(".pdf")
+            neuron = load_morphology(row.morph_path)
+            view.plot_morph(
+                neuron, plt.gca(), realistic_diameters=False, plane="xz", soma_outline=False
+            )
 
-        if markers:
             points = markers.markers[0].data.T[[0, 2]]
             plt.scatter(*points, color="g", s=5)
 
-        plt.gca().axis("equal")
-        plt.title(f"{row.name}")
-        plt.suptitle(f"probability = {row.cut_qualities}", fontsize=8)
-        plt.savefig(plot_path)
-        plt.close()
+            plt.gca().axis("equal")
+            plt.title(f"{row.name}")
+            plt.suptitle(f"probability = {row.cut_qualities}", fontsize=8)
+            plt.savefig(plot_path)
+            plt.close()
 
     return ValidationResult(is_valid=True, plot_cut_leaves_path=plot_path)
