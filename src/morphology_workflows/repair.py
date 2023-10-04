@@ -10,7 +10,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from data_validation_framework.result import ValidationResult
-from diameter_synthesis.main import diametrize_single_neuron
+from data_validation_framework.result import ValidationResultSet
+from diameter_synthesis.main import build_diameters
+from diameter_synthesis.main import build_model
 from matplotlib.backends.backend_pdf import PdfPages
 from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
@@ -190,13 +192,30 @@ def plot_repair(row, data_dir, with_plotly=True):
     return ValidationResult(is_valid=True, plot_repair_path=plot_path)
 
 
-def smooth_diameters(row, data_dir):
+def smooth_diameters(df, data_dir, neurite_types=None, seed=42):
     """Smooth diameters using diameter-synthesis simpler algorithm."""
-    morph = Morphology(row.morph_path)
-    diametrize_single_neuron(morph)
-    morph_path = data_dir / Path(row.morph_path).name
-    write_neuron(morph, morph_path)
-    return ValidationResult(is_valid=True, morph_path=morph_path)
+    if neurite_types is None:
+        neurite_types = ["basal_dendrite", "apical_dendrite"]
+
+    config = {"models": ["simpler"], "neurite_types": neurite_types, "seed": seed}
+
+    if "with_diameters" not in df.columns:
+        df["with_diameters"] = True
+
+    morphologies = [
+        load_morphology(df.loc[gid, "morph_path"])
+        for gid in df.index
+        if df.loc[gid, "with_diameters"]
+    ]
+    model_params = build_model(morphologies, config)
+
+    for gid in df.index:
+        morph = Morphology(df.loc[gid, "morph_path"])
+        build_diameters(morph, neurite_types, model_params, diam_params=config)
+        morph_path = data_dir / Path(df.loc[gid, "morph_path"]).name
+        df.loc[gid, "morph_path"] = morph_path
+        write_neuron(morph, morph_path)
+    return ValidationResultSet(data=df, output_columns={"morph_path": None})
 
 
 def plot_smooth_diameters(row, data_dir, shift=200):

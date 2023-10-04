@@ -235,7 +235,7 @@ class PlotRepair(StrIndexMixin, SkippableMixin(), ElementValidationTask):
         }
 
 
-class SmoothDiameters(StrIndexMixin, SkippableMixin(True), ElementValidationTask):
+class SmoothDiameters(StrIndexMixin, SkippableMixin(True), SetValidationTask):
     """Smooth diameters with :mod:`diameter_synthesis`.
 
     We use actual diameters to learn a diameter model used to diametrize the morphology.
@@ -243,7 +243,13 @@ class SmoothDiameters(StrIndexMixin, SkippableMixin(True), ElementValidationTask
     By default, this task is skipped.
     """
 
+    neurite_types = luigi.OptionalListParameter(
+        default=None, description=":list: List of neurite_types to smooth"
+    )
     output_columns = {"morph_path": None}
+
+    def kwargs(self):
+        return {"neurite_types": self.neurite_types}
 
     validation_function = smooth_diameters
 
