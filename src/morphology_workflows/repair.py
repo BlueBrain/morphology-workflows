@@ -9,8 +9,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from data_validation_framework.result import ValidationResult, ValidationResultSet
-from diameter_synthesis.main import build_model, build_diameters
+from data_validation_framework.result import ValidationResult
+from data_validation_framework.result import ValidationResultSet
+from diameter_synthesis.main import build_diameters
+from diameter_synthesis.main import build_model
 from matplotlib.backends.backend_pdf import PdfPages
 from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
@@ -190,12 +192,12 @@ def plot_repair(row, data_dir, with_plotly=True):
     return ValidationResult(is_valid=True, plot_repair_path=plot_path)
 
 
-def smooth_diameters(df, data_dir, neurite_types=None):
+def smooth_diameters(df, data_dir, neurite_types=None, seed=42):
     """Smooth diameters using diameter-synthesis simpler algorithm."""
     if neurite_types is None:
         neurite_types = ["basal_dendrite", "apical_dendrite"]
 
-    config = {"models": ["simpler"], "neurite_types": neurite_types, "seed": 42}
+    config = {"models": ["simpler"], "neurite_types": neurite_types, "seed": seed}
 
     if "with_diameters" not in df.columns:
         df["with_diameters"] = True
