@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.1](https://github.com/BlueBrain/morphology-workflows/compare/0.8.0..0.8.1)
+
+> 14 November 2023
+
+### Fixes
+
+- Create the dataset before the metadata to not raise a useless warning (Adrien Berchet - [#120](https://github.com/BlueBrain/morphology-workflows/pull/120))
+
 ## [0.8.0](https://github.com/BlueBrain/morphology-workflows/compare/0.7.0..0.8.0)
 
 > 1 November 2023
@@ -29,6 +37,10 @@
 ### Tidying of Code eg Whitespace
 
 - Setup Ruff config (Adrien Berchet - [#115](https://github.com/BlueBrain/morphology-workflows/pull/115))
+
+### General Changes
+
+- Release 0.8.0 (Adrien Berchet - [#119](https://github.com/BlueBrain/morphology-workflows/pull/119))
 
 ## [0.7.0](https://github.com/BlueBrain/morphology-workflows/compare/0.6.1..0.7.0)
 
