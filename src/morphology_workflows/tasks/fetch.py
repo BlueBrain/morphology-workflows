@@ -221,12 +221,12 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                 entry["morphology"] = morph_name
                 formatted_result.append(entry)
 
-        df = pd.DataFrame(formatted_result)
-        df.to_csv(self.output()["metadata"].path, index=False)
-
         create_dataset_from_dir(
             self.output()["morphologies"].pathlib_path, self.output()["dataset"].pathlib_path
         )
+
+        df = pd.DataFrame(formatted_result)
+        df.to_csv(self.output()["metadata"].path, index=False)
 
     def output(self):
         return {
