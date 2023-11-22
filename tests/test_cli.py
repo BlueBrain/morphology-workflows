@@ -45,7 +45,7 @@ class TestCLI:
 
 def test_entry_point(script_runner):
     """Test the entry point."""
-    ret = script_runner.run("morphology-workflows", "--version")
+    ret = script_runner.run(["morphology-workflows", "--version"])
     assert ret.success
     assert ret.stdout.startswith("morphology-workflows, version ")
     assert ret.stderr == ""

@@ -1,5 +1,6 @@
 """Test curation functions."""
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -542,18 +543,19 @@ class TestCheckNeurites:
 
     def test_no_soma(self, simple_morph, res_path):
         """Check neurites with default options on a morph without any soma."""
+        morph_swc = str(Path(simple_morph).with_suffix(".swc"))
+        morph_asc = str(Path(simple_morph).with_suffix(".asc"))
+
         morph = Morphology(simple_morph)
-        try:
-            morph.soma.type = SomaType.SOMA_UNDEFINED
-        except AttributeError:
-            # This can not be changed for MorphIO<3.3.6 but it's not needed in this case.
-            pass
+
+        morph.soma.type = SomaType.SOMA_UNDEFINED
         morph.soma.points = np.array([], dtype=morph.soma.points.dtype).reshape((0, 3))
         morph.soma.diameters = np.array([], dtype=morph.soma.diameters.dtype)
-        morph.write(simple_morph)
-        row = pd.Series({"morph_path": simple_morph}, name="test_name")
+        morph.write(morph_swc)
+        morph.write(morph_asc)
 
         # Test with spherical soma (the default value)
+        row = pd.Series({"morph_path": morph_swc}, name="test_name")
         res = curation.check_neurites(
             row,
             res_path,
@@ -571,6 +573,7 @@ class TestCheckNeurites:
         assert_array_almost_equal(res_morph.soma.points, [[-0.5, 0.5, 0]])
 
         # Test with contour soma
+        row = pd.Series({"morph_path": morph_asc}, name="test_name")
         res = curation.check_neurites(
             row,
             res_path,
@@ -589,6 +592,8 @@ class TestCheckNeurites:
         assert_array_almost_equal(
             res_morph.soma.points,
             [
+                [0.20710672, -0.20710684, 0],
+                [-1.2071068, 1.2071067, 0],
                 [-1, 0, 0],
                 [0, 1, 0],
             ],

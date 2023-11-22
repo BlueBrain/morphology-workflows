@@ -18,6 +18,7 @@ from morph_tool.transform import rotate
 from morph_tool.transform import rotation_matrix_from_vectors
 from morphio import PointLevel
 from morphio import SectionType
+from morphio import SomaType
 from morphio.mut import Morphology
 from neurom import COLS
 from neurom import load_morphology
@@ -199,21 +200,65 @@ def _center_root_points(morph):
     return center, radius, root_points
 
 
+def _create_intermediate_angles_xy(points, missing_pts):
+    relative_pts_xy = points.copy()
+    relative_pts_xy[:, 2] = 0
+    normed_relative_pts = relative_pts_xy / np.linalg.norm(relative_pts_xy, axis=1)[:, np.newaxis]
+
+    # Compute angles
+    ref = np.zeros_like(normed_relative_pts)
+    ref[:, 0] = 1
+    angles = np.arctan2(normed_relative_pts[:, 1], normed_relative_pts[:, 0])
+
+    # Compute consecutive angles
+    consecutive_angles = angles[1:] - angles[:-1]
+    consecutive_angles = np.insert(consecutive_angles, -1, 2 * np.pi - consecutive_angles.sum())
+
+    # Compute the number of new points in each interval
+    sort_idx = np.argsort(consecutive_angles)[::-1]
+    sorted_consecutive_angles = consecutive_angles[sort_idx]
+    consecutive_ratios = (sorted_consecutive_angles[:-1] / sorted_consecutive_angles[1:]).round()
+    cumsums = consecutive_ratios.cumsum()
+    nb_pts = np.insert(cumsums, -1, 1)
+    nb_pts = ((nb_pts / nb_pts.sum()) * missing_pts).round()
+    nb_pts[0] += np.clip(nb_pts.sum() - missing_pts, a_min=0, a_max=None)
+    nb_pts = nb_pts.astype(int)
+
+    # Compute the angles of the new points
+    inter_consecutive_angles = sorted_consecutive_angles / (nb_pts + 1)
+    return np.repeat(angles[sort_idx], nb_pts) + np.repeat(inter_consecutive_angles, nb_pts)
+
+
 def _add_soma(morph, soma_type="spherical"):
     """Add a mock soma centered around first points with radius mean distance to them."""
     if len(morph.soma.points) == 0:
         center, radius, root_points = _center_root_points(morph)
         if soma_type == "spherical":
             morph.soma.points = [center.tolist()]
+            morph.soma.type = SomaType.SOMA_SINGLE_POINT
             morph.soma.diameters = [2.0 * radius]
             L.info("Adding a spherical mock soma at %s of radius %s.", center, radius)
         elif soma_type == "contour":
             # Order contour points by polar angle
             relative_pts = root_points - center
+            missing_pts = 4 - len(root_points)
+            if missing_pts >= 1:
+                new_angles = _create_intermediate_angles_xy(relative_pts, missing_pts)
+
+                # Create the new points
+                new_root_pts = np.repeat(center[np.newaxis, :], len(new_angles), axis=0)
+                new_root_pts[:, 0] += np.cos(new_angles) * radius
+                new_root_pts[:, 1] += np.sin(new_angles) * radius
+
+                # Add the new points to the root points
+                root_points = np.concatenate([root_points, new_root_pts])
+
+            relative_pts = root_points - center
             angles = np.arctan(relative_pts[:, COLS.Y] / relative_pts[:, COLS.X])
             angle_order = np.argsort(angles)
 
             morph.soma.points = root_points[angle_order]
+            morph.soma.type = SomaType.SOMA_SIMPLE_CONTOUR
             morph.soma.diameters = np.zeros(len(root_points), dtype=float)
             L.info("Adding a contour mock soma around %s with %s points.", center, len(root_points))
 
