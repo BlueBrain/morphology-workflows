@@ -235,11 +235,7 @@ def _add_soma(morph, soma_type="spherical"):
         center, radius, root_points = _center_root_points(morph)
         if soma_type == "spherical":
             morph.soma.points = [center.tolist()]
-            try:
-                morph.soma.type = SomaType.SOMA_SIMPLE_POINT
-            except AttributeError:
-                # This can not be changed for MorphIO<3.3.6 but it's not needed in this case.
-                pass
+            morph.soma.type = SomaType.SOMA_SINGLE_POINT
             morph.soma.diameters = [2.0 * radius]
             L.info("Adding a spherical mock soma at %s of radius %s.", center, radius)
         elif soma_type == "contour":
@@ -262,11 +258,7 @@ def _add_soma(morph, soma_type="spherical"):
             angle_order = np.argsort(angles)
 
             morph.soma.points = root_points[angle_order]
-            try:
-                morph.soma.type = SomaType.SOMA_SIMPLE_CONTOUR
-            except AttributeError:
-                # This can not be changed for MorphIO<3.3.6 but it's not needed in this case.
-                pass
+            morph.soma.type = SomaType.SOMA_SIMPLE_CONTOUR
             morph.soma.diameters = np.zeros(len(root_points), dtype=float)
             L.info("Adding a contour mock soma around %s with %s points.", center, len(root_points))
 

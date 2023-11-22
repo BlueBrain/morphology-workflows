@@ -548,11 +548,7 @@ class TestCheckNeurites:
 
         morph = Morphology(simple_morph)
 
-        try:
-            morph.soma.type = SomaType.SOMA_UNDEFINED
-        except AttributeError:
-            # This can not be changed for MorphIO<3.3.6 but it's not needed in this case.
-            pass
+        morph.soma.type = SomaType.SOMA_UNDEFINED
         morph.soma.points = np.array([], dtype=morph.soma.points.dtype).reshape((0, 3))
         morph.soma.diameters = np.array([], dtype=morph.soma.diameters.dtype)
         morph.write(morph_swc)
