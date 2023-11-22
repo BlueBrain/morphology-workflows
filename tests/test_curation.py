@@ -604,6 +604,7 @@ class TestCheckNeurites:
     @pytest.mark.parametrize("nb_root_points", list(range(6)))
     def test__add_soma_contour(self, nb_root_points):
         """Test _add_soma for contour type with multiple numbers of root sections."""
+        # pylint: disable=protected-access
         morph = Morphology()
         morph.soma.type = SomaType.SOMA_UNDEFINED
         morph.soma.points = np.array([], dtype=morph.soma.points.dtype).reshape((0, 3))
