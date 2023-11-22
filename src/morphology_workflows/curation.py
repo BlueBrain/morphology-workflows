@@ -195,8 +195,11 @@ def sanitize(row, data_dir, ensure_roots_at_soma=True):
 def _center_root_points(morph):
     root_points = np.array([section.points[0, COLS.XYZ] for section in morph.root_sections])
     center = np.mean(root_points, axis=0)
-    dists = np.linalg.norm(root_points - center, axis=1)
-    radius = max(1.0, dists.mean())
+    if len(root_points) > 0:
+        dists = np.linalg.norm(root_points - center, axis=1)
+        radius = max(1.0, dists.mean())
+    else:
+        radius = 1.0
     return center, radius, root_points
 
 
@@ -221,7 +224,7 @@ def _create_intermediate_angles_xy(points, missing_pts):
     cumsums = consecutive_ratios.cumsum()
     nb_pts = np.insert(cumsums, -1, 1)
     nb_pts = ((nb_pts / nb_pts.sum()) * missing_pts).round()
-    nb_pts[0] += np.clip(nb_pts.sum() - missing_pts, a_min=0, a_max=None)
+    nb_pts[0] += np.clip(missing_pts - nb_pts.sum(), a_min=0, a_max=None)
     nb_pts = nb_pts.astype(int)
 
     # Compute the angles of the new points
@@ -243,6 +246,9 @@ def _add_soma(morph, soma_type="spherical"):
             relative_pts = root_points - center
             missing_pts = 4 - len(root_points)
             if missing_pts >= 1:
+                if len(root_points) < 2:
+                    msg = "At least 2 root points are needed to create a valid contour soma."
+                    raise ValueError(msg)
                 new_angles = _create_intermediate_angles_xy(relative_pts, missing_pts)
 
                 # Create the new points
@@ -254,7 +260,7 @@ def _add_soma(morph, soma_type="spherical"):
                 root_points = np.concatenate([root_points, new_root_pts])
 
             relative_pts = root_points - center
-            angles = np.arctan(relative_pts[:, COLS.Y] / relative_pts[:, COLS.X])
+            angles = np.arctan2(relative_pts[:, COLS.Y], relative_pts[:, COLS.X])
             angle_order = np.argsort(angles)
 
             morph.soma.points = root_points[angle_order]

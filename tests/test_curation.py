@@ -5,6 +5,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+from morphio import PointLevel
+from morphio import SectionType
 from morphio import SomaType
 from morphio.mut import Morphology
 from numpy.testing import assert_array_almost_equal
@@ -598,6 +600,31 @@ class TestCheckNeurites:
                 [0, 1, 0],
             ],
         )
+
+    @pytest.mark.parametrize("nb_root_points", list(range(6)))
+    def test__add_soma_contour(self, nb_root_points):
+        """Test _add_soma for contour type with multiple numbers of root sections."""
+        morph = Morphology()
+        morph.soma.type = SomaType.SOMA_UNDEFINED
+        morph.soma.points = np.array([], dtype=morph.soma.points.dtype).reshape((0, 3))
+        morph.soma.diameters = np.array([], dtype=morph.soma.diameters.dtype)
+
+        interval = np.pi / (nb_root_points + 1)
+        for i in range(nb_root_points):
+            angle = i * interval
+            x = np.cos(angle)
+            y = np.sin(angle)
+            z = 0
+            stub = PointLevel([np.array([x, y, z]), 2 * np.array([x, y, z])], [1, 1])
+            morph.append_root_section(stub, SectionType.axon)
+
+        if nb_root_points < 2:
+            with pytest.raises(ValueError, match="At least 2 root points are needed"):
+                curation._add_soma(morph, soma_type="contour")  # noqa: SLF001
+        else:
+            curation._add_soma(morph, soma_type="contour")  # noqa: SLF001
+
+            assert len(morph.soma.points) == max(4, nb_root_points)
 
     def test_no_mock_but_stub(self, simple_morph, res_path):
         """Check neurites with no mock soma but with stub axon."""
