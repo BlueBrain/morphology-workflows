@@ -166,18 +166,20 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
         api.allen_morphology_cache.mkdir(parents=True, exist_ok=True)
 
         for conf_element in config:
-            size = conf_element.get("nb_morphologies", float("inf"))
-            species = conf_element.get("species", None)
-            brain_region = conf_element.get("brain_region", None)
-            # cell_type = conf_element.get("cell_type", None)
+            criteria = copy.deepcopy(conf_element)
+            size = criteria.pop("nb_morphologies", float("inf"))
+            species = criteria.pop("species", None)
+            brain_region = criteria.pop("brain_region", None)
+            seed = criteria.pop("seed", None)
 
             mask = np.full(len(api.neurons), True, dtype=bool)
             if species is not None:
                 mask = mask & (api.neurons.species == species)
             if brain_region is not None:
                 mask = mask & (api.neurons.structure_area_abbrev == brain_region)
-            # if cell_type is not None:
-            #     mask = mask & (api.neurons.structure_area_abbrev == region)
+
+            for key, value in criteria.items():
+                mask = mask & (api.neurons[key] == value)
 
             neurons = api.neurons.loc[mask]
 
@@ -187,9 +189,7 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
                 # Download some neurons
                 downloaded_neurons = self._neuron_paths(
                     api.download_neurons(
-                        neurons.sample(
-                            min(len(neurons), size), random_state=conf_element.get("seed", None)
-                        ).id.values,
+                        neurons.sample(min(len(neurons), size), random_state=seed).id.values,
                         load_neurons=False,
                     ),
                     api.allen_morphology_cache,

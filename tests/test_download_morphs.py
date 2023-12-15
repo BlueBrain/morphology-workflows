@@ -132,23 +132,21 @@ def test_allen(prepare_dir, data_dir):
     # Check metadata
     expected = pd.DataFrame(
         {
-            "species": ["Mus musculus"] * 10,
-            "brain_region": ["VISli"] * 10,
-            "cell_type": ["interneuron"] * 2 + ["pyramidal"] * 8,
-            "nb_morphologies": [2] * 2 + [np.nan] * 4 + [9999] * 4,
-            "seed": [0] * 10,
+            "species": ["Mus musculus"] * 8,
+            "brain_region": ["VISli"] * 8,
+            "nb_morphologies": [2] * 2 + [np.nan] * 2 + [9999] * 4,
+            "seed": [0] * 8,
             "morphology": [
                 "555019563.swc",
                 "603402458.swc",
-                "555019563.swc",
                 "603402458.swc",
                 "526573598.swc",
-                "555241040.swc",
                 "555019563.swc",
                 "603402458.swc",
                 "526573598.swc",
                 "555241040.swc",
             ],
+            "dendrite_type": [np.nan] * 2 + ["spiny"] * 2 + [np.nan] * 4,
         }
     )
 
