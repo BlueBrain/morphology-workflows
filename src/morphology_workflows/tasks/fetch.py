@@ -168,13 +168,10 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
         for conf_element in config:
             criteria = copy.deepcopy(conf_element)
             size = criteria.pop("nb_morphologies", float("inf"))
-            species = criteria.pop("species", None)
             brain_region = criteria.pop("brain_region", None)
             seed = criteria.pop("seed", None)
 
             mask = np.full(len(api.neurons), True, dtype=bool)
-            if species is not None:
-                mask = mask & (api.neurons.species == species)
             if brain_region is not None:
                 mask = mask & (api.neurons.structure_area_abbrev == brain_region)
 
