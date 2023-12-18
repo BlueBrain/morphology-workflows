@@ -40,7 +40,8 @@ def is_morphology(filename):
     try:
         Morphology(filename)
         ext = Path(filename).suffix.lower()
-    except Exception:  # pylint: disable=broad-except  # noqa: BLE001
+    except Exception as exc:  # pylint: disable=broad-except  # noqa: BLE001
+        L.warning("Error when loading the morphology from %s:\n%s", filename, exc)
         return False, None
     return ext in EXTS, ext
 

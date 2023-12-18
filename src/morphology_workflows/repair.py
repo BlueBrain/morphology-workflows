@@ -343,9 +343,7 @@ def make_collage(  # noqa: PLR0913
 def _convert(input_file, output_file):
     """Handles crashes in conversion of writing of morphologies."""
     try:
-        convert(input_file, output_file)
-        # to ensure nrn_order
-        write_neuron(Morphology(output_file), output_file)
+        convert(input_file, output_file, nrn_order=True)
     except MorphToolException:
         return "cannot save"
     except RuntimeError:  # this can happen if duplicates are being written at the same time
