@@ -10,6 +10,7 @@
    Home <self>
    cli
    luigi_cfg
+   fetch_config
    placeholders_config
    api_ref
    changelog

@@ -2,20 +2,18 @@
     {
         "species": "Mus musculus",
         "brain_region": "VISli",
-        "cell_type": "interneuron",
         "nb_morphologies": 2,
         "seed": 0
     },
     {
         "species": "Mus musculus",
         "brain_region": "VISli",
-        "cell_type": "pyramidal",
+        "dendrite_type": "spiny",
         "seed": 0
     },
     {
         "species": "Mus musculus",
         "brain_region": "VISli",
-        "cell_type": "pyramidal",
         "nb_morphologies": 9999,
         "seed": 0
     }
