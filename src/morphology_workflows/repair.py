@@ -343,10 +343,14 @@ def make_collage(  # noqa: PLR0913
 def _convert(input_file, output_file):
     """Handles crashes in conversion of writing of morphologies."""
     try:
-        convert(input_file, output_file, nrn_order=True)
-    except MorphToolException:
-        return "cannot save"
-    except RuntimeError:  # this can happen if duplicates are being written at the same time
+        L.debug("Converting %s into %s", input_file, output_file)
+        convert(input_file, output_file, nrn_order=True, sanitize=True)
+    except MorphToolException as exc:
+        return (
+            f"Could not convert the file '{input_file}' into '{output_file}' because of the "
+            f"following exception:\n{exc}"
+        )
+    except RuntimeError:  # This can happen if duplicates are being written at the same time
         pass
     return output_file
 
