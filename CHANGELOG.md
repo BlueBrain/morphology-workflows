@@ -1,8 +1,25 @@
 # Changelog
 
+## [0.9.0](https://github.com/BlueBrain/morphology-workflows/compare/0.8.1..0.9.0)
+
+> 21 December 2023
+
+### Build
+
+- Bump MorphIO and fix tests accordingly (Adrien Berchet - [#125](https://github.com/BlueBrain/morphology-workflows/pull/125))
+
+### New Features
+
+- Add logger entry to know which morphology could not be written in make_release (Adrien Berchet - [#129](https://github.com/BlueBrain/morphology-workflows/pull/129))
+
+### Fixes
+
+- Handle any number of points in _add_soma and add a specific test (Adrien Berchet - [#123](https://github.com/BlueBrain/morphology-workflows/pull/123))
+- Create contour soma properly (Adrien Berchet - [#122](https://github.com/BlueBrain/morphology-workflows/pull/122))
+
 ## [0.8.1](https://github.com/BlueBrain/morphology-workflows/compare/0.8.0..0.8.1)
 
-> 14 November 2023
+> 15 November 2023
 
 ### Fixes
 
@@ -38,10 +55,6 @@
 
 - Setup Ruff config (Adrien Berchet - [#115](https://github.com/BlueBrain/morphology-workflows/pull/115))
 
-### General Changes
-
-- Release 0.8.0 (Adrien Berchet - [#119](https://github.com/BlueBrain/morphology-workflows/pull/119))
-
 ## [0.7.0](https://github.com/BlueBrain/morphology-workflows/compare/0.6.1..0.7.0)
 
 > 22 May 2023
@@ -60,7 +73,6 @@
 
 ### General Changes
 
-- Release: 0.7.0 (Adrien Berchet - [#97](https://github.com/BlueBrain/morphology-workflows/pull/97))
 - Fix layers not int (Alexis Arnaudon - [#92](https://github.com/BlueBrain/morphology-workflows/pull/92))
 - Use JSON schema from NeuroR.main.Repair and fix CLI command in docs (Adrien Berchet - [#90](https://github.com/BlueBrain/morphology-workflows/pull/90))
 
@@ -71,10 +83,6 @@
 ### New Features
 
 - Update command and doc (Adrien Berchet - [#88](https://github.com/BlueBrain/morphology-workflows/pull/88))
-
-### General Changes
-
-- Release: 0.6.1 (Adrien Berchet - [#89](https://github.com/BlueBrain/morphology-workflows/pull/89))
 
 ## [0.6.0](https://github.com/BlueBrain/morphology-workflows/compare/0.5.3..0.6.0)
 
@@ -94,7 +102,6 @@
 
 ### General Changes
 
-- Release: 0.6.0 (Adrien Berchet - [#86](https://github.com/BlueBrain/morphology-workflows/pull/86))
 - Add propagation between workflows, fix MakeCollage and fix empty mtypes (Adrien Berchet - [#83](https://github.com/BlueBrain/morphology-workflows/pull/83))
 
 ## [0.5.3](https://github.com/BlueBrain/morphology-workflows/compare/0.5.2..0.5.3)
@@ -109,10 +116,6 @@
 
 - Bump pre-commit hooks (Adrien Berchet - [#80](https://github.com/BlueBrain/morphology-workflows/pull/80))
 
-### General Changes
-
-- Release: 0.5.3 (Adrien Berchet - [#81](https://github.com/BlueBrain/morphology-workflows/pull/81))
-
 ## [0.5.2](https://github.com/BlueBrain/morphology-workflows/compare/0.5.1..0.5.2)
 
 > 5 January 2023
@@ -121,10 +124,6 @@
 
 - Bump Sphinx (Adrien Berchet - [#77](https://github.com/BlueBrain/morphology-workflows/pull/77))
 
-### General Changes
-
-- Release: 0.5.2 (Adrien Berchet - [#78](https://github.com/BlueBrain/morphology-workflows/pull/78))
-
 ## [0.5.1](https://github.com/BlueBrain/morphology-workflows/compare/0.5.0..0.5.1)
 
 > 22 December 2022
@@ -132,10 +131,6 @@
 ### Chores And Housekeeping
 
 - Use optional params for region and mtype and improve default logger (Adrien Berchet - [#75](https://github.com/BlueBrain/morphology-workflows/pull/75))
-
-### General Changes
-
-- Release: 0.5.1 (Adrien Berchet - [#76](https://github.com/BlueBrain/morphology-workflows/pull/76))
 
 ## [0.5.0](https://github.com/BlueBrain/morphology-workflows/compare/0.4.2..0.5.0)
 
@@ -148,10 +143,6 @@
 ### Fixes
 
 - Make the rerun parameter work with CLI (Adrien Berchet - [#73](https://github.com/BlueBrain/morphology-workflows/pull/73))
-
-### General Changes
-
-- Release: 0.5.0 (Adrien Berchet - [#74](https://github.com/BlueBrain/morphology-workflows/pull/74))
 
 ## [0.4.2](https://github.com/BlueBrain/morphology-workflows/compare/0.4.1..0.4.2)
 
@@ -167,10 +158,6 @@
 
 - Use tox 4 (Adrien Berchet - [#70](https://github.com/BlueBrain/morphology-workflows/pull/70))
 - Apply Copier template (Adrien Berchet - [#69](https://github.com/BlueBrain/morphology-workflows/pull/69))
-
-### General Changes
-
-- Release 0.4.2 (Adrien Berchet - [#71](https://github.com/BlueBrain/morphology-workflows/pull/71))
 
 ### General Changes
 
@@ -192,7 +179,6 @@
 
 ### General Changes
 
-- Release 0.4.1 (Alexis Arnaudon - [#63](https://github.com/BlueBrain/morphology-workflows/pull/63))
 - Reconnect axons to soma (Alexis Arnaudon - [#62](https://github.com/BlueBrain/morphology-workflows/pull/62))
 - Simpler smooth algorithm (Alexis Arnaudon - [#56](https://github.com/BlueBrain/morphology-workflows/pull/56))
 - Add duplicate layers to releases (Alexis Arnaudon - [#60](https://github.com/BlueBrain/morphology-workflows/pull/60))
@@ -214,7 +200,6 @@
 
 ### General Changes
 
-- Release 0.4.0 (Adrien Berchet - [#53](https://github.com/BlueBrain/morphology-workflows/pull/53))
 - Remove warning from scipy (Adrien Berchet - [#48](https://github.com/BlueBrain/morphology-workflows/pull/48))
 - Add workflow to compute placeholders (Adrien Berchet - [#22](https://github.com/BlueBrain/morphology-workflows/pull/22))
 
