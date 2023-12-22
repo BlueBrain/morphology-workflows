@@ -281,8 +281,6 @@ def export_dependency_graph(task, output_file, dpi=None):
 def main(arguments=None):
     """Main function."""
     # Setup logging
-    logging.getLogger("luigi").propagate = False
-    logging.getLogger("luigi-interface").propagate = False
     luigi_config = luigi.configuration.get_config()
     logging_conf = luigi_config.get("core", "logging_conf_file", None)
     if logging_conf is not None and not Path(logging_conf).exists():
@@ -311,9 +309,14 @@ def main(arguments=None):
                     "": {  # root logger
                         "level": args.log_level,
                     },
+                    "luigi": {"propagate": False},
+                    "luigi_interface": {"propagate": False},
                 },
             },
         )
+
+    logging.getLogger("luigi").propagate = False
+    logging.getLogger("luigi-interface").propagate = False
 
     logger = logging.getLogger(__name__)
 
@@ -339,12 +342,13 @@ def main(arguments=None):
         os.environ["LUIGI_CONFIG_PATH"] = args.config_path
 
     # Get arguments to configure luigi
-    luigi_config = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
-    luigi_config["local_scheduler"] = not args.master_scheduler
+    env_params = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
+    env_params["local_scheduler"] = not args.master_scheduler
     if args.log_level is not None:
-        luigi_config["logging_conf_file"] = ""
+        env_params["logging_conf_file"] = ""
+        luigi_config.set("core", "no_configure_logging", "true")
     else:
-        luigi_config.pop("log_level")
+        env_params.pop("log_level")
 
     # Prepare workflow task and arguments
     task_cls = WORKFLOW_TASKS[args.workflow]
@@ -359,8 +363,8 @@ def main(arguments=None):
         return
 
     # Run the luigi task
-    logger.debug("Running the workflow using the following luigi config: %s", luigi_config)
-    luigi.build([task], **luigi_config)
+    logger.debug("Running the workflow using the following luigi config: %s", env_params)
+    luigi.build([task], **env_params)
 
 
 if __name__ == "__main__":
