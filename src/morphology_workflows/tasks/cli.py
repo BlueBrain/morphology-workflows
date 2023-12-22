@@ -22,7 +22,6 @@ from morphology_workflows.utils import create_inputs
 
 L = logging.getLogger(__name__)
 
-
 WORKFLOW_TASKS = {
     "Fetch": Fetch,
     "Placeholders": Placeholders,
@@ -127,9 +126,9 @@ class ArgParser:
         parser.add_argument(
             "-ll",
             "--log-level",
-            default="INFO",
+            default=None,
             choices=LOGGING_LEVELS,
-            help="Logger level.",
+            help="Logger level (this will ignore the luigi 'logging_conf_file' argument).",
         )
 
         parser.add_argument("-lf", "--log-file", help="Logger file.")
@@ -282,8 +281,6 @@ def export_dependency_graph(task, output_file, dpi=None):
 def main(arguments=None):
     """Main function."""
     # Setup logging
-    logging.getLogger("luigi").propagate = False
-    logging.getLogger("luigi-interface").propagate = False
     luigi_config = luigi.configuration.get_config()
     logging_conf = luigi_config.get("core", "logging_conf_file", None)
     if logging_conf is not None and not Path(logging_conf).exists():
@@ -303,11 +300,31 @@ def main(arguments=None):
     parser = ArgParser()
     args = parser.parse_args(arguments)
 
-    L.debug("Args: %s", args)
+    if args.log_level is not None:
+        logging.config.dictConfig(
+            {
+                "version": 1,
+                "incremental": True,
+                "loggers": {
+                    "": {  # root logger
+                        "level": args.log_level,
+                    },
+                    "luigi": {"propagate": False},
+                    "luigi_interface": {"propagate": False},
+                },
+            },
+        )
+
+    logging.getLogger("luigi").propagate = False
+    logging.getLogger("luigi-interface").propagate = False
+
+    logger = logging.getLogger(__name__)
+
+    logger.debug("Args: %s", args)
 
     # Check that one workflow is in arguments
     if args is None or args.workflow is None:
-        L.critical("Arguments must contain one workflow. Check help with -h/--help argument.")
+        logger.critical("Arguments must contain one workflow. Check help with -h/--help argument.")
         parser.parser.print_help()
         return
 
@@ -325,8 +342,13 @@ def main(arguments=None):
         os.environ["LUIGI_CONFIG_PATH"] = args.config_path
 
     # Get arguments to configure luigi
-    luigi_config = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
-    luigi_config["local_scheduler"] = not args.master_scheduler
+    env_params = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
+    env_params["local_scheduler"] = not args.master_scheduler
+    if args.log_level is not None:
+        env_params["logging_conf_file"] = ""
+        luigi_config.set("core", "no_configure_logging", "true")
+    else:
+        env_params.pop("log_level")
 
     # Prepare workflow task and arguments
     task_cls = WORKFLOW_TASKS[args.workflow]
@@ -341,7 +363,8 @@ def main(arguments=None):
         return
 
     # Run the luigi task
-    luigi.build([task], **luigi_config)
+    logger.debug("Running the workflow using the following luigi config: %s", env_params)
+    luigi.build([task], **env_params)
 
 
 if __name__ == "__main__":
