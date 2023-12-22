@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.1](https://github.com/BlueBrain/morphology-workflows/compare/0.9.0..0.9.1)
+
+> 22 December 2023
+
+### New Features
+
+- Add nb_processes to MakeRelease and improve log level when using the CLI (Adrien Berchet - [#131](https://github.com/BlueBrain/morphology-workflows/pull/131))
+
 ## [0.9.0](https://github.com/BlueBrain/morphology-workflows/compare/0.8.1..0.9.0)
 
 > 21 December 2023
