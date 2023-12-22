@@ -433,6 +433,7 @@ def make_release(
     repair_path,
     extensions,
     duplicate_layers=True,
+    nb_processes=None,
 ):
     """Make morphology release."""
     set_layer_column(df)
@@ -442,6 +443,8 @@ def make_release(
         df_tmp = add_duplicated_layers(df_tmp)
 
     release_path = Path(release_path or "")
+
+    L.debug("Exporting releases to %s using %s processes", release_path, nb_processes)
 
     for extension in extensions:
         _zero_diameter_path = None
@@ -469,7 +472,7 @@ def make_release(
 
         _m = []
         written = set()
-        with Pool() as pool:
+        with Pool(nb_processes) as pool:
             for index, row, m in tqdm(
                 pool.imap(__create_db_row, df_tmp.loc[df_tmp["is_valid"]].iterrows()),
                 total=len(df_tmp),

@@ -22,7 +22,6 @@ from morphology_workflows.utils import create_inputs
 
 L = logging.getLogger(__name__)
 
-
 WORKFLOW_TASKS = {
     "Fetch": Fetch,
     "Placeholders": Placeholders,
@@ -127,9 +126,9 @@ class ArgParser:
         parser.add_argument(
             "-ll",
             "--log-level",
-            default="INFO",
+            default=None,
             choices=LOGGING_LEVELS,
-            help="Logger level.",
+            help="Logger level (this will ignore the luigi 'logging_conf_file' argument).",
         )
 
         parser.add_argument("-lf", "--log-file", help="Logger file.")
@@ -303,11 +302,26 @@ def main(arguments=None):
     parser = ArgParser()
     args = parser.parse_args(arguments)
 
-    L.debug("Args: %s", args)
+    if args.log_level is not None:
+        logging.config.dictConfig(
+            {
+                "version": 1,
+                "incremental": True,
+                "loggers": {
+                    "": {  # root logger
+                        "level": args.log_level,
+                    },
+                },
+            },
+        )
+
+    logger = logging.getLogger(__name__)
+
+    logger.debug("Args: %s", args)
 
     # Check that one workflow is in arguments
     if args is None or args.workflow is None:
-        L.critical("Arguments must contain one workflow. Check help with -h/--help argument.")
+        logger.critical("Arguments must contain one workflow. Check help with -h/--help argument.")
         parser.parser.print_help()
         return
 
@@ -327,6 +341,10 @@ def main(arguments=None):
     # Get arguments to configure luigi
     luigi_config = {k: v for k, v in vars(args).items() if k in LUIGI_PARAMETERS}
     luigi_config["local_scheduler"] = not args.master_scheduler
+    if args.log_level is not None:
+        luigi_config["logging_conf_file"] = ""
+    else:
+        luigi_config.pop("log_level")
 
     # Prepare workflow task and arguments
     task_cls = WORKFLOW_TASKS[args.workflow]
@@ -341,6 +359,7 @@ def main(arguments=None):
         return
 
     # Run the luigi task
+    logger.debug("Running the workflow using the following luigi config: %s", luigi_config)
     luigi.build([task], **luigi_config)
 
 

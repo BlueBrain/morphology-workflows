@@ -181,6 +181,12 @@ class MakeRelease(StrIndexMixin, SetValidationTask):
         default=True, description=":bool: Duplicate entries with mixed layer mtypes, i.e. L23_PC."
     )
 
+    nb_processes = luigi.OptionalIntParameter(
+        default=None,
+        description=":int: The number of parallel processes to use.",
+        significant=False,
+    )
+
     extensions = [".asc", ".h5", ".swc"]
     output_columns = {}
     for extension in extensions:
@@ -207,6 +213,7 @@ class MakeRelease(StrIndexMixin, SetValidationTask):
             "repair_path": self.repair_path,
             "extensions": self.extensions,
             "duplicate_layers": self.duplicate_layers,
+            "nb_processes": self.nb_processes,
         }
 
     def inputs(self):
