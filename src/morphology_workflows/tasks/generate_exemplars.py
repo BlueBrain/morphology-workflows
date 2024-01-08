@@ -33,6 +33,10 @@ class GenerateExemplar(TagResultOutputMixin, WorkflowTask):
 
     def run(self):
         morph_df = pd.read_csv(self.input_morph_df_path)
+
+        if "path" not in morph_df:
+            morph_df["path"] = morph_df["morph_path"]
+
         self.output().pathlib_path.mkdir(exist_ok=True)
         mtype = "no_mtype"
         if "mtype" in morph_df.columns:

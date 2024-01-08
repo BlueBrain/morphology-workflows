@@ -82,7 +82,6 @@ def get_surface_density(neuron_path, path_bins, neurite_type="basal", tpe="area"
             if tpe == "area":
                 data += list(nm.get("segment_areas", neurite))
             if tpe == "diameter":
-
                 for section in nm.iter_sections(neurite):
                     data += list(section.points[1:, 3])
             dists += list(nm.get("segment_path_lengths", neurite))
@@ -428,5 +427,5 @@ def full_exemplar(df, surface_percentile=50, bin_params=None, figure_folder="ful
     return {
         "soma": soma_model["soma_model"],
         "ais": ais_model["ais_model"],
-        "path": df.loc[best_gid, "path"],
+        "path": df.loc[best_gid, "path"].resolve(),
     }
