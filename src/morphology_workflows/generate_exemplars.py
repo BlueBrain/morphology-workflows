@@ -2,6 +2,7 @@
 from functools import partial
 from multiprocessing.pool import Pool
 from tqdm import tqdm
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
@@ -427,5 +428,9 @@ def full_exemplar(df, surface_percentile=50, bin_params=None, figure_folder="ful
     return {
         "soma": soma_model["soma_model"],
         "ais": ais_model["ais_model"],
-        "path": df.loc[best_gid, "path"].resolve(),
+<<<<<<< Updated upstream
+        "path": df.loc[best_gid, "path"],
+=======
+        "path": str(Path(df.loc[best_gid, "path"]).resolve()),
+>>>>>>> Stashed changes
     }

@@ -53,7 +53,6 @@ class ExtractMarkers(SkippableMixin(), ElementValidationTask):
     validation_function = extract_marker
 
     def inputs(self):
-        """ """
         return {Collect: {"morph_path": "morph_path"}}
 
 
@@ -69,11 +68,9 @@ class PlotMarkers(SkippableMixin(), ElementValidationTask):
     with_plotly = BoolParameter(default=True, description=":bool: Use Plotly for plotting")
 
     def kwargs(self):
-        """ """
         return {"with_plotly": self.with_plotly}
 
     def inputs(self):
-        """ """
         return {
             ExtractMarkers: {"marker_path": "marker_path"},
         }
@@ -137,7 +134,6 @@ class CheckNeurites(ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {
             "mock_soma_type": self.mock_soma_type,
             "axon_n_section_min": self.axon_n_section_min,
@@ -146,7 +142,6 @@ class CheckNeurites(ElementValidationTask):
         }
 
     def inputs(self):
-        """ """
         return {Collect: {"morph_path": "morph_path"}}
 
 
@@ -174,11 +169,9 @@ class Sanitize(ElementValidationTask):
     validation_function = sanitize
 
     def kwargs(self):
-        """ """
         return {"ensure_roots_at_soma": self.ensure_roots_at_soma}
 
     def inputs(self):
-        """ """
         return {CheckNeurites: {"morph_path": "morph_path"}}
 
 
@@ -193,7 +186,6 @@ class Recenter(SkippableMixin(), ElementValidationTask):
     validation_function = recenter
 
     def inputs(self):
-        """ """
         return {Sanitize: {"morph_path": "morph_path"}}
 
 
@@ -216,11 +208,9 @@ class Orient(ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {"pia_direction": self.pia_direction}
 
     def inputs(self):
-        """ """
         return {Recenter: {"morph_path": "morph_path"}}
 
 
@@ -253,13 +243,15 @@ class Align(SkippableMixin(True), ElementValidationTask):
     neurite_type = luigi.Parameter(
         default="apical", description=":str: Neurite to use to align morphology"
     )
-    direction = luigi.ListParameter(default=None)
+    direction = luigi.OptionalListParameter(
+        default=None,
+        schema={"type": "array", "items": {"type": "number"}, "minItems": 3, "maxItems": 3},
+    )
     custom_orientation_json_path = luigi.OptionalStrParameter(
         default=None, description=":str: Path to json with custom orientations"
     )
 
     def kwargs(self):
-        """ """
         return {
             "method": self.method,
             "neurite_type": self.neurite_type,
@@ -268,7 +260,6 @@ class Align(SkippableMixin(True), ElementValidationTask):
         }
 
     def inputs(self):
-        """ """
         return {Orient: {"morph_path": "morph_path"}}
 
 
@@ -279,7 +270,6 @@ class EnsureNeuritesOutsideSoma(SkippableMixin(True), ElementValidationTask):
     validation_function = fix_neurites_in_soma
 
     def inputs(self):
-        """ """
         return {Align: {"morph_path": "morph_path"}}
 
 
@@ -314,11 +304,9 @@ class DetectErrors(SkippableMixin(), ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {"min_range": self.min_range}
 
     def inputs(self):
-        """ """
         return {CheckNeurites: {"morph_path": "morph_path"}}
 
 
@@ -334,11 +322,9 @@ class PlotErrors(SkippableMixin(), ElementValidationTask):
     with_plotly = BoolParameter(default=True, description=":bool: Use Plotly for plotting")
 
     def kwargs(self):
-        """ """
         return {"with_plotly": self.with_plotly}
 
     def inputs(self):
-        """ """
         return {
             Recenter: {"morph_path": "morph_path"},
             DetectErrors: {"error_marker_path": "error_marker_path"},
@@ -354,11 +340,9 @@ class ErrorsReport(SkippableMixin(), SetValidationTask):
     validation_function = make_error_report
 
     def kwargs(self):
-        """ """
         return {"error_report_path": self.error_report_path}
 
     def inputs(self):
-        """ """
         return {
             DetectErrors: {"error_marker_path": "error_marker_path"},
         }
@@ -378,11 +362,9 @@ class Resample(SkippableMixin(), ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {"linear_density": self.linear_density}
 
     def inputs(self):
-        """ """
         return {EnsureNeuritesOutsideSoma: {"morph_path": "morph_path"}}
 
 
@@ -402,14 +384,12 @@ class PlotMorphologies(SkippableMixin(), ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {
             "with_plotly": self.with_plotly,
             "realistic_diameters": self.with_realistic_diameters,
         }
 
     def inputs(self):
-        """ """
         return {
             Resample: {"morph_path": "morph_path"},
         }

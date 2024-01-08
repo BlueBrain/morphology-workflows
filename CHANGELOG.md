@@ -1,5 +1,64 @@
 # Changelog
 
+## [0.5.3](https://github.com/BlueBrain/morphology-workflows/compare/0.5.2..0.5.3)
+
+> 31 January 2023
+
+### Chores And Housekeeping
+
+- Add JSON schemas to ListParameters (Adrien Berchet - [#79](https://github.com/BlueBrain/morphology-workflows/pull/79))
+
+### CI Improvements
+
+- Bump pre-commit hooks (Adrien Berchet - [#80](https://github.com/BlueBrain/morphology-workflows/pull/80))
+
+## [0.5.2](https://github.com/BlueBrain/morphology-workflows/compare/0.5.1..0.5.2)
+
+> 5 January 2023
+
+### Build
+
+- Bump Sphinx (Adrien Berchet - [#77](https://github.com/BlueBrain/morphology-workflows/pull/77))
+
+## [0.5.1](https://github.com/BlueBrain/morphology-workflows/compare/0.5.0..0.5.1)
+
+> 22 December 2022
+
+### Chores And Housekeeping
+
+- Use optional params for region and mtype and improve default logger (Adrien Berchet - [#75](https://github.com/BlueBrain/morphology-workflows/pull/75))
+
+## [0.5.0](https://github.com/BlueBrain/morphology-workflows/compare/0.4.2..0.5.0)
+
+> 22 December 2022
+
+### New Features
+
+- Placeholders can be computed without metadata.csv file (Adrien Berchet - [#72](https://github.com/BlueBrain/morphology-workflows/pull/72))
+
+### Fixes
+
+- Make the rerun parameter work with CLI (Adrien Berchet - [#73](https://github.com/BlueBrain/morphology-workflows/pull/73))
+
+## [0.4.2](https://github.com/BlueBrain/morphology-workflows/compare/0.4.1..0.4.2)
+
+> 13 December 2022
+
+### Chores And Housekeeping
+
+- Remove dead code in conf.py (Adrien Berchet - [#68](https://github.com/BlueBrain/morphology-workflows/pull/68))
+- Bump AllenSDK and Sphinx and use proper optional parameters (Adrien Berchet - [#67](https://github.com/BlueBrain/morphology-workflows/pull/67))
+- Fix language detection (Adrien Berchet - [#64](https://github.com/BlueBrain/morphology-workflows/pull/64))
+
+### CI Improvements
+
+- Use tox 4 (Adrien Berchet - [#70](https://github.com/BlueBrain/morphology-workflows/pull/70))
+- Apply Copier template (Adrien Berchet - [#69](https://github.com/BlueBrain/morphology-workflows/pull/69))
+
+### Uncategorized Changes
+
+- Update README.md (alex4200 - [53b70d4](https://github.com/BlueBrain/morphology-workflows/commit/53b70d41c4b271f47fef00ba24b27b48747bf68b))
+
 ## [0.4.1](https://github.com/BlueBrain/morphology-workflows/compare/0.4.0..0.4.1)
 
 > 22 September 2022

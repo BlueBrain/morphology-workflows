@@ -1,9 +1,11 @@
 """Placeholders functions."""
 import logging
+import warnings
 from pathlib import Path
 from typing import Optional
 
 import neurom
+import numpy as np
 import pandas as pd
 from neurom.apps import morph_stats
 from pkg_resources import resource_filename
@@ -54,25 +56,39 @@ DEFAULT_CONFIG = {
 }
 
 
-def select_population(input_morphologies: str, region: str, mtype: str) -> neurom.core.Population:
+def select_population(
+    input_morphologies: str, region: Optional[str], mtype: Optional[str]
+) -> neurom.core.Population:
     """Compute the placeholder values for a given region - mtype couple."""
     logger.debug("Get population for %s in %s from %s", mtype, region, input_morphologies)
 
     # Load the morphologies for a selected region - mtype couple
     input_dir = Path(input_morphologies)
-    metadata = pd.read_csv(input_dir / "metadata.csv")
-    metadata = metadata.loc[(metadata["brain_region"] == region) & (metadata["cell_type"] == mtype)]
-    population = neurom.load_morphologies(input_dir / metadata["morphology"])
+    metadata_path = input_dir / "metadata.csv"
+    if metadata_path.exists():
+        metadata = pd.read_csv(metadata_path)
+        if region is not None:
+            region_mask = metadata["brain_region"] == region
+        else:
+            region_mask = np.ones(len(metadata), dtype=bool)
+        if mtype is not None:
+            mtype_mask = metadata["cell_type"] == mtype
+        else:
+            mtype_mask = np.ones(len(metadata), dtype=bool)
+        metadata = metadata.loc[region_mask & mtype_mask]
+        population = neurom.load_morphologies(input_dir / metadata["morphology"])
+    else:
+        warnings.warn("No metadata.csv file found in the input directory, loading all morphologies")
+        population = neurom.load_morphologies(input_dir)
 
     return population
 
 
 def compute_placeholders(
     input_morphologies: str,
-    region: str,
-    mtype: str,
+    region: str = None,
+    mtype: str = None,
     config: Optional[dict] = None,
-    output_path: Optional[str] = None,
 ) -> pd.DataFrame:
     """Compute the placeholder values for a given region - mtype couple."""
     # Select morphologies
@@ -105,9 +121,5 @@ def compute_placeholders(
     # Add region and mtype to the dataframe
     df_placeholder[("Metadata", "Region")] = region
     df_placeholder[("Metadata", "Mtype")] = mtype
-
-    # Export csv file
-    if output_path is not None:
-        df_placeholder.to_csv(output_path)
 
     return df_placeholder

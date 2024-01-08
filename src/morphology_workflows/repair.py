@@ -26,11 +26,16 @@ from neuror.zero_diameter_fixer import fix_zero_diameters as _fix_zero_diameters
 from scipy.spatial import KDTree
 from tqdm import tqdm
 
+from morphology_workflows import MorphologyWorkflowsError
 from morphology_workflows.marker_helper import MarkerSet
 from morphology_workflows.utils import disable_loggers
 
 L = logging.getLogger(__name__)
 matplotlib.use("Agg")
+
+
+class RepairError(MorphologyWorkflowsError):
+    """Exception for Repair step."""
 
 
 def fix_zero_diameters(row, data_dir):
@@ -55,7 +60,7 @@ def _unravel_leaves(leaves, mapping):
     distances, indices = t.query(leaves)
     not_matching_leaves = np.where(distances > 1e-3)[0]
     if not_matching_leaves.size:
-        raise Exception(
+        raise RepairError(
             f"Cannot find the following leaves in the mapping:\n{leaves[not_matching_leaves]}"
         )
     return mapping.iloc[indices][["x1", "y1", "z1"]].values

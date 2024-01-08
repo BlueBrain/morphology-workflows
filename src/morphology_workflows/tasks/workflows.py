@@ -65,7 +65,6 @@ class Curate(ValidationWorkflow):
     validation_function = staticmethod(save_reduced_df)
 
     def inputs(self):
-        """ """
         return {
             Collect: {},
             ExtractMarkers: {"marker_path": "marker_path"},
@@ -107,7 +106,6 @@ class Annotate(ValidationWorkflow):
     validation_function = staticmethod(save_reduced_df)
 
     def inputs(self):
-        """ """
         return {
             CollectCurated: {},
             MType: {"mtype": "mtype"},
@@ -149,7 +147,6 @@ class Repair(ValidationWorkflow):
     }
 
     def inputs(self):
-        """ """
         inputs = {
             CollectAnnotated: {
                 "morph_path": "morph_path",

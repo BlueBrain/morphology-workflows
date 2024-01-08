@@ -42,14 +42,14 @@ class MType(ElementValidationTask):
 
     output_columns = {"mtype": None}
     validation_function = assign_mtypes
-    mtype_regex = luigi.OptionalListParameter(default=None)
+    mtype_regex = luigi.OptionalListParameter(
+        default=None, schema={"type": "array", "items": {"type": "string"}}
+    )
 
     def kwargs(self):
-        """ """
         return {"mtype_regex": self.mtype_regex}
 
     def inputs(self):
-        """ """
         return {CollectCurated: {"mtype": "mtype"}}
 
 
@@ -77,7 +77,6 @@ class HardLimit(ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {
             "skip_axon": self.skip_axon,
             "dendrite_hard_limit": self.dendrite_hard_limit,
@@ -85,7 +84,6 @@ class HardLimit(ElementValidationTask):
         }
 
     def inputs(self):
-        """ """
         return {CollectCurated: {"morph_path": "morph_path"}}
 
 
@@ -101,11 +99,9 @@ class PlotHardLimit(SkippableMixin(), ElementValidationTask):
     with_plotly = BoolParameter(default=True, description=":bool: Use Plotly for plotting")
 
     def kwargs(self):
-        """ """
         return {"with_plotly": self.with_plotly}
 
     def inputs(self):
-        """ """
         return {
             CollectCurated: {"morph_path": "morph_path"},
             HardLimit: {"hard_limit_path": "hard_limit_path"},
@@ -127,11 +123,9 @@ class ApicalPoint(SkippableMixin(), ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {"tuft_percent": self.tuft_percent}
 
     def inputs(self):
-        """ """
         return {CollectCurated: {"morph_path": "morph_path", "has_apical": "has_apical"}}
 
 
@@ -147,11 +141,9 @@ class PlotApicalPoint(SkippableMixin(), ElementValidationTask):
     with_plotly = BoolParameter(default=True, description=":bool: Use Plotly for plotting")
 
     def kwargs(self):
-        """ """
         return {"with_plotly": self.with_plotly}
 
     def inputs(self):
-        """ """
         return {
             CollectCurated: {"morph_path": "morph_path", "has_apical": "has_apical"},
             ApicalPoint: {"apical_point_path": "apical_point_path"},
@@ -176,11 +168,9 @@ class CutLeaves(ElementValidationTask):
     )
 
     def kwargs(self):
-        """ """
         return {"bin_width": self.bin_width, "percentile_threshold": self.percentile_threshold}
 
     def inputs(self):
-        """ """
         return {CollectCurated: {"morph_path": "morph_path", "rotation_matrix": "rotation_matrix"}}
 
 
@@ -197,11 +187,9 @@ class PlotCutLeaves(SkippableMixin(), ElementValidationTask):
     with_plotly = BoolParameter(default=True, description=":bool: Use Plotly for plotting")
 
     def kwargs(self):
-        """ """
         return {"with_plotly": self.with_plotly}
 
     def inputs(self):
-        """ """
         return {
             CutLeaves: {"cut_leaves_path": "cut_leaves_path", "cut_qualities": "cut_qualities"},
             CollectCurated: {"morph_path": "morph_path"},

@@ -47,7 +47,6 @@ class FixZeroDiameters(ElementValidationTask):
     validation_function = fix_zero_diameters
 
     def inputs(self):
-        """ """
         return {CollectAnnotated: {"morph_path": "morph_path"}}
 
 
@@ -72,11 +71,9 @@ class Unravel(ElementValidationTask):
     validation_function = unravel
 
     def kwargs(self):
-        """ """
         return {"window_half_length": self.window_half_length}
 
     def inputs(self):
-        """ """
         return {
             SmoothDiameters: {"morph_path": "morph_path"},
             CollectAnnotated: {
@@ -103,16 +100,14 @@ class RepairNeurites(ElementValidationTask):
     with_plot = BoolParameter(
         default=False, description=":bool: Save plots with highlighted repaired branches"
     )
-    repair_params = luigi.DictParameter(
+    repair_params = luigi.OptionalDictParameter(
         default=None, description=":dict: Repair internal parameters"
     )
 
     def kwargs(self):
-        """ """
         return {"with_plot": self.with_plot, "repair_params": self.repair_params}
 
     def inputs(self):
-        """ """
         return {
             CollectAnnotated: {
                 "has_axon": "has_axon",
@@ -132,12 +127,14 @@ class MakeCollage(SkippableMixin(), SetValidationTask):
 
     collage_path = luigi.Parameter(default="collage.pdf", description=":str: Path to collage plot")
     separation = luigi.FloatParameter(default=1500)
-    layer_thickness = luigi.ListParameter(default=[700.0, 525.0, 190.0, 353.0, 149.0, 165.0])
+    layer_thickness = luigi.ListParameter(
+        default=[700.0, 525.0, 190.0, 353.0, 149.0, 165.0],
+        schema={"type": "array", "items": {"type": "number"}},
+    )
     dpi = luigi.IntParameter(default=1000)
     n_morph_per_page = luigi.IntParameter(default=10)
 
     def kwargs(self):
-        """ """
         return {
             "collage_path": self.collage_path,
             "separation": self.separation,
@@ -149,17 +146,16 @@ class MakeCollage(SkippableMixin(), SetValidationTask):
     validation_function = make_collage
 
     def inputs(self):
-        """ """
         return {RepairNeurites: {"morph_path": "morph_path"}}
 
 
 class MakeRelease(SetValidationTask):
     """Make a morpology release, with three possible folders: zero-diameter, unravel or repair."""
 
-    zero_diameter_path = luigi.Parameter(
+    zero_diameter_path = luigi.OptionalParameter(
         default=None, description=":str: Path to zero diameter morphologies (not created if None)"
     )
-    unravel_path = luigi.Parameter(
+    unravel_path = luigi.OptionalParameter(
         default=None, description=":str: Path to unravel morphologies (not created if None)"
     )
     repair_path = luigi.Parameter(
@@ -189,7 +185,6 @@ class MakeRelease(SetValidationTask):
     validation_function = make_release
 
     def kwargs(self):
-        """ """
         return {
             "zero_diameter_path": self.zero_diameter_path,
             "unravel_path": self.unravel_path,
@@ -199,7 +194,6 @@ class MakeRelease(SetValidationTask):
         }
 
     def inputs(self):
-        """ """
         return {
             FixZeroDiameters: {"morph_path": "zero_diameter_morph_path"},
             Unravel: {"morph_path": "unravel_morph_path"},
@@ -216,11 +210,9 @@ class PlotRepair(SkippableMixin(), ElementValidationTask):
     with_plotly = BoolParameter(default=False, description=":bool: Use Plotly for plotting")
 
     def kwargs(self):
-        """ """
         return {"with_plotly": self.with_plotly}
 
     def inputs(self):
-        """ """
         return {
             Unravel: {"unravelled_cut_leaves_path": "cut_leaves_path"},
             RepairNeurites: {"morph_path": "morph_path"},
@@ -240,7 +232,6 @@ class SmoothDiameters(SkippableMixin(True), ElementValidationTask):
     validation_function = smooth_diameters
 
     def inputs(self):
-        """ """
         return {
             FixZeroDiameters: {"morph_path": "morph_path"},
             CollectAnnotated: {"apical_point_path": "apical_point_path"},
@@ -254,7 +245,6 @@ class PlotSmoothDiameters(SkippableMixin(True), ElementValidationTask):
     validation_function = plot_smooth_diameters
 
     def inputs(self):
-        """ """
         return {
             FixZeroDiameters: {"morph_path": "morph_path"},
             SmoothDiameters: {"morph_path": "smooth_morph_path"},

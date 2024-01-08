@@ -5,47 +5,41 @@ from setuptools import find_namespace_packages
 from setuptools import setup
 
 reqs = [
-    "data-validation-framework>=0.3.0",
+    "data-validation-framework>=0.6.0",
     "diameter-synthesis>=0.5.2,<0.6",
-    "Jinja2<3.1",
-    "luigi>=3.1",
-    "luigi-tools>=0.0.18",
-    # Markupsafe dependency is only due to an incompatibility with Jinja2==2.11.3 but it might be
-    # fixed later
-    "MarkupSafe<2.1",
-    "matplotlib",
-    "morphapi",
+    "luigi>=3.2",
+    "luigi-tools>=0.0.19",
+    "matplotlib>=3.4",
+    "morphapi>=0.1.8",
     "morph_tool>=2.9.0,<3.0",
-    "morphio>=3.1,<4.0",
+    "morphio>=3.1.1,<4.0",
     "neurom>=3.2.0,<4.0",
-    "neuror>=1.5.0,<2.0",
+    "neuror>=1.6,<2.0",
     "numpy>=1.21",
-    "pandas",
+    "pandas>=1.5",
     "plotly-helper>=0.0.8,<1.0",
-    "PyYAML",
-    "rst2pdf",
+    "PyYAML>=5.3",
+    "rst2pdf>=0.90",
     "scipy>=1.6",
-    "sphinx<4",
-    "tqdm",
+    "tqdm>=4.44",
 ]
 
 doc_reqs = [
     "graphviz",
     "m2r2",
-    "mistune<2",
-    "sphinx-autoapi<1.6",
-    "sphinx-bluebrain-theme",
     "sphinx-argparse",
+    "sphinx-autoapi",
+    "sphinx-bluebrain-theme",
 ]
 
 test_reqs = [
     "diff-pdf-visually>=1.5.1",
-    "dir-content-diff>=0.2",
-    "mock",
-    "pytest",
-    "pytest-cov",
-    "pytest-html",
-    "pytest-xdist",
+    "dir-content-diff>=1.2",
+    "mock>=3",
+    "pytest>=7",
+    "pytest-cov>=4",
+    "pytest-html>=3",
+    "pytest-xdist>=3.0.2",
 ]
 
 setup(
@@ -71,7 +65,7 @@ setup(
     extras_require={
         "docs": doc_reqs,
         "test": test_reqs,
-        "allen_brain": ["allensdk"],
+        "allen_brain": ["allensdk>=2.13.5"],
         "mouselight": ["bg_atlasapi"],
     },
     entry_points={
@@ -89,6 +83,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
 )

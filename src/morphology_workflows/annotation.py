@@ -99,10 +99,10 @@ def compute_hard_limits(
 
     rules = {}
     y_min, y_max = calculate_y_extent(morph, SEGMENT_TO_NEURITE["dendrite"])
-    rules[dendrite_hard_limit] = dict(y_min=y_min, y_max=y_max)
+    rules[dendrite_hard_limit] = {"y_min": y_min, "y_max": y_max}
     if not skip_axon:
         y_min, y_max = calculate_y_extent(morph, SEGMENT_TO_NEURITE["axon"])
-        rules[axon_hard_limit] = dict(y_min=y_min, y_max=y_max)
+        rules[axon_hard_limit] = {"y_min": y_min, "y_max": y_max}
 
     _markers = []
     for name, rule in rules.items():

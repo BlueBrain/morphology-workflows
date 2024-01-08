@@ -206,6 +206,8 @@ def _build_parser():
 
 def main(arguments=None):
     """Main function."""
+    logging.getLogger("luigi-interface").propagate = False
+
     if arguments is None:
         arguments = sys.argv[1:]
 
@@ -232,9 +234,8 @@ def main(arguments=None):
     # Prepare workflow task and arguments
     task_cls = WORKFLOW_TASKS[args.workflow]
     args_dict = {k.split(task_cls.get_task_family() + "_")[-1]: v for k, v in vars(args).items()}
-    args_dict = {
-        k: v for k, v in args_dict.items() if v is not None and k in task_cls.get_param_names()
-    }
+    task_params = [i for i, j in task_cls.get_params()]
+    args_dict = {k: v for k, v in args_dict.items() if v is not None and k in task_params}
     task = WORKFLOW_TASKS[args.workflow](**args_dict)
 
     # Export the dependency graph of the workflow instead of running it
