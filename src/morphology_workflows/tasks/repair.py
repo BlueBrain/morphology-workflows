@@ -41,7 +41,7 @@ class CollectAnnotated(StrIndexMixin, ElementValidationTask):
     validation_function = collect
 
 
-class FixZeroDiameters(StrIndexMixin, ElementValidationTask):
+class FixZeroDiameters(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Fix zero diameters.
 
     This task applies a fix on zero diameters on dendrites, by calling
@@ -56,7 +56,7 @@ class FixZeroDiameters(StrIndexMixin, ElementValidationTask):
         return {CollectAnnotated: {"morph_path": "morph_path"}}
 
 
-class Unravel(StrIndexMixin, ElementValidationTask):
+class Unravel(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Unravel morphologies.
 
     In-vitro morphologies produce recostruction with too much tortuosity, which is corrected for
@@ -89,7 +89,7 @@ class Unravel(StrIndexMixin, ElementValidationTask):
         }
 
 
-class RepairNeurites(StrIndexMixin, ElementValidationTask):
+class RepairNeurites(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """RepairNeurites morphologies.
 
     Using the cut leaves, we recreate missing branches using neuror.main.repair.
