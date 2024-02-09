@@ -92,7 +92,7 @@ class Unravel(StrIndexMixin, SkippableMixin(), ElementValidationTask):
 class RepairNeurites(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """RepairNeurites morphologies.
 
-    Using the cut leaves, we recreate missing branches using neuror.main.repair.
+    Using the cut leaves, we recreate missing branches using :class:`neuror.main.Repair`.
 
     .. todo::
 
