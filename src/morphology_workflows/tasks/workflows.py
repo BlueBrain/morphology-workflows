@@ -60,6 +60,8 @@ class Curate(StrIndexMixin, ValidationWorkflow):
     The complete phase has the following dependency graph:
 
     .. graphviz:: Curate.dot
+
+    (click on steps in the image for more details)
     """
 
     __specifications__ = "Run the Curation phase."
@@ -101,6 +103,8 @@ class Annotate(StrIndexMixin, ValidationWorkflow):
     The complete phase has the following dependency graph:
 
     .. graphviz:: Annotate.dot
+
+    (click on steps in the image for more details)
     """
 
     __specifications__ = "Run the Annotation phase."
@@ -140,6 +144,8 @@ class Repair(StrIndexMixin, ValidationWorkflow):
     The complete phase has the following dependency graph:
 
     .. graphviz:: Repair.dot
+
+    (click on steps in the image for more details)
     """
 
     __specifications__ = "Run the Repair phase."
