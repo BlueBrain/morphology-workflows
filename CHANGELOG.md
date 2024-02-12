@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.9.2](https://github.com/BlueBrain/morphology-workflows/compare/0.9.1..0.9.2)
+
+> 12 February 2024
+
+### New Features
+
+- Make the FixZeroDiameters, Unravel and RepairNeurites steps skippable (Adrien Berchet - [#135](https://github.com/BlueBrain/morphology-workflows/pull/135))
+
+### Documentation Changes
+
+- Make more clear that the dependency graphs are clickable (Adrien Berchet - [#139](https://github.com/BlueBrain/morphology-workflows/pull/139))
+- Fix some more links (Adrien Berchet - [#138](https://github.com/BlueBrain/morphology-workflows/pull/138))
+- Fix link to neuror.main.Repair (Adrien Berchet - [#137](https://github.com/BlueBrain/morphology-workflows/pull/137))
+
+### CI Improvements
+
+- Add CodeCov token (Adrien Berchet - [#136](https://github.com/BlueBrain/morphology-workflows/pull/136))
+
 ## [0.9.1](https://github.com/BlueBrain/morphology-workflows/compare/0.9.0..0.9.1)
 
 > 22 December 2023
