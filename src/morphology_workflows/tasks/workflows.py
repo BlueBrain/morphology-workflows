@@ -57,9 +57,11 @@ def save_reduced_df(df, data_dir, df_path="reduced_df.csv", parents=None):
 class Curate(StrIndexMixin, ValidationWorkflow):
     """Run Curation phase.
 
-    The complete phase has the following dependency graph (click on steps for more details):
+    The complete phase has the following dependency graph:
 
     .. graphviz:: Curate.dot
+
+    (click on steps in the image for more details)
     """
 
     __specifications__ = "Run the Curation phase."
@@ -98,9 +100,11 @@ class Curate(StrIndexMixin, ValidationWorkflow):
 class Annotate(StrIndexMixin, ValidationWorkflow):
     """Run Annotation phase.
 
-    The complete phase has the following dependency graph (click on steps for more details):
+    The complete phase has the following dependency graph:
 
     .. graphviz:: Annotate.dot
+
+    (click on steps in the image for more details)
     """
 
     __specifications__ = "Run the Annotation phase."
@@ -137,9 +141,11 @@ class Annotate(StrIndexMixin, ValidationWorkflow):
 class Repair(StrIndexMixin, ValidationWorkflow):
     """Run Repair phase.
 
-    The complete phase has the following dependency graph (click on steps for more details):
+    The complete phase has the following dependency graph:
 
     .. graphviz:: Repair.dot
+
+    (click on steps in the image for more details)
     """
 
     __specifications__ = "Run the Repair phase."
