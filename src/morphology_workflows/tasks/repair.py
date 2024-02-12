@@ -90,7 +90,7 @@ class Unravel(StrIndexMixin, SkippableMixin(), ElementValidationTask):
 
 
 class RepairNeurites(StrIndexMixin, SkippableMixin(), ElementValidationTask):
-    """RepairNeurites morphologies.
+    """Repair morphologies.
 
     Using the cut leaves, we recreate missing branches using :class:`neuror.main.Repair`.
 
@@ -243,9 +243,11 @@ class PlotRepair(StrIndexMixin, SkippableMixin(), ElementValidationTask):
 
 
 class SmoothDiameters(StrIndexMixin, SkippableMixin(True), SetValidationTask):
-    """Smooth diameters with :mod:`diameter_synthesis`.
+    """Smooth diameters.
 
-    We use actual diameters to learn a diameter model used to diametrize the morphology.
+    This tasks uses :func:`diameter_synthesis.build_models.build` to learn a diameter model from
+    the actual diameters which is then used by :func:`diameter_synthesis.build_diameters.build` to
+    diametrize the morphology.
 
     By default, this task is skipped.
     """
