@@ -158,7 +158,7 @@ class Sanitize(StrIndexMixin, ElementValidationTask):
     - raises if the morphology has a neurite whose type changes along the way
     - removes segments with near zero lengths (shorter than 1e-4)
 
-    Note that the :class:`tasks.curation.CheckNeurite` task adds a soma if missing, so a failure
+    Note that the :class:`tasks.curation.CheckNeurites` task adds a soma if missing, so a failure
     here means that the soma does not have a valid type.
     """
 
@@ -287,10 +287,10 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     - multifurcation
     - z-range (new error only present here, which check is the z thickness is larger than min_range)
 
-    This task uses NeuroR/neuror/error_annotation.py (https://github.com/BlueBrain/NeuroR),
-    and reproduuces part of what is in MorphService.
-    This task creates new .asc file with error annotated so it can be red by Neuroluscida,
-    and a MarkerSet container of the errors, for later plotting.
+    This task uses :func:`neuror.sanitize.annotate_neurolucida`.
+    This task creates new ``.asc`` file with error annotated so it can be red by Neuroluscida,
+    and a :class:`morphology_workflows.marker_helper.MarkerSet` container of the errors, for later
+    plotting.
     """
 
     output_columns = {
@@ -333,7 +333,10 @@ class PlotErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
 
 
 class ErrorsReport(StrIndexMixin, SkippableMixin(), SetValidationTask):
-    """Save error report for all morphologies."""
+    """Save error report for all morphologies.
+
+    From the detected errors in :class:`tasks.curation.DetectErrors`, create a CSV report.
+    """
 
     error_report_path = luigi.Parameter(
         default="error_report.csv", description=":str: Path to error report file in .csv"
@@ -352,7 +355,8 @@ class ErrorsReport(StrIndexMixin, SkippableMixin(), SetValidationTask):
 class Resample(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Resample morphologies.
 
-    This tasks ensures a constant sampling rate of points along all branches.
+    This tasks ensures a constant sampling rate of points along all branches
+    using the :func:`morph_tool.resampling.resample_linear_density` function.
     """
 
     output_columns = {"morph_path": None}
@@ -373,6 +377,8 @@ class PlotMorphologies(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot curated morphologies.
 
     This tasks creates a single pdf with all morphologies to visualise them after curation.
+
+    The PDF file is created using the :func:`neurom.view.matplotlib_impl.plot_morph` function.
     """
 
     output_columns = {"plot_path": None}

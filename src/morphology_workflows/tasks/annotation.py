@@ -155,7 +155,8 @@ class CutLeaves(StrIndexMixin, ElementValidationTask):
     """Detect the cut leaves.
 
     Cut leaves are considered to represent boundaries of slices of in-vitro reconstructions.
-    See :func:`neuror.cut_plane.cut_leaves` for more details on the algorithm and its parameters.
+    See :func:`neuror.cut_plane.cut_leaves.find_cut_leaves` for more details on the algorithm and
+    its parameters.
     """
 
     output_columns = {"cut_leaves_path": None, "cut_qualities": None}
