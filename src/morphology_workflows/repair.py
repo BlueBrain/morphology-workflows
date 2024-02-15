@@ -74,6 +74,7 @@ def _unravel_leaves(leaves, mapping):
     return mapping.iloc[indices][["x1", "y1", "z1"]].values
 
 
+@silent_loggers("neuror")
 def unravel(row, data_dir, window_half_length=10):
     """Unravel morphologies and update cut plane."""
     neuron, mapping = _unravel(row.morph_path, window_half_length=window_half_length)
@@ -340,6 +341,7 @@ def make_collage(  # noqa: PLR0913
                 plt.close()
 
 
+@silent_loggers("morph_tool.converter")
 def _convert(input_file, output_file):
     """Handles crashes in conversion of writing of morphologies."""
     try:
