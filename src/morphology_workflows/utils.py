@@ -92,7 +92,7 @@ def create_dataset_from_dir(dir_path, output_path):
 
     for i in dir_path.iterdir():
         if i.suffix.lower() in EXTS:
-            morph_files.append((i.with_suffix("").name, str(i)))
+            morph_files.append((i.with_suffix("").name, str(i.resolve())))
         else:
             L.info("The file '%s' is not detected as a morphology file and is thus discarded", i)
     df = pd.DataFrame(morph_files, columns=["morph_name", "morph_path"])
