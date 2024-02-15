@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.3](https://github.com/BlueBrain/morphology-workflows/compare/0.9.2..0.9.3)
+
+> 15 February 2024
+
+### Fixes
+
+- Use absolute paths in the dataset created by the Initialize workflow (Adrien Berchet - [#142](https://github.com/BlueBrain/morphology-workflows/pull/142))
+
 ## [0.9.2](https://github.com/BlueBrain/morphology-workflows/compare/0.9.1..0.9.2)
 
 > 12 February 2024
