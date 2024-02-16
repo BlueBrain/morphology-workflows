@@ -185,6 +185,7 @@ def plot_repair(row, data_dir, with_plotly=True):
 
 def smooth_diameters(row, data_dir):
     """Smooth diameters using diameter-synthesis simpler algorithm."""
+    print(row.morph_path)
     morph = Morphology(row.morph_path)
     diametrize_single_neuron(morph)
     morph_path = data_dir / Path(row.morph_path).name

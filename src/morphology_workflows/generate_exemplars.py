@@ -407,6 +407,7 @@ def plot_surface_comparison(surf_df, df, pdf_filename="surface_profile.pdf", sur
 
 def full_exemplar(df, surface_percentile=50, bin_params=None, figure_folder="full_exemplar"):
     """We create a full exemplar from the population."""
+    print(df)
     best_gid, surf_df = get_dendrite_exemplar(
         df, surface_percentile=surface_percentile, bin_params=bin_params
     )
@@ -428,9 +429,5 @@ def full_exemplar(df, surface_percentile=50, bin_params=None, figure_folder="ful
     return {
         "soma": soma_model["soma_model"],
         "ais": ais_model["ais_model"],
-<<<<<<< Updated upstream
-        "path": df.loc[best_gid, "path"],
-=======
         "path": str(Path(df.loc[best_gid, "path"]).resolve()),
->>>>>>> Stashed changes
     }
