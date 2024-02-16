@@ -552,7 +552,7 @@ def orient(row, data_dir, pia_direction="y"):
     morph = Morphology(row.morph_path)
 
     flip = False
-    if "-" in pia_direction:
+    if pia_direction[0] == "-":
         flip = True
         pia_direction = pia_direction[1:]
 
