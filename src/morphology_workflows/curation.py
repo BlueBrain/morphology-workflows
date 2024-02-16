@@ -552,10 +552,10 @@ def orient(row, data_dir, pia_direction="y"):
     morph = Morphology(row.morph_path)
 
     flip = False
-    if pia_direction[0] == "-":
+    if "-" in pia_direction[0]:
         flip = True
         pia_direction = pia_direction[1]
-elif len(pia_direction) > 1:
+    elif len(pia_direction) > 1:
         raise ValueError(f"Invalid 'pia_direction' argument: '{pia_direction}'")
 
     rotation_matrix = rotation_matrix_from_vectors(_convert[pia_direction], [0.0, 1.0, 0.0])
