@@ -199,6 +199,7 @@ class Orient(StrIndexMixin, ElementValidationTask):
         - ``x`` the other direction
 
     If ``y`` is provided (default value), no oriention will be applied.
+    One can also use minus sign, as ``-y`` to flip y axis.
     """
 
     output_columns = {"morph_path": None}

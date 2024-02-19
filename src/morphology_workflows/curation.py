@@ -1,4 +1,5 @@
 """Curation functions."""
+
 import json
 import logging
 import shutil
@@ -546,11 +547,21 @@ def recenter(row, data_dir):
 def orient(row, data_dir, pia_direction="y"):
     """Orient a morphology such that the original pia_direcion is along y."""
     new_morph_path = data_dir / Path(row.morph_path).name
-    _convert = {"x": [1.0, 0, 0], "z": [0.0, 0.0, 1.0]}
+    _convert = {"x": [1.0, 0, 0], "y": [0.0, 1.0, 0.0], "z": [0.0, 0.0, 1.0]}
+    _convert_id = {"x": 0, "y": 1, "z": 2}
     morph = Morphology(row.morph_path)
-    if pia_direction != "y":
-        rotation_matrix = rotation_matrix_from_vectors(_convert[pia_direction], [0.0, 1.0, 0.0])
-        rotate(morph, rotation_matrix)
+
+    flip = False
+    if "-" in pia_direction[0]:
+        flip = True
+        pia_direction = pia_direction[1]
+    elif len(pia_direction) > 1:
+        raise ValueError(f"Invalid 'pia_direction' argument: '{pia_direction}'")
+
+    rotation_matrix = rotation_matrix_from_vectors(_convert[pia_direction], [0.0, 1.0, 0.0])
+    if flip:
+        rotation_matrix[_convert_id[pia_direction], _convert_id[pia_direction]] *= -1
+    rotate(morph, rotation_matrix)
     morph.write(new_morph_path)
     return ValidationResult(is_valid=True, morph_path=new_morph_path)
 
