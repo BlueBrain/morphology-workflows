@@ -194,11 +194,13 @@ def sanitize(row, data_dir, ensure_roots_at_soma=True):
 
 def _center_root_points(morph):
     root_points = np.array([section.points[0, COLS.XYZ] for section in morph.root_sections])
-    center = np.mean(root_points, axis=0)
     if len(root_points) > 0:
+        center = np.mean(root_points, axis=0)
         dists = np.linalg.norm(root_points - center, axis=1)
         radius = max(1.0, dists.mean())
     else:
+        root_points = np.zeros((1, 3), dtype=float)
+        center = np.zeros(3, dtype=float)
         radius = 1.0
     return center, radius, root_points
 
