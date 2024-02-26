@@ -602,7 +602,8 @@ class TestCheckNeurites:
         )
 
     @pytest.mark.parametrize("nb_root_points", list(range(6)))
-    def test__add_soma_contour(self, nb_root_points):
+    @pytest.mark.parametrize("soma_type", ["contour", "spherical"])
+    def test__add_soma(self, nb_root_points, soma_type):
         """Test _add_soma for contour type with multiple numbers of root sections."""
         # pylint: disable=protected-access
         morph = Morphology()
@@ -619,13 +620,18 @@ class TestCheckNeurites:
             stub = PointLevel([np.array([x, y, z]), 2 * np.array([x, y, z])], [1, 1])
             morph.append_root_section(stub, SectionType.axon)
 
-        if nb_root_points < 2:
-            with pytest.raises(ValueError, match="At least 2 root points are needed"):
+        if soma_type == "contour":
+            if nb_root_points < 2:
+                with pytest.raises(ValueError, match="At least 2 root points are needed"):
+                    curation._add_soma(morph, soma_type="contour")  # noqa: SLF001
+            else:
                 curation._add_soma(morph, soma_type="contour")  # noqa: SLF001
-        else:
-            curation._add_soma(morph, soma_type="contour")  # noqa: SLF001
 
-            assert len(morph.soma.points) == max(4, nb_root_points)
+                assert len(morph.soma.points) == max(4, nb_root_points)
+        else:
+            curation._add_soma(morph, soma_type="spherical")  # noqa: SLF001
+
+            assert len(morph.soma.points) == 1
 
     def test_no_mock_but_stub(self, simple_morph, res_path):
         """Check neurites with no mock soma but with stub axon."""
