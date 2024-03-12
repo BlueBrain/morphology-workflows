@@ -5,6 +5,7 @@
 [![Coverage](https://codecov.io/github/BlueBrain/morphology-workflows/coverage.svg?branch=main)](https://codecov.io/github/BlueBrain/morphology-workflows?branch=main)
 [![License](https://img.shields.io/badge/License-Apache%202-blue)](https://github.com/BlueBrain/morphology-workflows/blob/main/LICENSE.txt)
 [![Documentation status](https://readthedocs.org/projects/morphology-workflows/badge/?version=latest)](https://morphology-workflows.readthedocs.io/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10809196.svg)](https://doi.org/10.5281/zenodo.10809196)
 
 
 # Morphology Workflows
@@ -235,6 +236,12 @@ This example can simply be run using the following command:
 This script will create a new directory ``out_curated`` which will contain the report and all the
 results.
 
+## Citation
+
+When you use this software, we kindly ask you to cite the following DOI:
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.10809196.svg
+  :target: https://doi.org/10.5281/zenodo.10809196
 
 ## Funding & Acknowledgment
 
