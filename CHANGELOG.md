@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.9.4](https://github.com/BlueBrain/morphology-workflows/compare/0.9.3..0.9.4)
+
+> 12 March 2024
+
+### New Features
+
+- Add sign flip in Orient (Alexis Arnaudon - [#144](https://github.com/BlueBrain/morphology-workflows/pull/144))
+
+### Fixes
+
+- The add_soma() function should work with no root point (Adrien Berchet - [#145](https://github.com/BlueBrain/morphology-workflows/pull/145))
+
 ## [0.9.3](https://github.com/BlueBrain/morphology-workflows/compare/0.9.2..0.9.3)
 
 > 15 February 2024
