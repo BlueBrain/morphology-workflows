@@ -18,13 +18,13 @@ from morphology_workflows.tasks.curation import EnsureNeuritesOutsideSoma
 from morphology_workflows.tasks.curation import ErrorsReport
 from morphology_workflows.tasks.curation import ExtractMarkers
 from morphology_workflows.tasks.curation import Orient
-from morphology_workflows.tasks.curation import PlotErrors
 from morphology_workflows.tasks.curation import PlotMarkers
 from morphology_workflows.tasks.curation import PlotMorphologies
 from morphology_workflows.tasks.curation import Recenter
 from morphology_workflows.tasks.curation import Resample
 from morphology_workflows.tasks.curation import Sanitize
 from morphology_workflows.tasks.repair import CollectAnnotated
+from morphology_workflows.tasks.repair import FinalCheck
 from morphology_workflows.tasks.repair import FixZeroDiameters
 from morphology_workflows.tasks.repair import MakeCollage
 from morphology_workflows.tasks.repair import MakeRelease
@@ -87,7 +87,6 @@ class Curate(StrIndexMixin, ValidationWorkflow):
                 "error_annotated_path": "error_annotated_path",
             },
             PlotMarkers: {},
-            PlotErrors: {},
             ErrorsReport: {},
             Align: {"rotation_matrix": "rotation_matrix"},
             EnsureNeuritesOutsideSoma: {},
@@ -193,6 +192,11 @@ class Repair(StrIndexMixin, ValidationWorkflow):
             PlotSmoothDiameters: {},
             PlotRepair: {},
             MakeCollage: {},
+            FinalCheck: {
+                "final_check_marker_path": "final_check_marker_path",
+                "final_check_annotated_path": "final_check_annotated_path",
+                "final_check_plot_path": "final_check_plot_path",
+            },
         }
 
         if self.make_release:
