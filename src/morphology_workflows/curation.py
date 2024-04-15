@@ -643,6 +643,7 @@ def detect_errors(row, data_dir, min_range=50, strict_labels=None, column_names=
 
     TODO: bypass dangling if only one axon/neurite
     """
+    # pylint: disable=too-many-locals
     if column_names is None:
         column_names = {
             "error_marker_path": "error_marker_path",
