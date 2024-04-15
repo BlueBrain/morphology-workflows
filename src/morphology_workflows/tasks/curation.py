@@ -18,7 +18,6 @@ from morphology_workflows.curation import extract_marker
 from morphology_workflows.curation import fix_neurites_in_soma
 from morphology_workflows.curation import make_error_report
 from morphology_workflows.curation import orient
-from morphology_workflows.curation import plot_errors
 from morphology_workflows.curation import plot_markers
 from morphology_workflows.curation import plot_morphology
 from morphology_workflows.curation import recenter
@@ -276,7 +275,7 @@ class EnsureNeuritesOutsideSoma(StrIndexMixin, SkippableMixin(True), ElementVali
 
 
 class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
-    """Detect errors in reconstructions.
+    """Detect and plot errors in reconstructions.
 
     Reconstructions may contain errors, which are detected here.
     They are of the following type:
@@ -289,7 +288,7 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     - z-range (new error only present here, which check is the z thickness is larger than min_range)
 
     This task uses :func:`neuror.sanitize.annotate_neurolucida`.
-    This task creates new ``.asc`` file with error annotated so it can be red by Neuroluscida,
+    This task creates new ``.asc`` file with error annotated so it can be red by Neurolucida,
     and a :class:`morphology_workflows.marker_helper.MarkerSet` container of the errors, for later
     plotting.
     """
@@ -297,6 +296,7 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     output_columns = {
         "error_marker_path": None,
         "error_annotated_path": None,
+        "error_plot_path": None,
         "error_summary": None,
     }
     validation_function = detect_errors
@@ -310,27 +310,6 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
 
     def inputs(self):
         return {CheckNeurites: {"morph_path": "morph_path"}}
-
-
-class PlotErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
-    """Plot detected errors.
-
-    From the detected errors in :class:`tasks.curation.DetectErrors`, plot them on the morphologies.
-    """
-
-    output_columns = {"plot_errors_path": ""}
-    validation_function = plot_errors
-
-    with_plotly = BoolParameter(default=True, description=":bool: Use Plotly for plotting")
-
-    def kwargs(self):
-        return {"with_plotly": self.with_plotly}
-
-    def inputs(self):
-        return {
-            Recenter: {"morph_path": "morph_path"},
-            DetectErrors: {"error_marker_path": "error_marker_path"},
-        }
 
 
 class ErrorsReport(StrIndexMixin, SkippableMixin(), SetValidationTask):

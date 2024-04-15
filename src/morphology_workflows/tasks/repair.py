@@ -10,6 +10,7 @@ from luigi_tools.parameter import BoolParameter
 from neuror.main import _PARAM_SCHEMA
 
 from morphology_workflows.curation import collect
+from morphology_workflows.curation import detect_errors
 from morphology_workflows.repair import fix_zero_diameters
 from morphology_workflows.repair import make_collage
 from morphology_workflows.repair import make_release
@@ -280,3 +281,46 @@ class PlotSmoothDiameters(StrIndexMixin, SkippableMixin(True), ElementValidation
             FixZeroDiameters: {"morph_path": "morph_path"},
             SmoothDiameters: {"morph_path": "smooth_morph_path"},
         }
+
+
+class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
+    """Detect and plot errors in curated morphologies.
+
+    The checks are the same as in the :class:`tasks.curation.DetectErrors` task.
+
+    This task uses :func:`neuror.sanitize.annotate_neurolucida`.
+    This task creates new ``.asc`` file with error annotated so it can be red by Neurolucida,
+    and a :class:`morphology_workflows.marker_helper.MarkerSet` container of the errors, for later
+    plotting.
+    """
+
+    output_columns = {
+        "final_check_marker_path": None,
+        "final_check_annotated_path": None,
+        "final_check_plot_path": None,
+        "final_check_summary": None,
+    }
+    validation_function = detect_errors
+
+    min_range = luigi.FloatParameter(
+        default=50, description=":float: Minimum z-range to be an error"
+    )
+    strict = BoolParameter(
+        default=True,
+        description=":bool: Morphologies with detected errors are marked as invalid.",
+    )
+
+    def kwargs(self):
+        return {
+            "min_range": self.min_range,
+            "strict": self.strict,
+            "column_names": {
+                "error_marker_path": "final_check_marker_path",
+                "error_annotated_path": "final_check_annotated_path",
+                "error_summary": "final_check_summary",
+                "error_plot_path": "final_check_plot_path",
+            },
+        }
+
+    def inputs(self):
+        return {RepairNeurites: {"morph_path": "morph_path"}}

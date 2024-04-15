@@ -638,11 +638,18 @@ def z_range(neuron, min_range=50):
     return CheckResult(abs(_max - _min) > min_range, [min_id, max_id])
 
 
-def detect_errors(row, data_dir, min_range=50):
+def detect_errors(row, data_dir, min_range=50, strict=False, column_names=None):
     """Detect errors in morphologies.
 
     TODO: bypass dangling if only one axon/neurite
     """
+    if column_names is None:
+        column_names = {
+            "error_marker_path": "error_marker_path",
+            "error_annotated_path": "error_annotated_path",
+            "error_summary": "error_summary",
+            "error_plot_path": "error_plot_path",
+        }
     checkers = {
         nc.has_no_fat_ends: {"name": "fat end", "label": "Circle3", "color": "Blue"},
         partial(nc.has_no_jumps, axis="z"): {
@@ -663,6 +670,7 @@ def detect_errors(row, data_dir, min_range=50):
             "label": "Circle2",
             "color": "Red",
         },
+        nc.has_no_back_tracking: {"name": "back-tracking", "label": "Circle5", "color": "Purple"},
     }
 
     annotations, error_summary, error_markers = annotate_neurolucida(
@@ -670,31 +678,32 @@ def detect_errors(row, data_dir, min_range=50):
     )
     markers = _convert_error_markers(row, error_markers)
     error_marker_path = None
+    plot_path = None
+    is_valid = True
     if len(markers) > 0:
         error_marker_path = (data_dir / row.name).with_suffix(".yaml")
-        MarkerSet.from_markers(markers).save(filename=error_marker_path)
+        marker_set = MarkerSet.from_markers(markers)
+        marker_set.save(filename=error_marker_path)
+        plot_path = (data_dir / row.name).with_suffix(".html")
+        marker_set.plot(filename=plot_path)
+        if strict:
+            is_valid = False
 
     new_morph_path = data_dir / Path(row.morph_path).name
     shutil.copy(row.morph_path, new_morph_path)
     with open(new_morph_path, "a", encoding="utf-8") as morph_file:
         morph_file.write(annotations)
 
+    res_data = {
+        column_names["error_marker_path"]: error_marker_path,
+        column_names["error_annotated_path"]: new_morph_path,
+        column_names["error_summary"]: json.dumps(error_summary),
+        column_names["error_plot_path"]: plot_path,
+    }
     return ValidationResult(
-        is_valid=True,
-        error_marker_path=error_marker_path,
-        error_annotated_path=new_morph_path,
-        error_summary=json.dumps(error_summary),
+        is_valid=is_valid,
+        **res_data,
     )
-
-
-def plot_errors(row, data_dir, with_plotly=True):
-    """Plot error markers."""
-    plot_path = None
-    if not row.isnull()["error_marker_path"] and with_plotly:
-        plot_path = (data_dir / row.name).with_suffix(".html")
-        MarkerSet.from_file(row.error_marker_path).plot(filename=plot_path)
-
-    return ValidationResult(is_valid=True, plot_errors_path=plot_path)
 
 
 def make_error_report(df, data_dir, error_report_path="error_report.csv"):
