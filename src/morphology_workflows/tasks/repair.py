@@ -291,7 +291,10 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     This task uses :func:`neuror.sanitize.annotate_neurolucida`.
     This task creates new ``.asc`` file with error annotated so it can be red by Neurolucida,
     and a :class:`morphology_workflows.marker_helper.MarkerSet` container of the errors, for later
-    plotting.
+    plotting. Basic plots are also exported when errors are detected
+
+    The ``strict_labels`` parameter can be used to select for which errors the morphologies are
+    considered as invalid..
     """
 
     output_columns = {
@@ -322,7 +325,7 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
                 ],
             },
         },
-        description=":bool: Morphologies with detected errors are marked as invalid.",
+        description=":bool: Morphologies with at least on of these errors are marked as invalid.",
     )
 
     def kwargs(self):
