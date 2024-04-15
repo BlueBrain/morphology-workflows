@@ -306,7 +306,7 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     )
 
     def kwargs(self):
-        return {"min_range": self.min_range}
+        return {"min_range": self.min_range, "strict_labels": []}
 
     def inputs(self):
         return {CheckNeurites: {"morph_path": "morph_path"}}

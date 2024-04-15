@@ -638,7 +638,7 @@ def z_range(neuron, min_range=50):
     return CheckResult(abs(_max - _min) > min_range, [min_id, max_id])
 
 
-def detect_errors(row, data_dir, min_range=50, strict=False, column_names=None):
+def detect_errors(row, data_dir, min_range=50, strict_labels=None, column_names=None):
     """Detect errors in morphologies.
 
     TODO: bypass dangling if only one axon/neurite
@@ -672,6 +672,8 @@ def detect_errors(row, data_dir, min_range=50, strict=False, column_names=None):
         },
         nc.has_no_back_tracking: {"name": "back-tracking", "label": "Circle5", "color": "Purple"},
     }
+    if strict_labels is None:
+        strict_labels = ["back-tracking"]
 
     annotations, error_summary, error_markers = annotate_neurolucida(
         row.morph_path, checkers=checkers
@@ -686,23 +688,24 @@ def detect_errors(row, data_dir, min_range=50, strict=False, column_names=None):
         marker_set.save(filename=error_marker_path)
         plot_path = (data_dir / row.name).with_suffix(".html")
         marker_set.plot(filename=plot_path)
-        if strict:
-            is_valid = False
+        for marker in marker_set.markers:
+            if str(marker.label).lower() in strict_labels or not is_valid:
+                is_valid = False
+                break
 
     new_morph_path = data_dir / Path(row.morph_path).name
     shutil.copy(row.morph_path, new_morph_path)
     with open(new_morph_path, "a", encoding="utf-8") as morph_file:
         morph_file.write(annotations)
 
-    res_data = {
-        column_names["error_marker_path"]: error_marker_path,
-        column_names["error_annotated_path"]: new_morph_path,
-        column_names["error_summary"]: json.dumps(error_summary),
-        column_names["error_plot_path"]: plot_path,
-    }
     return ValidationResult(
         is_valid=is_valid,
-        **res_data,
+        **{
+            column_names["error_marker_path"]: error_marker_path,
+            column_names["error_annotated_path"]: new_morph_path,
+            column_names["error_summary"]: json.dumps(error_summary),
+            column_names["error_plot_path"]: plot_path,
+        },
     )
 
 

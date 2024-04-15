@@ -305,15 +305,30 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     min_range = luigi.FloatParameter(
         default=50, description=":float: Minimum z-range to be an error"
     )
-    strict = BoolParameter(
-        default=True,
+    strict_labels = luigi.OptionalListParameter(
+        default=None,
+        schema={
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": [
+                    "fat end",
+                    "zjump",
+                    "narrow start",
+                    "multifurcation",
+                    "unifurcation",
+                    "z_range",
+                    "back-tracking",
+                ],
+            },
+        },
         description=":bool: Morphologies with detected errors are marked as invalid.",
     )
 
     def kwargs(self):
         return {
             "min_range": self.min_range,
-            "strict": self.strict,
+            "strict_labels": self.strict_labels,
             "column_names": {
                 "error_marker_path": "final_check_marker_path",
                 "error_annotated_path": "final_check_annotated_path",
