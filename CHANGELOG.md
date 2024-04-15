@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.10.0](https://github.com/BlueBrain/morphology-workflows/compare/0.9.4..0.10.0)
+
+> 15 April 2024
+
+### New Features
+
+- Merge DetectErrors and PlotErrors and add a similar FinalCheck task (Adrien Berchet - [#148](https://github.com/BlueBrain/morphology-workflows/pull/148))
+
+### Documentation Changes
+
+- Add Zenodo badge on the main page (#147) (Adrien Berchet - [e23e232](https://github.com/BlueBrain/morphology-workflows/commit/e23e232041bca2ed63006e6b60ace6666289df4d))
+
 ## [0.9.4](https://github.com/BlueBrain/morphology-workflows/compare/0.9.3..0.9.4)
 
 > 12 March 2024
