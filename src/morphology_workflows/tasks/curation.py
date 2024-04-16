@@ -121,6 +121,10 @@ class CheckNeurites(StrIndexMixin, ElementValidationTask):
         description=":bool: Add a stub axon if there is no axon on the morphology",
         default=False,
     )
+    ensure_single_axon = luigi.BoolParameter(
+        description=":bool: Keep only largest axon if multiple are present",
+        default=True,
+    )
     min_length_first_section = OptionalNumericalParameter(
         description=(
             ":float: Resize the first section to be at least of the given size (do nothing if None "
