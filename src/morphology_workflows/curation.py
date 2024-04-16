@@ -436,6 +436,16 @@ def _ensure_single_axon(morph):
             morph.delete_section(sec, recursive=True)
 
 
+def _remove_dummy_neurites(morph):
+    for root_section in morph.root_sections:
+        if (
+            not root_section.children
+            and root_section.points.shape[0] == 2
+            and abs(root_section.points[0] - root_section.points[1]) < 1e-5
+        ):
+            morph.delete_section(root_section)
+
+
 def check_neurites(
     row,
     data_dir,
@@ -456,6 +466,9 @@ def check_neurites(
 
     if ensure_single_axon:
         _ensure_single_axon(morph)
+
+    if _remove_dummy_neurites(morph):
+        _remove_dummy_neurites(morph)
 
     fix_root_section(morph, min_length_first_section)
     morph.write(new_morph_path)
