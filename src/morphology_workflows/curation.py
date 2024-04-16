@@ -441,7 +441,7 @@ def _remove_dummy_neurites(morph):
         if (
             not root_section.children
             and root_section.points.shape[0] == 2
-            and abs(root_section.points[0] - root_section.points[1]) < 1e-5
+            and np.linalg.norm(root_section.points[0] - root_section.points[1]) < 1e-5
         ):
             morph.delete_section(root_section)
 
@@ -453,6 +453,7 @@ def check_neurites(
     mock_soma_type="spherical",
     ensure_stub_axon=False,
     ensure_single_axon=True,
+    remove_dummy_neurites=True,
     min_length_first_section=_ZERO_LENGTH,
 ):
     """Check which neurites are present, add soma if missing and mock_soma_type is not None."""
@@ -467,7 +468,7 @@ def check_neurites(
     if ensure_single_axon:
         _ensure_single_axon(morph)
 
-    if _remove_dummy_neurites(morph):
+    if remove_dummy_neurites:
         _remove_dummy_neurites(morph)
 
     fix_root_section(morph, min_length_first_section)

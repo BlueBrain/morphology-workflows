@@ -1,4 +1,5 @@
 """Curation tasks."""
+
 import logging
 
 import luigi
@@ -125,6 +126,10 @@ class CheckNeurites(StrIndexMixin, ElementValidationTask):
         description=":bool: Keep only largest axon if multiple are present",
         default=True,
     )
+    remove_dummy_neurites = luigi.BoolParameter(
+        description=":bool: Remove neurites with two equal points",
+        default=True,
+    )
     min_length_first_section = OptionalNumericalParameter(
         description=(
             ":float: Resize the first section to be at least of the given size (do nothing if None "
@@ -142,6 +147,8 @@ class CheckNeurites(StrIndexMixin, ElementValidationTask):
             "mock_soma_type": self.mock_soma_type,
             "axon_n_section_min": self.axon_n_section_min,
             "ensure_stub_axon": self.ensure_stub_axon,
+            "ensure_single_axon": self.ensure_single_axon,
+            "remove_dummy_neurites": self.remove_dummy_neurites,
             "min_length_first_section": self.min_length_first_section,
         }
 
