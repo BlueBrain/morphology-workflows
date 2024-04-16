@@ -304,9 +304,17 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     min_range = luigi.FloatParameter(
         default=50, description=":float: Minimum z-range to be an error"
     )
+    duplicated_point_tolerance = luigi.FloatParameter(
+        default=1e-6, description=":float: Tolerance used to detect duplicated points"
+    )
 
     def kwargs(self):
-        return {"min_range": self.min_range, "strict_labels": []}
+        return {
+            "min_range": self.min_range,
+            "duplicated_point_tolernce": self.duplicated_point_tolerance,
+            "strict_checker_labels": [],
+            "disabled_checker_labels": ["back-tracking"],
+        }
 
     def inputs(self):
         return {CheckNeurites: {"morph_path": "morph_path"}}

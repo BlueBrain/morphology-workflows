@@ -220,6 +220,8 @@ morphology paths). Finally, the **Repair** workflow can generate morphology rele
 the final morphologies that could be validated and automatically fixed by the workflow. Usually
 these morphologies are the most relevant ones for later use.
 
+The morphologies marked as invalid may be fixed manually before rerunning the workflow on them.
+
 
 ## Examples
 

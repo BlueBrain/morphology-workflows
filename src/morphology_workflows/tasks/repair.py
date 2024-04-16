@@ -308,30 +308,37 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     min_range = luigi.FloatParameter(
         default=50, description=":float: Minimum z-range to be an error"
     )
-    strict_labels = luigi.OptionalListParameter(
+    duplicated_point_tolerance = luigi.FloatParameter(
+        default=1e-6, description=":float: Tolerance used to detect duplicated points"
+    )
+    strict_checker_labels = luigi.OptionalListParameter(
         default=None,
         schema={
             "type": "array",
             "items": {
                 "type": "string",
                 "enum": [
+                    "back-tracking",
+                    "dangling",
+                    "duplicated point",
                     "fat end",
-                    "zjump",
-                    "narrow start",
                     "multifurcation",
+                    "narrow start",
                     "unifurcation",
                     "z_range",
-                    "back-tracking",
+                    "zjump",
                 ],
             },
         },
-        description=":bool: Morphologies with at least on of these errors are marked as invalid.",
+        description=":bool: Morphologies with at least one of these errors are marked as invalid.",
     )
 
     def kwargs(self):
         return {
             "min_range": self.min_range,
-            "strict_labels": self.strict_labels,
+            "duplicated_point_tolernce": self.duplicated_point_tolerance,
+            "strict_checker_labels": self.strict_checker_labels,
+            "disabled_checker_labels": ["back-tracking"],
             "column_names": {
                 "error_marker_path": "final_check_marker_path",
                 "error_annotated_path": "final_check_annotated_path",
