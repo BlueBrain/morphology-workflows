@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1](https://github.com/BlueBrain/morphology-workflows/compare/0.10.0..0.10.1)
+
+> 17 April 2024
+
+### General Changes
+
+- Add check for overlapping points in neurites (Adrien Berchet - [#151](https://github.com/BlueBrain/morphology-workflows/pull/151))
+
 ## [0.10.0](https://github.com/BlueBrain/morphology-workflows/compare/0.9.4..0.10.0)
 
 > 15 April 2024
