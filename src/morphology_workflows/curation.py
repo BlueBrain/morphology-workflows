@@ -642,7 +642,7 @@ def detect_errors(
     row,
     data_dir,
     min_range=50,
-    duplicated_point_tolernce=None,
+    overlapping_point_tolernce=None,
     disabled_checker_labels=None,
     strict_checker_labels=None,
     column_names=None,
@@ -695,10 +695,10 @@ def detect_errors(
             nc.has_no_back_tracking,
             {"name": "back-tracking", "label": "Circle5", "color": "Purple"},
         ),
-        "duplicated point": (
-            partial(nc.has_no_duplicated_point, tolerance=duplicated_point_tolernce),
+        "overlapping point": (
+            partial(nc.has_no_overlapping_point, tolerance=overlapping_point_tolernce),
             {
-                "name": "duplicated point",
+                "name": "overlapping point",
                 "label": "Circle5",
                 "color": "Chocolate",
             },
@@ -718,7 +718,7 @@ def detect_errors(
     checkers = {v[0]: v[1] for k, v in all_checkers.items() if k not in disabled_checker_labels}
 
     if strict_checker_labels is None:
-        strict_checker_labels = ["duplicated point"]
+        strict_checker_labels = ["overlapping point"]
 
     annotations, error_summary, error_markers = annotate_neurolucida(
         row.morph_path, checkers=checkers

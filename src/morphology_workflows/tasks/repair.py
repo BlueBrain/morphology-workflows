@@ -300,7 +300,7 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     _checker_labels = [
         "back-tracking",
         "dangling",
-        "duplicated point",
+        "overlapping point",
         "fat end",
         "multifurcation",
         "narrow start",
@@ -318,10 +318,10 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     validation_function = detect_errors
 
     min_range = luigi.FloatParameter(
-        default=50, description=":float: Minimum z-range to be an error"
+        default=50, description=":float: Minimum z-range to be an error."
     )
-    duplicated_point_tolerance = luigi.FloatParameter(
-        default=1e-6, description=":float: Tolerance used to detect duplicated points"
+    overlapping_point_tolerance = luigi.FloatParameter(
+        default=1e-6, description=":float: Tolerance used to detect overlapping points."
     )
     disabled_checker_labels = luigi.ListParameter(
         default=["back-tracking"],
@@ -335,7 +335,7 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
         description=":list: The listed checkers will not be processed.",
     )
     strict_checker_labels = luigi.ListParameter(
-        default=["duplicated point"],
+        default=["overlapping point"],
         schema={
             "type": "array",
             "items": {
@@ -345,7 +345,7 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
         },
         description=":list: Morphologies with at least one of these errors are marked as invalid.",
     )
-    plot_errors = BoolParameter(default=True, description=":bool: Plot the detected errors")
+    plot_errors = BoolParameter(default=True, description=":bool: Plot the detected errors.")
 
     def kwargs(self):
         return {
@@ -356,7 +356,7 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
                 "error_plot_path": "final_check_plot_path",
             },
             "disabled_checker_labels": self.disabled_checker_labels,
-            "duplicated_point_tolernce": self.duplicated_point_tolerance,
+            "overlapping_point_tolernce": self.overlapping_point_tolerance,
             "min_range": self.min_range,
             "plot": self.plot_errors,
             "strict_checker_labels": self.strict_checker_labels,
