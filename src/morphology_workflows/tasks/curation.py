@@ -285,6 +285,7 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     - narrow start
     - dangling branch
     - multifurcation
+    - overlapping points
     - z-range (new error only present here, which check is the z thickness is larger than min_range)
 
     This task uses :func:`neuror.sanitize.annotate_neurolucida`.
@@ -304,9 +305,19 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     min_range = luigi.FloatParameter(
         default=50, description=":float: Minimum z-range to be an error"
     )
+    overlapping_point_tolerance = luigi.FloatParameter(
+        default=1e-6, description=":float: Tolerance used to detect overlapping points."
+    )
+    plot_errors = BoolParameter(default=True, description=":bool: Plot the detected errors")
 
     def kwargs(self):
-        return {"min_range": self.min_range, "strict_labels": []}
+        return {
+            "disabled_checker_labels": ["back-tracking"],
+            "overlapping_point_tolerance": self.overlapping_point_tolerance,
+            "min_range": self.min_range,
+            "plot": self.plot_errors,
+            "strict_checker_labels": [],
+        }
 
     def inputs(self):
         return {CheckNeurites: {"morph_path": "morph_path"}}

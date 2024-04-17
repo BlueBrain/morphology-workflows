@@ -638,12 +638,73 @@ def z_range(neuron, min_range=50):
     return CheckResult(abs(_max - _min) > min_range, [min_id, max_id])
 
 
-def detect_errors(row, data_dir, min_range=50, strict_labels=None, column_names=None):
+def detect_errors(
+    row,
+    data_dir,
+    min_range=50,
+    overlapping_point_tolerance=None,
+    disabled_checker_labels=None,
+    strict_checker_labels=None,
+    column_names=None,
+    plot=True,
+):
     """Detect errors in morphologies.
 
     TODO: bypass dangling if only one axon/neurite
     """
     # pylint: disable=too-many-locals
+    all_checkers = {
+        "fat end": (nc.has_no_fat_ends, {"name": "fat end", "label": "Circle3", "color": "Blue"}),
+        "zjump": (
+            partial(nc.has_no_jumps, axis="z"),
+            {
+                "name": "zjump",
+                "label": "Circle2",
+                "color": "Green",
+            },
+        ),
+        "narrow start": (
+            nc.has_no_narrow_start,
+            {"name": "narrow start", "label": "Circle1", "color": "Blue"},
+        ),
+        "dangling": (
+            nc.has_no_dangling_branch,
+            {"name": "dangling", "label": "Circle6", "color": "Magenta"},
+        ),
+        "multifurcation": (
+            nc.has_multifurcation,
+            {
+                "name": "Multifurcation",
+                "label": "Circle8",
+                "color": "Yellow",
+            },
+        ),
+        "unifurcation": (
+            nc.has_unifurcation,
+            {"name": "unifurcation", "label": "Circle8", "color": "Magenta"},
+        ),
+        "z_range": (
+            partial(z_range, min_range=min_range),
+            {
+                "name": "z_range",
+                "label": "Circle2",
+                "color": "Red",
+            },
+        ),
+        "back-tracking": (
+            nc.has_no_back_tracking,
+            {"name": "back-tracking", "label": "Circle5", "color": "Purple"},
+        ),
+        "overlapping point": (
+            partial(nc.has_no_overlapping_point, tolerance=overlapping_point_tolerance),
+            {
+                "name": "overlapping point",
+                "label": "Circle5",
+                "color": "Chocolate",
+            },
+        ),
+    }
+
     if column_names is None:
         column_names = {
             "error_marker_path": "error_marker_path",
@@ -651,30 +712,13 @@ def detect_errors(row, data_dir, min_range=50, strict_labels=None, column_names=
             "error_summary": "error_summary",
             "error_plot_path": "error_plot_path",
         }
-    checkers = {
-        nc.has_no_fat_ends: {"name": "fat end", "label": "Circle3", "color": "Blue"},
-        partial(nc.has_no_jumps, axis="z"): {
-            "name": "zjump",
-            "label": "Circle2",
-            "color": "Green",
-        },
-        nc.has_no_narrow_start: {"name": "narrow start", "label": "Circle1", "color": "Blue"},
-        nc.has_no_dangling_branch: {"name": "dangling", "label": "Circle6", "color": "Magenta"},
-        nc.has_multifurcation: {
-            "name": "Multifurcation",
-            "label": "Circle8",
-            "color": "Yellow",
-        },
-        nc.has_unifurcation: {"name": "unifurcation", "label": "Circle8", "color": "Magenta"},
-        partial(z_range, min_range=min_range): {
-            "name": "z_range",
-            "label": "Circle2",
-            "color": "Red",
-        },
-        nc.has_no_back_tracking: {"name": "back-tracking", "label": "Circle5", "color": "Purple"},
-    }
-    if strict_labels is None:
-        strict_labels = ["back-tracking"]
+
+    if disabled_checker_labels is None:
+        disabled_checker_labels = []
+    checkers = {v[0]: v[1] for k, v in all_checkers.items() if k not in disabled_checker_labels}
+
+    if strict_checker_labels is None:
+        strict_checker_labels = ["overlapping point"]
 
     annotations, error_summary, error_markers = annotate_neurolucida(
         row.morph_path, checkers=checkers
@@ -687,10 +731,11 @@ def detect_errors(row, data_dir, min_range=50, strict_labels=None, column_names=
         error_marker_path = (data_dir / row.name).with_suffix(".yaml")
         marker_set = MarkerSet.from_markers(markers)
         marker_set.save(filename=error_marker_path)
-        plot_path = (data_dir / row.name).with_suffix(".html")
-        marker_set.plot(filename=plot_path)
+        if plot:
+            plot_path = (data_dir / row.name).with_suffix(".html")
+            marker_set.plot(filename=plot_path)
         for marker in marker_set.markers:
-            if str(marker.label).lower() in strict_labels or not is_valid:
+            if str(marker.label).lower() in strict_checker_labels or not is_valid:
                 is_valid = False
                 break
 

@@ -297,6 +297,18 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     considered as invalid..
     """
 
+    _checker_labels = [
+        "back-tracking",
+        "dangling",
+        "overlapping point",
+        "fat end",
+        "multifurcation",
+        "narrow start",
+        "unifurcation",
+        "z_range",
+        "zjump",
+    ]
+
     output_columns = {
         "final_check_marker_path": None,
         "final_check_annotated_path": None,
@@ -306,38 +318,48 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     validation_function = detect_errors
 
     min_range = luigi.FloatParameter(
-        default=50, description=":float: Minimum z-range to be an error"
+        default=50, description=":float: Minimum z-range to be an error."
     )
-    strict_labels = luigi.OptionalListParameter(
-        default=None,
+    overlapping_point_tolerance = luigi.FloatParameter(
+        default=1e-6, description=":float: Tolerance used to detect overlapping points."
+    )
+    disabled_checker_labels = luigi.ListParameter(
+        default=["back-tracking"],
         schema={
             "type": "array",
             "items": {
                 "type": "string",
-                "enum": [
-                    "fat end",
-                    "zjump",
-                    "narrow start",
-                    "multifurcation",
-                    "unifurcation",
-                    "z_range",
-                    "back-tracking",
-                ],
+                "enum": _checker_labels,
             },
         },
-        description=":bool: Morphologies with at least on of these errors are marked as invalid.",
+        description=":list: The listed checkers will not be processed.",
     )
+    strict_checker_labels = luigi.ListParameter(
+        default=["overlapping point"],
+        schema={
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": _checker_labels,
+            },
+        },
+        description=":list: Morphologies with at least one of these errors are marked as invalid.",
+    )
+    plot_errors = BoolParameter(default=True, description=":bool: Plot the detected errors.")
 
     def kwargs(self):
         return {
-            "min_range": self.min_range,
-            "strict_labels": self.strict_labels,
             "column_names": {
                 "error_marker_path": "final_check_marker_path",
                 "error_annotated_path": "final_check_annotated_path",
                 "error_summary": "final_check_summary",
                 "error_plot_path": "final_check_plot_path",
             },
+            "disabled_checker_labels": self.disabled_checker_labels,
+            "overlapping_point_tolerance": self.overlapping_point_tolerance,
+            "min_range": self.min_range,
+            "plot": self.plot_errors,
+            "strict_checker_labels": self.strict_checker_labels,
         }
 
     def inputs(self):

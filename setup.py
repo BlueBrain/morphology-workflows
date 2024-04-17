@@ -13,7 +13,7 @@ reqs = [
     "morphapi>=0.2.1",
     "morph_tool>=2.10.1,<3.0",
     "morphio>=3.3.6,<4.0",
-    "neurom>=3.2.9,<4.0",
+    "neurom>=3.2.10,<4.0",
     "neuror>=1.6.3,<2.0",
     "numpy>=1.21",
     "pandas>=1.5",
@@ -26,6 +26,7 @@ reqs = [
 ]
 
 doc_reqs = [
+    "docutils<0.21",  # Temporary fix for m2r2
     "graphviz",
     "m2r2",
     "sphinx-argparse",
