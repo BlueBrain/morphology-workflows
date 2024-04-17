@@ -332,19 +332,21 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
         },
         description=":bool: Morphologies with at least one of these errors are marked as invalid.",
     )
+    plot_errors = BoolParameter(default=True, description=":bool: Plot the detected errors")
 
     def kwargs(self):
         return {
-            "min_range": self.min_range,
-            "duplicated_point_tolernce": self.duplicated_point_tolerance,
-            "strict_checker_labels": self.strict_checker_labels,
-            "disabled_checker_labels": ["back-tracking"],
             "column_names": {
                 "error_marker_path": "final_check_marker_path",
                 "error_annotated_path": "final_check_annotated_path",
                 "error_summary": "final_check_summary",
                 "error_plot_path": "final_check_plot_path",
             },
+            "disabled_checker_labels": ["back-tracking"],
+            "duplicated_point_tolernce": self.duplicated_point_tolerance,
+            "min_range": self.min_range,
+            "plot": self.plot_errors,
+            "strict_checker_labels": self.strict_checker_labels,
         }
 
     def inputs(self):

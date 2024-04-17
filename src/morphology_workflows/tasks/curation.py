@@ -307,13 +307,15 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     duplicated_point_tolerance = luigi.FloatParameter(
         default=1e-6, description=":float: Tolerance used to detect duplicated points"
     )
+    plot_errors = BoolParameter(default=True, description=":bool: Plot the detected errors")
 
     def kwargs(self):
         return {
-            "min_range": self.min_range,
-            "duplicated_point_tolernce": self.duplicated_point_tolerance,
-            "strict_checker_labels": [],
             "disabled_checker_labels": ["back-tracking"],
+            "duplicated_point_tolernce": self.duplicated_point_tolerance,
+            "min_range": self.min_range,
+            "plot": self.plot_errors,
+            "strict_checker_labels": [],
         }
 
     def inputs(self):

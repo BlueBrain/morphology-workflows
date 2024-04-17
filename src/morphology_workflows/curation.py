@@ -646,6 +646,7 @@ def detect_errors(
     disabled_checker_labels=None,
     strict_checker_labels=None,
     column_names=None,
+    plot=True,
 ):
     """Detect errors in morphologies.
 
@@ -699,7 +700,7 @@ def detect_errors(
             {
                 "name": "duplicated point",
                 "label": "Circle5",
-                "color": "Teal",
+                "color": "Chocolate",
             },
         ),
     }
@@ -730,8 +731,9 @@ def detect_errors(
         error_marker_path = (data_dir / row.name).with_suffix(".yaml")
         marker_set = MarkerSet.from_markers(markers)
         marker_set.save(filename=error_marker_path)
-        plot_path = (data_dir / row.name).with_suffix(".html")
-        marker_set.plot(filename=plot_path)
+        if plot:
+            plot_path = (data_dir / row.name).with_suffix(".html")
+            marker_set.plot(filename=plot_path)
         for marker in marker_set.markers:
             if str(marker.label).lower() in strict_checker_labels or not is_valid:
                 is_valid = False
