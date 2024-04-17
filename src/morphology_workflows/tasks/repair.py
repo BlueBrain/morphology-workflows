@@ -356,7 +356,7 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
                 "error_plot_path": "final_check_plot_path",
             },
             "disabled_checker_labels": self.disabled_checker_labels,
-            "overlapping_point_tolernce": self.overlapping_point_tolerance,
+            "overlapping_point_tolerance": self.overlapping_point_tolerance,
             "min_range": self.min_range,
             "plot": self.plot_errors,
             "strict_checker_labels": self.strict_checker_labels,

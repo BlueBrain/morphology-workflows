@@ -642,7 +642,7 @@ def detect_errors(
     row,
     data_dir,
     min_range=50,
-    overlapping_point_tolernce=None,
+    overlapping_point_tolerance=None,
     disabled_checker_labels=None,
     strict_checker_labels=None,
     column_names=None,
@@ -696,7 +696,7 @@ def detect_errors(
             {"name": "back-tracking", "label": "Circle5", "color": "Purple"},
         ),
         "overlapping point": (
-            partial(nc.has_no_overlapping_point, tolerance=overlapping_point_tolernce),
+            partial(nc.has_no_overlapping_point, tolerance=overlapping_point_tolerance),
             {
                 "name": "overlapping point",
                 "label": "Circle5",
