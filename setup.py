@@ -26,6 +26,7 @@ reqs = [
 ]
 
 doc_reqs = [
+    "docutils<0.21",  # Temporary fix for m2r2
     "graphviz",
     "m2r2",
     "sphinx-argparse",
