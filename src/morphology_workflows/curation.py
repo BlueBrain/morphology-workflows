@@ -436,6 +436,17 @@ def _ensure_single_axon(morph):
             morph.delete_section(sec, recursive=True)
 
 
+def _ensure_axon_at_soma(morph):
+    """Ensure axon is connected to soma."""
+    for root_section in morph.root_sections:
+        root_section_type = root_section.type
+        for section in root_section.iter():
+            if section.type != root_section_type:
+                morph.append_root_section(section)
+                morph.delete_section(section, recursive=True)
+                break
+
+
 def _remove_dummy_neurites(morph):
     for root_section in morph.root_sections:
         if (
@@ -465,6 +476,7 @@ def check_neurites(
     if ensure_stub_axon and not _has_axon(row.morph_path, n_section_min=0):
         _add_stub_axon(morph)
 
+    _ensure_axon_at_soma(morph)
     if ensure_single_axon:
         _ensure_single_axon(morph)
 
