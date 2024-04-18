@@ -430,7 +430,7 @@ def _ensure_single_axon(morph):
     sections = {}
     for root_section in morph.root_sections:
         if root_section.type == SectionType.axon:
-            sections[root_section] = len([s for s in root_section.iter()])
+            sections[root_section] = len(list(root_section.iter()))
     if len(sections) > 1:
         for sec in sorted(sections, key=sections.get, reverse=True)[1:]:
             morph.delete_section(sec, recursive=True)
