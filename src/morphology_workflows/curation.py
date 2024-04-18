@@ -457,7 +457,7 @@ def _remove_dummy_neurites(morph):
             morph.delete_section(root_section)
 
 
-def check_neurites(
+def check_neurites(  # noqa: PLR0913
     row,
     data_dir,
     axon_n_section_min=5,
