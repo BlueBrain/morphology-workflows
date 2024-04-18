@@ -464,6 +464,7 @@ def check_neurites(
     mock_soma_type="spherical",
     ensure_stub_axon=False,
     ensure_single_axon=True,
+    ensure_axon_at_soma=True,
     remove_dummy_neurites=True,
     min_length_first_section=_ZERO_LENGTH,
 ):
@@ -476,7 +477,8 @@ def check_neurites(
     if ensure_stub_axon and not _has_axon(row.morph_path, n_section_min=0):
         _add_stub_axon(morph)
 
-    _ensure_axon_at_soma(morph)
+    if ensure_axon_at_soma:
+        _ensure_axon_at_soma(morph)
     if ensure_single_axon:
         _ensure_single_axon(morph)
 

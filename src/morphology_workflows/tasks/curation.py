@@ -126,6 +126,10 @@ class CheckNeurites(StrIndexMixin, ElementValidationTask):
         description=":bool: Keep only largest axon if multiple are present",
         default=True,
     )
+    ensure_axon_at_soma = luigi.BoolParameter(
+        description=":bool: Ensure all axons are connected to the soma, and not dendrites",
+        default=True,
+    )
     remove_dummy_neurites = luigi.BoolParameter(
         description=":bool: Remove neurites with two equal points",
         default=True,
@@ -148,6 +152,7 @@ class CheckNeurites(StrIndexMixin, ElementValidationTask):
             "axon_n_section_min": self.axon_n_section_min,
             "ensure_stub_axon": self.ensure_stub_axon,
             "ensure_single_axon": self.ensure_single_axon,
+            "ensure_axon_at_soma": self.ensure_axon_at_soma,
             "remove_dummy_neurites": self.remove_dummy_neurites,
             "min_length_first_section": self.min_length_first_section,
         }

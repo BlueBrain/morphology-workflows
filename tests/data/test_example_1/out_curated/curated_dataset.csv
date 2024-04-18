@@ -20,7 +20,7 @@ simple,out_curated/DetectErrors/data/simple.asc,out_curated/DetectErrors/data/si
 simple-with-font,out_curated/DetectErrors/data/simple-with-font.asc,out_curated/DetectErrors/data/simple-with-font.yaml,False,False,True,,out_curated/Resample/data/simple-with-font.asc,L1_AAA:C,,"[0.0, 0.0, 0.0]"
 simple-with-image-coord,out_curated/DetectErrors/data/simple-with-image-coord.asc,out_curated/DetectErrors/data/simple-with-image-coord.yaml,False,False,True,,out_curated/Resample/data/simple-with-image-coord.asc,L1_AAA:C,,"[0.0, 0.0, 0.0]"
 simple2,out_curated/DetectErrors/data/simple2.asc,out_curated/DetectErrors/data/simple2.yaml,False,False,True,,out_curated/Resample/data/simple2.asc,L1_AAA:C,,"[0.0, 0.0, 0.0]"
-soma_cylinders,out_curated/DetectErrors/data/soma_cylinders.swc,out_curated/DetectErrors/data/soma_cylinders.yaml,False,False,False,,out_curated/Resample/data/soma_cylinders.swc,L1_AAA:C,,"[1.5, 0.0, 0.0]"
+soma_cylinders,out_curated/DetectErrors/data/soma_cylinders.swc,,False,False,False,,out_curated/Resample/data/soma_cylinders.swc,L1_AAA:C,,"[1.5, 0.0, 0.0]"
 soma_multiple_frustums,out_curated/DetectErrors/data/soma_multiple_frustums.swc,,False,False,False,,out_curated/Resample/data/soma_multiple_frustums.swc,L1_AAA:C,,"[1.5, 0.0, 0.0]"
 soma_single_frustum,out_curated/DetectErrors/data/soma_single_frustum.swc,,False,False,False,,out_curated/Resample/data/soma_single_frustum.swc,L1_AAA:C,,"[0.5, 0.0, 0.0]"
 soma_three_points_cylinder,out_curated/DetectErrors/data/soma_three_points_cylinder.swc,,False,False,False,,out_curated/Resample/data/soma_three_points_cylinder.swc,L1_AAA:C,,"[0.0, 0.0, 0.0]"
