@@ -425,12 +425,47 @@ def fix_root_section(morph, min_length=_ZERO_LENGTH):
         morph.delete_section(sec)
 
 
-def check_neurites(
+def _ensure_single_axon(morph):
+    """Keep only the largest axon if multiple are present."""
+    sections = {}
+    for root_section in morph.root_sections:
+        if root_section.type == SectionType.axon:
+            sections[root_section] = len(list(root_section.iter()))
+    if len(sections) > 1:
+        for sec in sorted(sections, key=sections.get, reverse=True)[1:]:
+            morph.delete_section(sec, recursive=True)
+
+
+def _ensure_axon_at_soma(morph):
+    """Ensure axon is connected to soma."""
+    for root_section in morph.root_sections:
+        root_section_type = root_section.type
+        for section in root_section.iter():
+            if section.type != root_section_type:
+                morph.append_root_section(section)
+                morph.delete_section(section, recursive=True)
+                break
+
+
+def _remove_dummy_neurites(morph):
+    for root_section in morph.root_sections:
+        if (
+            not root_section.children
+            and root_section.points.shape[0] == 2
+            and np.linalg.norm(root_section.points[0] - root_section.points[1]) < 1e-5
+        ):
+            morph.delete_section(root_section)
+
+
+def check_neurites(  # noqa: PLR0913
     row,
     data_dir,
     axon_n_section_min=5,
     mock_soma_type="spherical",
     ensure_stub_axon=False,
+    ensure_single_axon=True,
+    ensure_axon_at_soma=True,
+    remove_dummy_neurites=True,
     min_length_first_section=_ZERO_LENGTH,
 ):
     """Check which neurites are present, add soma if missing and mock_soma_type is not None."""
@@ -438,8 +473,18 @@ def check_neurites(
     morph = Morphology(row.morph_path)
     if mock_soma_type is not None:
         _add_soma(morph, mock_soma_type)
+
     if ensure_stub_axon and not _has_axon(row.morph_path, n_section_min=0):
         _add_stub_axon(morph)
+
+    if ensure_axon_at_soma:
+        _ensure_axon_at_soma(morph)
+    if ensure_single_axon:
+        _ensure_single_axon(morph)
+
+    if remove_dummy_neurites:
+        _remove_dummy_neurites(morph)
+
     fix_root_section(morph, min_length_first_section)
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(new_morph_path, n_section_min=axon_n_section_min))
