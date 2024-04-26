@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.11.0](https://github.com/BlueBrain/morphology-workflows/compare/0.10.1..0.11.0)
+
+> 26 April 2024
+
+### New Features
+
+- Move MakeRelease after FinalCheck to release only the valid morphologies (Adrien Berchet - [#153](https://github.com/BlueBrain/morphology-workflows/pull/153))
+- Ensure single axon, remove dummy dendrites and connect axon to soma (Alexis Arnaudon - [#150](https://github.com/BlueBrain/morphology-workflows/pull/150))
+
 ## [0.10.1](https://github.com/BlueBrain/morphology-workflows/compare/0.10.0..0.10.1)
 
 > 17 April 2024
