@@ -161,70 +161,6 @@ class MakeCollage(StrIndexMixin, SkippableMixin(), SetValidationTask):
         return {RepairNeurites: {"morph_path": "morph_path"}}
 
 
-class MakeRelease(StrIndexMixin, SetValidationTask):
-    """Make a morpology release, with three possible folders: zero-diameter, unravel or repair."""
-
-    release_path = luigi.OptionalParameter(
-        default=None,
-        description=":str: Path to the directory in which all the releases will be exported",
-    )
-    zero_diameter_path = luigi.OptionalParameter(
-        default=None, description=":str: Path to zero diameter morphologies (not created if None)"
-    )
-    unravel_path = luigi.OptionalParameter(
-        default=None, description=":str: Path to unravel morphologies (not created if None)"
-    )
-    repair_path = luigi.Parameter(
-        default="repaired_release",
-        description=":str: Path to repaired morphologies (not created if None)",
-    )
-    duplicate_layers = luigi.BoolParameter(
-        default=True, description=":bool: Duplicate entries with mixed layer mtypes, i.e. L23_PC."
-    )
-
-    nb_processes = luigi.OptionalIntParameter(
-        default=None,
-        description=":int: The number of parallel processes to use.",
-        significant=False,
-    )
-
-    extensions = [".asc", ".h5", ".swc"]
-    output_columns = {}
-    for extension in extensions:
-        ext = extension[1:]
-        output_columns.update(
-            {
-                f"zero_diameter_morph_db_path_{ext}": None,
-                f"unravel_morph_db_path_{ext}": None,
-                f"repair_morph_db_path_{ext}": None,
-                f"zero_diameter_release_morph_path_{ext}": None,
-                f"unravel_release_morph_path_{ext}": None,
-                f"repair_release_morph_path_{ext}": None,
-                "layer": None,
-            }
-        )
-
-    validation_function = make_release
-
-    def kwargs(self):
-        return {
-            "release_path": self.release_path,
-            "zero_diameter_path": self.zero_diameter_path,
-            "unravel_path": self.unravel_path,
-            "repair_path": self.repair_path,
-            "extensions": self.extensions,
-            "duplicate_layers": self.duplicate_layers,
-            "nb_processes": self.nb_processes,
-        }
-
-    def inputs(self):
-        return {
-            FixZeroDiameters: {"morph_path": "zero_diameter_morph_path"},
-            Unravel: {"morph_path": "unravel_morph_path"},
-            RepairNeurites: {"morph_path": "repair_morph_path"},
-        }
-
-
 class PlotRepair(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     """Plot the cut leaves on repaired cells."""
 
@@ -364,3 +300,67 @@ class FinalCheck(StrIndexMixin, SkippableMixin(), ElementValidationTask):
 
     def inputs(self):
         return {RepairNeurites: {"morph_path": "morph_path"}}
+
+
+class MakeRelease(StrIndexMixin, SetValidationTask):
+    """Make a morpology release, with three possible folders: zero-diameter, unravel or repair."""
+
+    release_path = luigi.OptionalParameter(
+        default=None,
+        description=":str: Path to the directory in which all the releases will be exported",
+    )
+    zero_diameter_path = luigi.OptionalParameter(
+        default=None, description=":str: Path to zero diameter morphologies (not created if None)"
+    )
+    unravel_path = luigi.OptionalParameter(
+        default=None, description=":str: Path to unravel morphologies (not created if None)"
+    )
+    repair_path = luigi.Parameter(
+        default="repaired_release",
+        description=":str: Path to repaired morphologies (not created if None)",
+    )
+    duplicate_layers = luigi.BoolParameter(
+        default=True, description=":bool: Duplicate entries with mixed layer mtypes, i.e. L23_PC."
+    )
+
+    nb_processes = luigi.OptionalIntParameter(
+        default=None,
+        description=":int: The number of parallel processes to use.",
+        significant=False,
+    )
+
+    extensions = [".asc", ".h5", ".swc"]
+    output_columns = {}
+    for extension in extensions:
+        ext = extension[1:]
+        output_columns.update(
+            {
+                f"zero_diameter_morph_db_path_{ext}": None,
+                f"unravel_morph_db_path_{ext}": None,
+                f"repair_morph_db_path_{ext}": None,
+                f"zero_diameter_release_morph_path_{ext}": None,
+                f"unravel_release_morph_path_{ext}": None,
+                f"repair_release_morph_path_{ext}": None,
+                "layer": None,
+            }
+        )
+
+    validation_function = make_release
+
+    def kwargs(self):
+        return {
+            "release_path": self.release_path,
+            "zero_diameter_path": self.zero_diameter_path,
+            "unravel_path": self.unravel_path,
+            "repair_path": self.repair_path,
+            "extensions": self.extensions,
+            "duplicate_layers": self.duplicate_layers,
+            "nb_processes": self.nb_processes,
+        }
+
+    def inputs(self):
+        return {
+            FixZeroDiameters: {"morph_path": "zero_diameter_morph_path"},
+            Unravel: {"morph_path": "unravel_morph_path"},
+            FinalCheck: {"morph_path": "repair_morph_path"},
+        }
