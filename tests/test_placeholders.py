@@ -321,7 +321,7 @@ def test_placeholders_aggregation_mode(prepare_dir, data_dir, default_config, co
     min_cols = [col for col in expected.columns if col[1].startswith("min_")]
     max_cols = [col for col in expected.columns if col[1].startswith("max_")]
     sum_cols = [col for col in expected.columns if col[1].startswith("sum_")]
-    tmp = expected.mean()
+    tmp = expected.mean(numeric_only=True)
     tmp.loc[expected.isnull().any()] = np.nan  # Fix columns with NaN values
     tmp[min_cols] = expected[min_cols].min()
     tmp[max_cols] = expected[max_cols].max()
