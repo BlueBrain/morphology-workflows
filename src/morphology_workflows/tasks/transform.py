@@ -1,18 +1,20 @@
 """Transformation phase (Optional)."""
+
 import logging
 
 import luigi
 from luigi_tools.parameter import BoolParameter
+
+from data_validation_framework.task import ElementValidationTask
+from data_validation_framework.task import SetValidationTask
+
 from morphology_workflows.curation import collect
 from morphology_workflows.repair import make_release
-
-from morphology_processing_workflow.tasks import ElementValidationTask
-from morphology_processing_workflow.tasks import SetValidationTask
-from morphology_processing_workflow.transform import apply_transformation
-from morphology_processing_workflow.transform import compare_transformed
-from morphology_processing_workflow.transform import learn_diameter_transform
-from morphology_processing_workflow.transform import learn_morphology_transform
-from morphology_processing_workflow.transform import learn_soma_transform
+from morphology_workflows.transform import apply_transformation
+from morphology_workflows.transform import compare_transformed
+from morphology_workflows.transform import learn_diameter_transform
+from morphology_workflows.transform import learn_morphology_transform
+from morphology_workflows.transform import learn_soma_transform
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,5 @@
 """Util functions."""
+
 import logging
 import re
 import shutil
@@ -185,3 +186,13 @@ def placeholders_to_nested_dict(df: pd.DataFrame) -> dict:
             target = target.setdefault(k, {})
         target[key[-1]] = value
     return result
+
+
+def import_morph(morph_path, new_morph_path, annotation_path, new_annotation_path):
+    """Copy a morphology and an annotation."""
+    if Path(morph_path).suffix != Path(new_morph_path).suffix:
+        convert(morph_path, new_morph_path)
+    else:
+        shutil.copy(morph_path, new_morph_path)
+    shutil.copy(annotation_path, new_annotation_path)
+    return Morphology(new_morph_path, options=Option.nrn_order)

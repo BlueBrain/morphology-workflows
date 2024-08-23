@@ -4,6 +4,7 @@ import json
 import logging
 import math
 import pprint
+from collections import namedtuple
 from collections import defaultdict
 from functools import partial
 from multiprocessing.pool import Pool
@@ -13,35 +14,33 @@ import luigi
 import pandas as pd
 from bluepyparallel import init_parallel_factory
 from data_validation_framework.result import ValidationResult
+from data_validation_framework.task import ElementValidationTask
+from data_validation_framework.task import SetValidationTask
 from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
-from morph_tool.morphdb import MorphInfo as MorphInfo_morphtool
+from morph_tool.morphdb import MorphInfo
 from morphology_workflows.curation import collect
 from neurom.core import Morphology
 from tqdm import tqdm
 
-from morphology_processing_workflow import morphdb
-from morphology_processing_workflow.clone import PlacementAnnotation
-from morphology_processing_workflow.clone import apply_scaling
-from morphology_processing_workflow.clone import collect_annotations
-from morphology_processing_workflow.clone import expand_mtype_to_layers
-from morphology_processing_workflow.clone import filter_missing_perimeter_morphs
-from morphology_processing_workflow.clone import get_category_overlap
-from morphology_processing_workflow.clone import get_cellcounts_from_recipe
-from morphology_processing_workflow.clone import graft_axons
-from morphology_processing_workflow.clone import make_clones
-from morphology_processing_workflow.clone import parse_morphdb_transform_rules
-from morphology_processing_workflow.clone import EXT
-from morphology_processing_workflow.clone import read_placement_rules
-from morphology_processing_workflow.morphdb import NEURONDB_XML
-from morphology_processing_workflow.morphdb import MorphInfo
-from morphology_processing_workflow.morphdb import MorphologyDB
-from morphology_processing_workflow.tasks import ElementValidationTask
-from morphology_processing_workflow.tasks import SetValidationTask
-from morphology_processing_workflow.utils import import_morph
+from morphology_workflows.clone import PlacementAnnotation
+from morphology_workflows.clone import apply_scaling
+from morphology_workflows.clone import collect_annotations
+from morphology_workflows.clone import expand_mtype_to_layers
+from morphology_workflows.clone import filter_missing_perimeter_morphs
+from morphology_workflows.clone import get_category_overlap
+from morphology_workflows.clone import get_cellcounts_from_recipe
+from morphology_workflows.clone import graft_axons
+from morphology_workflows.clone import make_clones
+from morphology_workflows.clone import parse_morphdb_transform_rules
+from morphology_workflows.clone import EXT
+from morphology_workflows.clone import read_placement_rules
+from morphology_workflows.utils import import_morph
 
 logger = logging.getLogger(__name__)
+Category = namedtuple("Category", "mtype layer")
+NEURONDB_XML = Path("neuronDB.xml")
 
 
 class CollectRepaired(ElementValidationTask):
@@ -102,6 +101,15 @@ class CollectAnnotations(ElementValidationTask):
             ret_code=ret_code,
             comment=comment,
         )
+
+
+def get_candidates_from_neurondb(neurondb):
+    """Returns a dict of 'Category' -> list of names."""
+    candidates = defaultdict(list)
+    for morph in neurondb:
+        candidates[Category(morph.mtype, morph.layer)].append(morph.name)
+
+    return dict(candidates)
 
 
 class CloneMorphologies(SetValidationTask):
@@ -300,7 +308,7 @@ class CloneMorphologies(SetValidationTask):
             with open(placement_rules_path, encoding="utf-8") as fd:
                 placement_rules = read_placement_rules(fd.read())
 
-        input_db = MorphologyDB(valid_morphs.iloc[0][morph_path_col])
+        input_db = MorphDB(valid_morphs.iloc[0][morph_path_col])
 
         graft_db = graft_axons(
             valid_morphs,
@@ -431,7 +439,7 @@ class CloneMorphologies(SetValidationTask):
 
         count_mapping = get_cellcounts_from_recipe(builder_recipe_path)
         logger.info("Expected Cell Counts:\n%s", pprint.pformat(count_mapping))
-        candidates = morphdb.get_candidates_from_neurondb(clone_db)
+        candidates = get_candidates_from_neurondb(clone_db)
 
         clone_counts = {
             category: int(
@@ -577,7 +585,7 @@ def _create_db_row(_data, clone_path, extension):
     """Create a db row and convert morphology."""
     index, data = _data
     mtype, layer = _get_layer_mtype(data)
-    m = MorphInfo_morphtool(
+    m = MorphInfo(
         name=data["name"], mtype=mtype, layer=layer, use_dendrite=True, use_axon=True
     )
 
