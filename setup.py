@@ -25,7 +25,7 @@ reqs = [
     "urllib3>=1.26,<2; python_version < '3.9'",
     "bluepyparallel>=0.2.2",
     "lxml>=4.5",
-    "neuroc>=0.2.8,<1.0",
+    "neuroc>=0.3.0,<1.0",
     "seaborn>=0.11",
 ]
 
