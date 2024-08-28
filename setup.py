@@ -22,6 +22,8 @@ reqs = [
     "rst2pdf>=0.99",
     "scipy>=1.8",
     "tqdm>=4.44",
+    "urllib3>=1.26,<2; python_version < '3.9'",
+    "bluepyparallel>=0.2.2",
 ]
 
 doc_reqs = [

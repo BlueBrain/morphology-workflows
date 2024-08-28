@@ -1,4 +1,5 @@
 """Test the complete workflow on the example."""
+
 # pylint: disable=redefined-outer-name
 import shutil
 
@@ -7,7 +8,7 @@ import numpy as np
 import pytest
 from dir_content_diff import assert_equal_trees
 
-from morphology_processing_workflow.tasks import workflows
+from morphology_workflows.tasks import workflows
 
 
 @pytest.fixture()
