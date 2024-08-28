@@ -1,15 +1,20 @@
 """Util functions."""
 
 import logging
+import hashlib
 import re
 import shutil
 import warnings
+from itertools import chain
 from contextlib import contextmanager
 from pathlib import Path
 
+import numpy as np
 import luigi
 import pandas as pd
 from luigi_tools.util import configparser_to_dict
+from morph_tool.converter import convert
+from morphio import Option
 from morphio.mut import Morphology
 from pkg_resources import resource_filename
 from tqdm import tqdm
@@ -196,3 +201,37 @@ def import_morph(morph_path, new_morph_path, annotation_path, new_annotation_pat
         shutil.copy(morph_path, new_morph_path)
     shutil.copy(annotation_path, new_annotation_path)
     return Morphology(new_morph_path, options=Option.nrn_order)
+
+
+def seed_from_name(name):
+    """Build a seed from the name hash."""
+    return int(hashlib.md5(name.encode("ascii")).hexdigest(), 16) % (2**32 - 1)
+
+
+def rng_from_name(name):
+    """Build a random number generator from the name hash."""
+    return np.random.default_rng(seed_from_name(name))
+
+
+def write_neuron(neuron: Morphology, filename):
+    """Write a NEURON ordered version of the morphology."""
+    Morphology(neuron, options=Option.nrn_order).write(filename)
+
+
+def compare_lists(l0, l1):
+    """Compare two sets of lists, returns sets of overlap, only in l0, and only in l1."""
+    l0_set = set(l0)
+    l1_set = set(l1)
+
+    overlap = l0_set & l1_set
+    only_in_l0 = l0_set - l1_set
+    only_in_l1 = l1_set - l0_set
+
+    return overlap, only_in_l0, only_in_l1
+
+
+def get_points(input_file):
+    """Get all points (soma, then neurites) from morphology."""
+    m = Morphology(input_file)
+    points = chain.from_iterable([[m.soma.points], [section.points for section in m.iter()]])
+    return np.vstack(list(points))

@@ -36,17 +36,17 @@ from neurom.core.types import NeuriteType
 from neurom.core.types import tree_type_checker
 from tqdm import tqdm
 
-from morphology_processing_workflow import morphdb
-from morphology_processing_workflow import utils
-from morphology_processing_workflow.morphdb import Category
-from morphology_processing_workflow.morphdb import MorphInfo
-from morphology_processing_workflow.morphdb import MorphologyDB
-from morphology_processing_workflow.utils import import_morph
-from morphology_processing_workflow.utils import rng_from_name
-from morphology_processing_workflow.utils import seed_from_name
-from morphology_processing_workflow.utils import write_neuron
+from morph_tool.morphdb import MorphInfo
+from morph_tool.morphdb import MorphDB
+from morphology_workflows.utils import import_morph
+from morphology_workflows.utils import rng_from_name
+from morphology_workflows.utils import seed_from_name
+from morphology_workflows.utils import write_neuron
+from morphology_workflows.utils import compare_lists
+from morphology_workflows.utils import get_points
 
 L = logging.getLogger(__name__)
+Category = namedtuple("Category", "mtype layer")
 
 
 # ########################################################################## #
@@ -78,16 +78,14 @@ def get_cellcounts_from_recipe(recipe_path):
         num_in_layer = math.ceil(total * float(layer_node.attrib["percentage"]) / 100.0)
         for structural_type_node in layer_node.findall("./StructuralType"):
             percentage = float(structural_type_node.attrib["percentage"]) / 100.0
-            category = morphdb.Category(structural_type_node.attrib["id"], layer_node.attrib["id"])
+            category = Category(structural_type_node.attrib["id"], layer_node.attrib["id"])
             category_to_cellcount[category] = math.ceil(num_in_layer * percentage)
     return category_to_cellcount
 
 
 def get_category_overlap(category_to_cellcount, candidates):
     """Finds the overlap of categories between the recipe and the neurondb."""
-    overlap, only_in_l0, only_in_l1 = utils.compare_lists(
-        category_to_cellcount.keys(), candidates.keys()
-    )
+    overlap, only_in_l0, only_in_l1 = compare_lists(category_to_cellcount.keys(), candidates.keys())
 
     if only_in_l0:
         # TODO: decide if this needs to be an exception
@@ -255,7 +253,7 @@ def _extract_y_indices(morph, segment_type, y_min, y_max):
 
 def _extract_y_extent(clone_path, indices):
     """Find y_min, y_max for morph, within indices."""
-    points = utils.get_points(clone_path)
+    points = get_points(clone_path)
     y_points = points[indices, COL_Y]
     return np.min(y_points), np.max(y_points)
 
@@ -415,7 +413,7 @@ def graft_axons(  # pylint: disable=too-many-arguments
     Args:
         input_path(str): path to input files
         output_path(str): path to output directory
-        input_neurondb (MorphologyDB): the input (previous phase) morphdb
+        input_neurondb (MorphDB): the input (previous phase) morphdb
         cross_mtypes(list): names of mytpes to be used for crossing, ex:  ['L23_PC', 'L4_PC', ...]
         placement_rules(dict): mapping of placement_rules as returned by `read_placement_rules`
         axon_hardlimit_name(str): named used in xml annotation file for axon y-extent
@@ -429,7 +427,7 @@ def graft_axons(  # pylint: disable=too-many-arguments
 
     missed_crossings = set()
 
-    output_neurondb = MorphologyDB()
+    output_neurondb = MorphDB()
 
     new_annotations_path = Path(output_path) / "annotations"
     new_annotations_path.mkdir(parents=True, exist_ok=True)

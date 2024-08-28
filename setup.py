@@ -24,6 +24,9 @@ reqs = [
     "tqdm>=4.44",
     "urllib3>=1.26,<2; python_version < '3.9'",
     "bluepyparallel>=0.2.2",
+    "lxml>=4.5",
+    "neuroc>=0.2.8,<1.0",
+    "seaborn>=0.11",
 ]
 
 doc_reqs = [
@@ -70,8 +73,8 @@ setup(
     extras_require={
         "docs": doc_reqs,
         "graphviz": ["graphviz"],
-        "test": test_reqs,
         "mouselight": ["brainglobe_atlasapi>=2"],
+        "test": test_reqs,
     },
     entry_points={
         "console_scripts": [
