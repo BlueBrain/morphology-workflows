@@ -486,6 +486,7 @@ def check_neurites(  # noqa: PLR0913
         _remove_dummy_neurites(morph)
 
     fix_root_section(morph, min_length_first_section)
+    morph.remove_unifurcations()
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(new_morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(new_morph_path))
