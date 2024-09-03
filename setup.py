@@ -38,7 +38,7 @@ doc_reqs = [
 test_reqs = [
     "dictdiffer>=0.8",
     "diff-pdf-visually>=1.7",
-    "dir-content-diff>=1.4",
+    "dir-content-diff>=1.9",
     "pytest>=6",
     "pytest-console-scripts>=1.4",
     "pytest-cov>=3",
@@ -69,7 +69,6 @@ setup(
     extras_require={
         "docs": doc_reqs,
         "test": test_reqs,
-        "allen_brain": ["allensdk>=2.13.5"],
         "mouselight": ["bg_atlasapi"],
     },
     entry_points={
@@ -85,10 +84,9 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
 )
