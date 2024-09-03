@@ -3,7 +3,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import dir_content_diff
-import dir_content_diff.pandas
+import dir_content_diff.comparators.pandas
 import luigi
 import pytest
 from luigi_tools.task import WorkflowTask
@@ -12,7 +12,7 @@ DATA = Path(__file__).parent / "data"
 EXAMPLES = Path(__file__).parent.parent / "examples"
 EXAMPLES_TEST = Path(__file__).parent / "examples_test"
 
-dir_content_diff.pandas.register()
+dir_content_diff.comparators.pandas.register()
 
 
 @pytest.fixture()

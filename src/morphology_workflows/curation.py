@@ -133,9 +133,9 @@ def plot_markers(row, data_dir, with_plotly=True):
                 else:
                     c = marker.plot_style.get("color", "r")
                     ms = marker.plot_style.get("width", 5) / 10
-                if marker.marker_type == "points":
+                if marker.marker_type != "line":
                     style = "o"
-                if marker.marker_type == "line":
+                else:
                     style = "-"
                 plt.plot(points[:, 0], points[:, 1], style, c=c, ms=ms)
             plot_path = (data_dir / row.name).with_suffix(".pdf")
@@ -486,6 +486,7 @@ def check_neurites(  # noqa: PLR0913
         _remove_dummy_neurites(morph)
 
     fix_root_section(morph, min_length_first_section)
+    morph.remove_unifurcations()
     morph.write(new_morph_path)
     has_axon = row.get("use_axon", _has_axon(new_morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(new_morph_path))
@@ -723,10 +724,6 @@ def detect_errors(
                 "label": "Circle8",
                 "color": "Yellow",
             },
-        ),
-        "unifurcation": (
-            nc.has_unifurcation,
-            {"name": "unifurcation", "label": "Circle8", "color": "Magenta"},
         ),
         "z_range": (
             partial(z_range, min_range=min_range),

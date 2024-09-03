@@ -10,19 +10,18 @@ reqs = [
     "luigi>=3.2",
     "luigi-tools>=0.3.3",
     "matplotlib>=3.4",
-    "morphapi>=0.2.1",
+    "morphapi>=0.3",
     "morph_tool>=2.10.1,<3.0",
     "morphio>=3.3.6,<4.0",
     "neurom>=3.2.10,<4.0",
     "neuror>=1.6.3,<2.0",
-    "numpy>=1.21",
+    "numpy>=1.23",
     "pandas>=1.5",
     "plotly-helper>=0.0.8,<1.0",
-    "PyYAML>=5.4",
+    "PyYAML>=6",
     "rst2pdf>=0.99",
-    "scipy>=1.6",
+    "scipy>=1.8",
     "tqdm>=4.44",
-    "urllib3>=1.26,<2; python_version < '3.9'",
 ]
 
 doc_reqs = [
@@ -38,8 +37,8 @@ doc_reqs = [
 test_reqs = [
     "dictdiffer>=0.8",
     "diff-pdf-visually>=1.7",
-    "dir-content-diff>=1.4",
-    "pytest>=6",
+    "dir-content-diff>=1.9",
+    "pytest>=7",
     "pytest-console-scripts>=1.4",
     "pytest-cov>=3",
     "pytest-html>=2",
@@ -60,7 +59,7 @@ setup(
     license="Apache License 2.0",
     packages=find_namespace_packages("src"),
     package_dir={"": "src"},
-    python_requires=">=3.8",
+    python_requires=">=3.10",
     use_scm_version=True,
     setup_requires=[
         "setuptools_scm",
@@ -68,9 +67,9 @@ setup(
     install_requires=reqs,
     extras_require={
         "docs": doc_reqs,
+        "graphviz": ["graphviz"],
         "test": test_reqs,
-        "allen_brain": ["allensdk>=2.13.5"],
-        "mouselight": ["bg_atlasapi"],
+        "mouselight": ["brainglobe_atlasapi>=2"],
     },
     entry_points={
         "console_scripts": [
@@ -85,10 +84,9 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
 )

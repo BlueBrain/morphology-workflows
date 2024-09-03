@@ -302,6 +302,7 @@ class DetectErrors(StrIndexMixin, SkippableMixin(), ElementValidationTask):
     - dangling branch
     - multifurcation
     - overlapping points
+    - back-tracking
     - z-range (new error only present here, which check is the z thickness is larger than min_range)
 
     This task uses :func:`neuror.sanitize.annotate_neurolucida`.

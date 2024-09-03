@@ -160,40 +160,7 @@ def test_allen(prepare_dir, data_dir):
 class TestMissingImports:
     """Test the errors raised when optional dependencies are not installed."""
 
-    @mock.patch.dict(sys.modules, {"morphapi.api.allenmorphology": None})
-    def test_allen(self, prepare_dir, data_dir):
-        """Test Allen Brain case."""
-
-        class FetchTmp(Fetch):
-            """Dummy task class to attach the event handler."""
-
-        task = FetchTmp(
-            source="Allen",
-            config_file=data_dir / "allen_config_download.json",
-            result_path=prepare_dir / "morphologies",
-        )
-
-        failed_tasks = []
-        exceptions = []
-
-        @FetchTmp.event_handler(luigi.Event.FAILURE)
-        def check_exception(failed_task, exception):
-            failed_tasks.append(str(failed_task))
-            exceptions.append(str(exception))
-
-        assert not luigi.build([task], local_scheduler=True)
-
-        assert failed_tasks == [
-            "FetchTmp(tag_output=False, source=Allen, config_file="
-            f"{data_dir / 'allen_config_download.json'}, "
-            f"result_path={prepare_dir / 'morphologies'})"
-        ]
-        assert exceptions == [
-            'You need to install the "allensdk" package to fetch morphologies from the Allen Brain '
-            'database: "pip install allensdk"'
-        ]
-
-    @mock.patch.dict(sys.modules, {"bg_atlasapi": None})
+    @mock.patch.dict(sys.modules, {"brainglobe_atlasapi": None})
     def test_mouselight(self, prepare_dir, data_dir):
         """Test MouseLight case."""
 
@@ -222,6 +189,6 @@ class TestMissingImports:
             f"result_path={prepare_dir / 'morphologies'})"
         ]
         assert exceptions == [
-            'You need to install the "bg_atlasapi" package to fetch morphologies from the '
-            'MouseLight database: "pip install bg_atlasapi"'
+            'You need to install the "brainglobe_atlasapi" package to fetch morphologies from the '
+            'MouseLight database: "pip install brainglobe_atlasapi"'
         ]
