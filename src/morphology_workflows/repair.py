@@ -396,14 +396,12 @@ def set_layer_column(df):
     for gid in df.index:
         if df.loc[gid, "layer"] is None:
             mtype = df.loc[gid, "mtype"]
-            if isinstance(mtype, str):
-                if len(mtype) > 1:
-                    try:
-                        layer = int(mtype[1])
-                    except ValueError:
-                        layer = 0
-            else:
-                layer = 0
+            layer = 0
+            if isinstance(mtype, str) and len(mtype) > 1:
+                try:
+                    layer = int(mtype[1])
+                except Exception:  # noqa: BLE001
+                    pass
             df.loc[gid, "layer"] = layer
             df.loc[gid, "mtype"] = mtype
 

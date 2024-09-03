@@ -133,9 +133,9 @@ def plot_markers(row, data_dir, with_plotly=True):
                 else:
                     c = marker.plot_style.get("color", "r")
                     ms = marker.plot_style.get("width", 5) / 10
-                if marker.marker_type == "points":
+                if marker.marker_type != "line":
                     style = "o"
-                if marker.marker_type == "line":
+                else:
                     style = "-"
                 plt.plot(points[:, 0], points[:, 1], style, c=c, ms=ms)
             plot_path = (data_dir / row.name).with_suffix(".pdf")

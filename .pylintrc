@@ -1,5 +1,6 @@
 [MESSAGES CONTROL]
 disable=
+	broad-exception-caught,
 	empty-docstring,
 	fixme,
 	invalid-name,
