@@ -725,10 +725,6 @@ def detect_errors(
                 "color": "Yellow",
             },
         ),
-        "unifurcation": (
-            nc.has_unifurcation,
-            {"name": "unifurcation", "label": "Circle8", "color": "Magenta"},
-        ),
         "z_range": (
             partial(z_range, min_range=min_range),
             {

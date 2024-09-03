@@ -11,6 +11,7 @@ from data_validation_framework.target import TaggedOutputLocalTarget
 from data_validation_framework.task import TagResultOutputMixin
 from luigi.parameter import PathParameter
 from luigi_tools.task import WorkflowTask
+from morphapi.api.allenmorphology import AllenMorphology
 from morphapi.api.mouselight import MouseLightAPI
 from morphapi.api.neuromorphorg import NeuroMorpOrgAPI
 
@@ -109,11 +110,11 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
         """Download morphologies from the MouseLight database."""
         try:
             # pylint: disable=import-outside-toplevel
-            from bg_atlasapi import BrainGlobeAtlas
+            from brainglobe_atlasapi import BrainGlobeAtlas
         except ImportError as exc:
             raise ImportError(  # noqa: TRY003
-                'You need to install the "bg_atlasapi" package to fetch morphologies from the '
-                'MouseLight database: "pip install bg_atlasapi"'
+                'You need to install the "brainglobe_atlasapi" package to fetch morphologies from '
+                'the MouseLight database: "pip install brainglobe_atlasapi"'
             ) from exc
         api = MouseLightAPI()
         api.mouselight_cache = self.output()["morphologies"].pathlib_path
@@ -153,14 +154,6 @@ class Fetch(TagResultOutputMixin, WorkflowTask):
     @silent_loggers("allensdk.api.api", "allensdk.api.api.retrieve_file_over_http")
     def allen_download(self, config):
         """Download morphologies from the Allen database."""
-        try:
-            # pylint: disable=import-outside-toplevel
-            from morphapi.api.allenmorphology import AllenMorphology
-        except ImportError as exc:
-            raise ImportError(  # noqa: TRY003
-                'You need to install the "allensdk" package to fetch morphologies from the '
-                'Allen Brain database: "pip install allensdk"'
-            ) from exc
         api = AllenMorphology()
         api.allen_morphology_cache = self.output()["morphologies"].pathlib_path
         api.allen_morphology_cache.mkdir(parents=True, exist_ok=True)
