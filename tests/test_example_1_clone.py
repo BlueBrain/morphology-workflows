@@ -31,7 +31,7 @@ def example_1_clone(tmp_working_dir, examples_dir):
 
     # Set current config in luigi
     luigi_config = luigi.configuration.get_config()
-    luigi_config.read("./luigi.cfg")
+    luigi_config.read(examples_dir / "clone" / "luigi.cfg")
 
     yield tmp_working_dir
 
