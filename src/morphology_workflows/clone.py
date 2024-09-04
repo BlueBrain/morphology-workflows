@@ -297,11 +297,11 @@ def _filter_graft_inputs(df, neurondb, cross_mtypes):
     morph_names_layers = defaultdict(set)
 
     morphs = []
-    for morph in neurondb:
-        morph_names_layers[morph.name].add(morph.layer)
-        if len(morph_names_layers[morph.name]) > 1:
+    for _, morph in neurondb.df.iterrows():
+        morph_names_layers[morph["name"]].add(morph["layer"])
+        if len(morph_names_layers[morph["name"]]) > 1:
             continue
-        morphs.append(morph.name)
+        morphs.append(morph["name"])
 
     cross_morphs = df.loc[(df.index.isin(morphs)) & (df["mtype"].isin(cross_mtypes))]
 
@@ -371,7 +371,7 @@ def _record_grafts(  # pylint: disable=too-many-arguments
         morph_info.dendrite_donor = recipient
         morph_info.axon_donor = src_axon
 
-        new_neurondb.add_morph(morph_info)
+        new_neurondb += MorphDB([morph_info])
         _create_graft_annotation(
             annotations_path,
             morph,

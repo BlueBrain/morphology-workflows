@@ -294,6 +294,7 @@ class CloneMorphologies(SetValidationTask):
         """Graft axons to morphologies."""
         # Remove morphologies with perimeters
         filter_missing_perimeter_morphs(df)
+        print(df)
 
         valid_morphs = df.loc[df["is_valid"]]
 
@@ -307,7 +308,7 @@ class CloneMorphologies(SetValidationTask):
             with open(placement_rules_path, encoding="utf-8") as fd:
                 placement_rules = read_placement_rules(fd.read())
 
-        input_db = MorphDB(valid_morphs.iloc[0][morph_path_col])
+        input_db = MorphDB.from_neurondb(valid_morphs.iloc[0][morph_path_col])
 
         graft_db = graft_axons(
             valid_morphs,
@@ -322,13 +323,13 @@ class CloneMorphologies(SetValidationTask):
         # Add initial morphologies which have use_axon and use_dendrites to True
         graft_annotations_path = Path(graft_dir) / "annotations"
         graft_annotations_path.mkdir(parents=True, exist_ok=True)
-        for morph_info in input_db:
-            if morph_info.use_axon and morph_info.use_dendrites:
-                morph_name = morph_info.name
+        for _, morph_info in input_db.df.iterrows():
+            if morph_info["use_axon"] and morph_info["use_dendrites"]:
+                morph_name = morph_info["name"]
                 morph_path, morph_annotation_path = df.loc[
                     morph_name, ["morph_path", "annotation_path"]
                 ]
-                graft_db.add_morph(morph_info)
+                graft_db.df = pd.concat([graft_db.df, morph_info])
                 import_morph(
                     morph_path,
                     graft_dir / (morph_name + ".h5"),
@@ -336,7 +337,7 @@ class CloneMorphologies(SetValidationTask):
                     graft_annotations_path,
                 )
 
-        graft_db.sort()
+        graft_db.df.sort_values(by="name", inplace=True)
         CloneMorphologies._write_db(graft_db, graft_dir)
         return graft_db, graft_dir, placement_rules
 
