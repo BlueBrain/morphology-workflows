@@ -12,16 +12,22 @@ from morphology_workflows.tasks import workflows
 
 
 @pytest.fixture()
-def example_1(tmp_working_dir, examples_dir):
+def example_1_clone(tmp_working_dir, examples_dir):
     """Setup the working directory."""
-    shutil.copyfile(examples_dir / "logging.conf", tmp_working_dir / "logging.conf")
-    shutil.copyfile(examples_dir / "luigi.cfg", tmp_working_dir / "luigi.cfg")
-    shutil.copyfile(examples_dir / "dataset.csv", tmp_working_dir / "dataset.csv")
-    shutil.copyfile(examples_dir / "builder_recipe.xml", tmp_working_dir / "builder_recipe.xml")
-    shutil.copyfile(examples_dir / "placement_rules.xml", tmp_working_dir / "placement_rules.xml")
-    shutil.copyfile(examples_dir / "transform_rules.xml", tmp_working_dir / "transform_rules.xml")
-    shutil.copytree(examples_dir / "out_repaired", tmp_working_dir / "out_repaired")
-    shutil.copytree(examples_dir / "repair_release", tmp_working_dir / "repair_release")
+    shutil.copyfile(examples_dir / "clone" / "logging.conf", tmp_working_dir / "logging.conf")
+    shutil.copyfile(examples_dir / "clone" / "luigi.cfg", tmp_working_dir / "luigi.cfg")
+    shutil.copyfile(examples_dir / "clone" / "dataset.csv", tmp_working_dir / "dataset.csv")
+    shutil.copyfile(
+        examples_dir / "clone" / "builder_recipe.xml", tmp_working_dir / "builder_recipe.xml"
+    )
+    shutil.copyfile(
+        examples_dir / "clone" / "placement_rules.xml", tmp_working_dir / "placement_rules.xml"
+    )
+    shutil.copyfile(
+        examples_dir / "clone" / "transform_rules.xml", tmp_working_dir / "transform_rules.xml"
+    )
+    shutil.copytree(examples_dir / "clone" / "out_repaired", tmp_working_dir / "out_repaired")
+    shutil.copytree(examples_dir / "clone" / "repair_release", tmp_working_dir / "repair_release")
 
     # Set current config in luigi
     luigi_config = luigi.configuration.get_config()
@@ -33,16 +39,16 @@ def example_1(tmp_working_dir, examples_dir):
     luigi_config.clear()
 
 
-def test_example_1(example_1, data_dir):
+def test_example_1_clone(example_1_clone, data_dir):
     """Test the workflow on the example."""
     np.random.seed(0)
-    out_dir_pattern = (str(example_1) + "/?", "")
+    out_dir_pattern = (str(example_1_clone) + "/?", "")
 
     # Run the Clone workflow
     assert luigi.build([workflows.Clone()], local_scheduler=True)
 
     # Define post-processes to check the results
-    clone_expected_dir = data_dir / "test_example_1" / "out_clone"
+    clone_expected_dir = data_dir / "test_example_1_clone" / "out_clone"
     clone_specific_args = {
         "clone_dataset.csv": {
             "format_data_kwargs": {
@@ -117,5 +123,5 @@ def test_example_1(example_1, data_dir):
 
     # Check the results
     assert_equal_trees(
-        clone_expected_dir, example_1 / "out_clone", specific_args=clone_specific_args
+        clone_expected_dir, example_1_clone / "out_clone", specific_args=clone_specific_args
     )

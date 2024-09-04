@@ -1,0 +1,24 @@
+__index_label__,is_valid,ret_code,comment,exception,morph_path,annotation_path
+C060114A5,True,0,,,out_clone/CollectRepaired/data/C060114A5.asc,out_clone/CollectAnnotations/data/C060114A5.xml
+C270106A,True,0,,,out_clone/CollectRepaired/data/C270106A.asc,out_clone/CollectAnnotations/data/C270106A.xml
+astrocyte,False,1,The morphologies with perimeters can not be used for axon grafting,,out_clone/CollectRepaired/data/astrocyte.h5,out_clone/CollectAnnotations/data/astrocyte.xml
+circle_contour,True,0,,,out_clone/CollectRepaired/data/circle_contour.asc,out_clone/CollectAnnotations/data/circle_contour.xml
+complexe,True,0,,,out_clone/CollectRepaired/data/complexe.swc,out_clone/CollectAnnotations/data/complexe.xml
+disconnected_neurite,True,0,,,out_clone/CollectRepaired/data/disconnected_neurite.swc,out_clone/CollectAnnotations/data/disconnected_neurite.xml
+iterators,True,0,,,out_clone/CollectRepaired/data/iterators.asc,out_clone/CollectAnnotations/data/iterators.xml
+mono-type,True,0,,,out_clone/CollectRepaired/data/mono-type.asc,out_clone/CollectAnnotations/data/mono-type.xml
+multiple_point_section,True,0,,,out_clone/CollectRepaired/data/multiple_point_section.asc,out_clone/CollectAnnotations/data/multiple_point_section.xml
+nested_single_children,True,0,,,out_clone/CollectRepaired/data/nested_single_children.asc,out_clone/CollectAnnotations/data/nested_single_children.xml
+neurite_wrong_root_point,True,0,,,out_clone/CollectRepaired/data/neurite_wrong_root_point.swc,out_clone/CollectAnnotations/data/neurite_wrong_root_point.xml
+nrn-order-already-sorted,True,0,,,out_clone/CollectRepaired/data/nrn-order-already-sorted.h5,out_clone/CollectAnnotations/data/nrn-order-already-sorted.xml
+nrn_ordering,True,0,,,out_clone/CollectRepaired/data/nrn_ordering.swc,out_clone/CollectAnnotations/data/nrn_ordering.xml
+pia,True,0,,,out_clone/CollectRepaired/data/pia.asc,out_clone/CollectAnnotations/data/pia.xml
+reversed_NRN_neurite_order,True,0,,,out_clone/CollectRepaired/data/reversed_NRN_neurite_order.swc,out_clone/CollectAnnotations/data/reversed_NRN_neurite_order.xml
+rp100427-123_idC,True,0,,,out_clone/CollectRepaired/data/rp100427-123_idC.asc,out_clone/CollectAnnotations/data/rp100427-123_idC.xml
+sections-block,True,0,,,out_clone/CollectRepaired/data/sections-block.asc,out_clone/CollectAnnotations/data/sections-block.xml
+simple,True,0,,,out_clone/CollectRepaired/data/simple.asc,out_clone/CollectAnnotations/data/simple.xml
+simple-with-font,True,0,,,out_clone/CollectRepaired/data/simple-with-font.asc,out_clone/CollectAnnotations/data/simple-with-font.xml
+simple-with-image-coord,True,0,,,out_clone/CollectRepaired/data/simple-with-image-coord.asc,out_clone/CollectAnnotations/data/simple-with-image-coord.xml
+simple2,True,0,,,out_clone/CollectRepaired/data/simple2.asc,out_clone/CollectAnnotations/data/simple2.xml
+spine,True,0,,,out_clone/CollectRepaired/data/spine.asc,out_clone/CollectAnnotations/data/spine.xml
+three_point_soma,True,0,,,out_clone/CollectRepaired/data/three_point_soma.swc,out_clone/CollectAnnotations/data/three_point_soma.xml

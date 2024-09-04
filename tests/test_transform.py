@@ -1,4 +1,5 @@
 """Test the transform phase."""
+
 # pylint: disable=redefined-outer-name
 import shutil
 
@@ -13,14 +14,19 @@ from morphology_workflows.tasks import workflows
 @pytest.fixture()
 def example_transform(tmp_working_dir, examples_dir):
     """Setup the working directory."""
-    shutil.copyfile(examples_dir / "logging.conf", tmp_working_dir / "logging.conf")
-    shutil.copyfile(examples_dir / "luigi.cfg", tmp_working_dir / "luigi.cfg")
+    shutil.copyfile(examples_dir / "transform" / "logging.conf", tmp_working_dir / "logging.conf")
+    shutil.copyfile(examples_dir / "transform" / "luigi.cfg", tmp_working_dir / "luigi.cfg")
     shutil.copyfile(
-        examples_dir / "transform_dataset.csv", tmp_working_dir / "transform_dataset.csv"
+        examples_dir / "transform" / "transform_dataset.csv",
+        tmp_working_dir / "transform_dataset.csv",
     )
-    shutil.copyfile(examples_dir / "mouse_dataset.csv", tmp_working_dir / "mouse_dataset.csv")
-    shutil.copytree(examples_dir / "morphologies", tmp_working_dir / "morphologies")
-    shutil.copytree(examples_dir / "mouse_morphologies", tmp_working_dir / "mouse_morphologies")
+    shutil.copyfile(
+        examples_dir / "transform" / "mouse_dataset.csv", tmp_working_dir / "mouse_dataset.csv"
+    )
+    shutil.copytree(examples_dir / "transform" / "morphologies", tmp_working_dir / "morphologies")
+    shutil.copytree(
+        examples_dir / "transform" / "mouse_morphologies", tmp_working_dir / "mouse_morphologies"
+    )
 
     # Set current config in luigi
     luigi_config = luigi.configuration.get_config()

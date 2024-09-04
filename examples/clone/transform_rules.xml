@@ -1,0 +1,19 @@
+<rules>
+    <exclude name="Excluded0"/>
+    <exclude name="Excluded1"/>
+    <exclude name="Excluded0"/> <!-- added twice -->
+    <exclude name="C230998A-I3"/>
+
+    <substitute from="L1_fake_type0" to="L4_MC"/>
+
+    <substitute from="L1_fake_type1" to="L23_NGC"/>
+
+    <substitute from="L1_fake_type2" to="L4_MC"/>
+    <substitute from="L1_fake_type2" to="L6_MC"/>
+
+    <substitute from="L1_DAC" to="L2_substituted_type:A"/>
+
+    <mtype_copy_to_layer mtype="L1_HAC" src_layer="1" dst_layer="3" />
+    <mtype_copy_to_layer mtype="L1_AAA:C" src_layer="1" dst_layer="3" />
+    <mtype_copy_to_layer mtype="L2_substituted_type:A" src_layer="2" dst_layer="3" />
+</rules>

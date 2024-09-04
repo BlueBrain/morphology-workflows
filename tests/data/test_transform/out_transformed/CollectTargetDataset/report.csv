@@ -1,0 +1,3 @@
+__index_label__,is_valid,ret_code,comment,exception,morph_path,has_apical,has_axon,has_basal,cut_leaves_path,apical_point_path,mtype
+ak171117_A_idA,True,0,,,out_transformed/CollectTargetDataset/data/ak171117_A_idA.asc,,,,,,L5_IN
+ak171120_A_idA,True,0,,,out_transformed/CollectTargetDataset/data/ak171120_A_idA.asc,,,,,,L5_IN

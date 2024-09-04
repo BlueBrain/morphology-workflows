@@ -1,0 +1,702 @@
+{
+  "dend-simple-with-font_axon-nrn-order-already-sorted": {
+    "dendrite": "simple-with-font",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-spine_axon-nrn-order-already-sorted": {
+    "dendrite": "spine",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted": {
+    "dendrite": "nrn_ordering",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted": {
+    "dendrite": "sections-block",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted": {
+    "dendrite": "disconnected_neurite",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted": {
+    "dendrite": "mono-type",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted": {
+    "dendrite": "iterators",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-simple_axon-nrn-order-already-sorted": {
+    "dendrite": "simple",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted": {
+    "dendrite": "three_point_soma",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted": {
+    "dendrite": "multiple_point_section",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted": {
+    "dendrite": "reversed_NRN_neurite_order",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted": {
+    "dendrite": "simple-with-image-coord",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted": {
+    "dendrite": "simple2",
+    "axon": "nrn-order-already-sorted"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted": {
+    "dendrite": "neurite_wrong_root_point",
+    "axon": "nrn-order-already-sorted"
+  },
+  "C060114A5_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "C060114A5",
+    "axon": "C060114A5"
+  },
+  "C060114A5_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "C060114A5",
+    "axon": "C060114A5"
+  },
+  "C060114A5_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "C060114A5",
+    "axon": "C060114A5"
+  },
+  "C060114A5_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "C060114A5",
+    "axon": "C060114A5"
+  },
+  "C270106A_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "C270106A",
+    "axon": "C270106A"
+  },
+  "C270106A_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "C270106A",
+    "axon": "C270106A"
+  },
+  "C270106A_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "C270106A",
+    "axon": "C270106A"
+  },
+  "C270106A_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "C270106A",
+    "axon": "C270106A"
+  },
+  "astrocyte_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "astrocyte",
+    "axon": "astrocyte"
+  },
+  "astrocyte_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "astrocyte",
+    "axon": "astrocyte"
+  },
+  "astrocyte_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "astrocyte",
+    "axon": "astrocyte"
+  },
+  "astrocyte_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "astrocyte",
+    "axon": "astrocyte"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted",
+    "axon": "dend-simple_axon-nrn-order-already-sorted"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted",
+    "axon": "dend-simple_axon-nrn-order-already-sorted"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted",
+    "axon": "dend-simple_axon-nrn-order-already-sorted"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted",
+    "axon": "dend-simple_axon-nrn-order-already-sorted"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted",
+    "axon": "dend-spine_axon-nrn-order-already-sorted"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted",
+    "axon": "dend-spine_axon-nrn-order-already-sorted"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted",
+    "axon": "dend-spine_axon-nrn-order-already-sorted"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted",
+    "axon": "dend-spine_axon-nrn-order-already-sorted"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "nrn-order-already-sorted",
+    "axon": "nrn-order-already-sorted"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "nrn-order-already-sorted",
+    "axon": "nrn-order-already-sorted"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "nrn-order-already-sorted",
+    "axon": "nrn-order-already-sorted"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "nrn-order-already-sorted",
+    "axon": "nrn-order-already-sorted"
+  },
+  "rp100427-123_idC_-_Scale_x1.000_y0.950_z1.000": {
+    "dendrite": "rp100427-123_idC",
+    "axon": "rp100427-123_idC"
+  },
+  "rp100427-123_idC_-_Scale_x1.000_y0.975_z1.000": {
+    "dendrite": "rp100427-123_idC",
+    "axon": "rp100427-123_idC"
+  },
+  "rp100427-123_idC_-_Scale_x1.000_y1.025_z1.000": {
+    "dendrite": "rp100427-123_idC",
+    "axon": "rp100427-123_idC"
+  },
+  "rp100427-123_idC_-_Scale_x1.000_y1.050_z1.000": {
+    "dendrite": "rp100427-123_idC",
+    "axon": "rp100427-123_idC"
+  },
+  "C270106A_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "C270106A_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "C270106A_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "C270106A_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "C270106A_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "C270106A_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "C270106A_-_Clone_0": {
+    "dendrite": "C270106A",
+    "axon": "C270106A"
+  },
+  "C270106A_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "C270106A_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "C270106A_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "C270106A_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "C270106A_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "C270106A_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "astrocyte_-_Clone_0": {
+    "dendrite": "astrocyte",
+    "axon": "astrocyte"
+  },
+  "astrocyte_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "astrocyte_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "astrocyte_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "astrocyte_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "astrocyte_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "astrocyte_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-disconnected_neurite_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-iterators_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-mono-type_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-multiple_point_section_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-neurite_wrong_root_point_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-reversed_NRN_neurite_order_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-sections-block_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "astrocyte_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "astrocyte_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "astrocyte_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-simple-with-font_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted"
+  },
+  "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-nrn_ordering_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-simple-with-image-coord_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-simple2_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted",
+    "axon": "dend-simple_axon-nrn-order-already-sorted"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted",
+    "axon": "dend-spine_axon-nrn-order-already-sorted"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-simple_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-spine_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "dend-three_point_soma_axon-nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "nrn-order-already-sorted_-_Clone_0": {
+    "dendrite": "nrn-order-already-sorted",
+    "axon": "nrn-order-already-sorted"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000_-_Clone_0": {
+    "dendrite": "nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000",
+    "axon": "nrn-order-already-sorted_-_Scale_x1.000_y0.975_z1.000"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000_-_Clone_0": {
+    "dendrite": "nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000",
+    "axon": "nrn-order-already-sorted_-_Scale_x1.000_y0.950_z1.000"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000_-_Clone_0": {
+    "dendrite": "nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000",
+    "axon": "nrn-order-already-sorted_-_Scale_x1.000_y1.025_z1.000"
+  },
+  "nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "nrn-order-already-sorted_-_Scale_x1.000_y1.050_z1.000"
+  },
+  "astrocyte_-_Scale_x1.000_y1.050_z1.000_-_Clone_0": {
+    "dendrite": "astrocyte_-_Scale_x1.000_y1.050_z1.000",
+    "axon": "astrocyte_-_Scale_x1.000_y1.050_z1.000"
+  }
+}

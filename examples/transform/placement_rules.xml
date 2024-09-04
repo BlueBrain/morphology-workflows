@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<placement_rules>
+  <global_rule_set>
+    <rule id="L1_hard_limit" type="below" segment_type="dendrite" y_layer="1" y_fraction="1.0"/>
+    <rule id="L1_axon_hard_limit" type="below" segment_type="axon" y_layer="1" y_fraction="1.0"/>
+    <rule id="ScaleBias" type="prefer_unscaled" sigma="3.5"/>
+  </global_rule_set>
+
+<mtype_rule_set mtype="L1_HAC">
+        <rule id="L1_HAC, axon, Layer_1" type="region_target" segment_type="axon" y_min_layer="1" y_min_fraction="0.00" y_max_layer="1" y_max_fraction="1.00"/>
+</mtype_rule_set>
+
+<!-- rules removed -->
+
+<mtype_rule_set mtype="L6_MC">
+	<rule id="L5_MC, axon, Layer_1" type="region_target" segment_type="axon" y_min_layer="1" y_min_fraction="0.00" y_max_layer="1" y_max_fraction="1.00"/>
+	<rule id="L5_MC, axon, Layer_4" type="region_target" segment_type="axon" y_min_layer="4" y_min_fraction="0.00" y_max_layer="4" y_max_fraction="1.00"/>
+	<rule id="L6_MC, axon, Layer_4" type="region_target" segment_type="axon" y_min_layer="4" y_min_fraction="0.00" y_max_layer="4" y_max_fraction="1.00"/>
+</mtype_rule_set>
+
+</placement_rules>
