@@ -132,7 +132,7 @@ def make_clones(
     # Yields one MorphInfo object per clone to be generated
     iter_morph = (
         morph
-        for morph in morphs
+        for _, morph in morphs.iterrows()
         for _ in range(clone_counts.get(Category(morph.mtype, morph.layer), 0))
     )
 

@@ -105,8 +105,8 @@ class CollectAnnotations(ElementValidationTask):
 def get_candidates_from_neurondb(neurondb):
     """Returns a dict of 'Category' -> list of names."""
     candidates = defaultdict(list)
-    for morph in neurondb:
-        candidates[Category(morph.mtype, morph.layer)].append(morph.name)
+    for _, morph in neurondb.df.iterrows():
+        candidates[Category(morph["mtype"], morph["layer"])].append(morph["name"])
 
     return dict(candidates)
 
@@ -174,7 +174,6 @@ class CloneMorphologies(SetValidationTask):
     - the morphology files.
     - the neuronDB.xml and neuronDB.dat files.
     - an annotations folder with one annotation for each new morphology.
-    - a lineage.json file.
     """
 
     cross_mtypes = luigi.ListParameter(
@@ -275,7 +274,6 @@ class CloneMorphologies(SetValidationTask):
     @staticmethod
     def _write_db(db, output_path):
         """Write the neuronDB as XML and DAT files."""
-        db.write_lineage(output_path)
         path = output_path / NEURONDB_XML
         db.write(path)
         db.write(path.with_suffix(".dat"))
@@ -294,7 +292,6 @@ class CloneMorphologies(SetValidationTask):
         """Graft axons to morphologies."""
         # Remove morphologies with perimeters
         filter_missing_perimeter_morphs(df)
-        print(df)
 
         valid_morphs = df.loc[df["is_valid"]]
 
@@ -329,7 +326,7 @@ class CloneMorphologies(SetValidationTask):
                 morph_path, morph_annotation_path = df.loc[
                     morph_name, ["morph_path", "annotation_path"]
                 ]
-                graft_db.df = pd.concat([graft_db.df, morph_info])
+                graft_db.df = pd.concat([graft_db.df, pd.DataFrame(morph_info).T])
                 import_morph(
                     morph_path,
                     graft_dir / (morph_name + ".h5"),
@@ -351,10 +348,10 @@ class CloneMorphologies(SetValidationTask):
         scale_db = graft_db
 
         parents = defaultdict(list)
-        for morph in scale_db:
-            parents[morph.name].append(morph)
+        for _, morph in scale_db.df.iterrows():
+            parents[morph["name"]].append(morph)
 
-        names = list(scale_db.groupby("name").keys())
+        names = list(scale_db.df["name"].unique())
         annotation_path = graft_dir / "annotations"
         scale_annotation_path = scale_dir / "annotations"
         scale_annotation_path.mkdir(parents=True, exist_ok=True)
@@ -370,9 +367,9 @@ class CloneMorphologies(SetValidationTask):
             scale_annotation_path,
         ):
             for output_info in output_infos:
-                scale_db.add_morph(output_info)
+                scale_db += MorphDB([output_info])
 
-        scale_db.sort()
+        scale_db.df.sort_values(by="name", inplace=True)
         CloneMorphologies._write_db(scale_db, scale_dir)
         return scale_db, scale_dir, scale_annotation_path
 
@@ -387,29 +384,31 @@ class CloneMorphologies(SetValidationTask):
 
         rules = parse_morphdb_transform_rules(transform_rules_path)
 
-        transform_rules_db.remove_morphs(rules.exclusions)
+        transform_rules_db.df = transform_rules_db.df[
+            ~transform_rules_db.df.name.isin(rules.exclusions)
+        ]
 
-        def layer_expansion(name, mtype, layer):
+        def layer_expansion(name, mtype, layer, transform_rules_db):
             """Add morph to DB, respecting any layer copies that may be needed."""
             logger.debug("Add %s of mtype %s into the layer %s", name, mtype, layer)
-            transform_rules_db.add_morph(MorphInfo(name=name, mtype=mtype, layer=layer))
+            transform_rules_db += MorphDB([MorphInfo(name=name, mtype=mtype, layer=layer)])
 
             mtype_layer = (mtype, layer)
             for new_layer in rules.layer_copies.get(mtype_layer, []):
                 logger.debug("Add %s of mtype %s into the layer %s", name, mtype, new_layer)
-                transform_rules_db.add_morph(MorphInfo(name=name, mtype=mtype, layer=new_layer))
+                transform_rules_db += MorphDB([MorphInfo(name=name, mtype=mtype, layer=new_layer)])
 
-        for morph in transform_rules_db:
+        for _, morph in list(transform_rules_db.df.iterrows()):
             # Note: in morphology-repair-workflow, the iteration was over the not filtered
             # morphologies but it was not consistent with the comments so I changed it here.
 
-            layer_expansion(morph.name, morph.mtype, morph.layer)
+            layer_expansion(morph["name"], morph["mtype"], morph["layer"], transform_rules_db)
 
-            for expansion in rules.expansions.get(morph.mtype, []):
+            for expansion in rules.expansions.get(morph["mtype"], []):
                 for layer in expand_mtype_to_layers(expansion):
-                    layer_expansion(morph.name, expansion, layer)
+                    layer_expansion(morph["name"], expansion, layer, transform_rules_db)
 
-        transform_rules_db.sort()
+        transform_rules_db.df.sort_values(by="name", inplace=True)
         CloneMorphologies._write_db(transform_rules_db, transform_rules_dir)
         return transform_rules_db
 
@@ -448,7 +447,7 @@ class CloneMorphologies(SetValidationTask):
             for category in get_category_overlap(count_mapping, candidates)
         }
 
-        items = clone_db.groupby("name").items()
+        items = clone_db.df.groupby("name")
         for output_infos in parallel_mapper(
             make_clones,
             items,
@@ -464,7 +463,7 @@ class CloneMorphologies(SetValidationTask):
             std_scale,
         ):
             for output_info in output_infos:
-                clone_db.add_morph(output_info)
+                clone_db += MorphDB([output_info])
 
         CloneMorphologies._write_db(clone_db, clone_dir)
         return clone_annotations_path
