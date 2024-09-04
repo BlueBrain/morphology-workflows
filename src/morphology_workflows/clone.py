@@ -1,7 +1,6 @@
 """Cloning functions."""
 
 import copy
-import yaml
 import functools
 import glob
 import itertools
@@ -54,7 +53,6 @@ Category = namedtuple("Category", "mtype layer")
 # ########################################################################## #
 
 COL_Y = 1
-EXT = ".asc"
 
 
 def _parse_recipe(recipe_filename):
@@ -120,7 +118,7 @@ def make_clones(
     It also creates the clone annotations if placement_rules is not None.
     """
     name, morphs = task
-    filename = input_path / (name + EXT)
+    filename = input_path / (name + ".h5")
     parent_morph = morphio.Morphology(filename)
     shutil.copy(filename, output_path / filename.name)
 
@@ -304,6 +302,7 @@ def _filter_graft_inputs(df, neurondb, cross_mtypes):
         if len(morph_names_layers[morph.name]) > 1:
             continue
         morphs.append(morph.name)
+
     cross_morphs = df.loc[(df.index.isin(morphs)) & (df["mtype"].isin(cross_mtypes))]
 
     def to_dict(series):
@@ -315,19 +314,6 @@ def _filter_graft_inputs(df, neurondb, cross_mtypes):
     )
 
     src_axons = to_dict(cross_morphs.loc[cross_morphs["has_axon"], "mtype"])
-    axon_mapping = None
-    if Path("axon_mapping.yaml").exists():
-        with open("axon_mapping.yaml") as axon_mapping_f:
-            axon_mapping = yaml.safe_load(axon_mapping_f)
-        for mtype, alt_mtypes in axon_mapping.items():
-            for alt_mtype in alt_mtypes:
-                if mtype not in src_axons:
-                    src_axons[mtype] = src_axons[alt_mtype]
-                else:
-                    src_axons[mtype].update(src_axons[alt_mtype])
-
-    print(src_axons.keys(), to_cross.keys())
-    # print(src_axons)
 
     if len(src_axons) == 0:
         raise ValueError("No axons found to graft")
@@ -436,7 +422,7 @@ def graft_axons(  # pylint: disable=too-many-arguments
     def load_morph(name):
         """Copy the morphology and the annotation (only once thanks to the cache)."""
         morph_path, annotation_path = df.loc[name, ["morph_path", "annotation_path"]].values
-        new_path = output_path / (name + EXT)
+        new_path = output_path / (name + ".h5")
         return import_morph(morph_path, new_path, annotation_path, new_annotations_path)
 
     for mtype in cross_mtypes:
@@ -458,12 +444,11 @@ def graft_axons(  # pylint: disable=too-many-arguments
             try:
                 graft_axon(morph, donor_neuron, rng)
             except MorphToolException:
-                print(recipient, src_axon)
                 L.error("Error while grafting axon: %s on morphology: %s", src_axon, recipient)
                 continue
 
             morph_name = f"dend-{recipient}_axon-{src_axon}"
-            new_morph_path = Path(output_path, morph_name + EXT)
+            new_morph_path = Path(output_path, morph_name + ".h5")
             write_neuron(morph, new_morph_path)
 
             _record_grafts(
@@ -701,7 +686,7 @@ class PlacementAnnotation(MutableMapping):
 
 def _scaled_name(morph_name, y_scale):
     """By inspection, this is the output from the MorphScale command."""
-    return f"{morph_name}_-_Scale_x{1:1.3f}_y{y_scale:1.3f}_z{1:1.3f}.{EXT}"
+    return f"{morph_name}_-_Scale_x{1:1.3f}_y{y_scale:1.3f}_z{1:1.3f}.h5"
 
 
 def apply_scaling(
@@ -713,12 +698,12 @@ def apply_scaling(
     """
     rng = rng_from_name(name)
 
-    path = input_path / (name + EXT)
+    path = input_path / (name + ".h5")
     parent_annotation = PlacementAnnotation.load(annotation_path / name)
     parent_annotation.save(output_annotation_path)
 
     original = morphio.Morphology(path)
-    write_neuron(original, output_path / (name + EXT))
+    write_neuron(original, output_path / (name + ".h5"))
     output_info = []
 
     for y_scale in y_scales:

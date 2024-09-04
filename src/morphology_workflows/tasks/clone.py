@@ -34,7 +34,6 @@ from morphology_workflows.clone import get_cellcounts_from_recipe
 from morphology_workflows.clone import graft_axons
 from morphology_workflows.clone import make_clones
 from morphology_workflows.clone import parse_morphdb_transform_rules
-from morphology_workflows.clone import EXT
 from morphology_workflows.clone import read_placement_rules
 from morphology_workflows.utils import import_morph
 
@@ -55,7 +54,7 @@ class CollectRepaired(ElementValidationTask):
         "apical_point_path": None,
     }
     input_index_col = luigi.Parameter(default="morph_name")
-    morph_path_col = luigi.Parameter(default=f"repair_release_morph_path_{EXT[1:]}")
+    morph_path_col = luigi.Parameter(default="repair_release_morph_path_h5")
 
     def args(self):
         return [self.morph_path_col]
@@ -248,7 +247,7 @@ class CloneMorphologies(SetValidationTask):
         default="multiprocessing",
         choices=["serial", "multiprocessing", "ipyparallel", "dask", "dask_dataframe"],
     )
-    morph_path_col = luigi.Parameter(default=f"repair_morph_db_path_{EXT[1:]}")
+    morph_path_col = luigi.Parameter(default="repair_morph_db_path_h5")
 
     def inputs(self):
         return {
@@ -332,7 +331,7 @@ class CloneMorphologies(SetValidationTask):
                 graft_db.add_morph(morph_info)
                 import_morph(
                     morph_path,
-                    graft_dir / (morph_name + EXT),
+                    graft_dir / (morph_name + ".h5"),
                     morph_annotation_path,
                     graft_annotations_path,
                 )
@@ -585,9 +584,7 @@ def _create_db_row(_data, clone_path, extension):
     """Create a db row and convert morphology."""
     index, data = _data
     mtype, layer = _get_layer_mtype(data)
-    m = MorphInfo(
-        name=data["name"], mtype=mtype, layer=layer, use_dendrite=True, use_axon=True
-    )
+    m = MorphInfo(name=data["name"], mtype=mtype, layer=layer, use_dendrite=True, use_axon=True)
 
     clone_release_path = str(clone_path / Path(data["morph_path"]).stem) + extension
 
