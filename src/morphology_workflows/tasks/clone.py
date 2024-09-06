@@ -5,6 +5,7 @@ import logging
 import math
 import pprint
 from collections import defaultdict
+from collections import namedtuple
 from functools import partial
 from multiprocessing.pool import Pool
 from pathlib import Path
@@ -21,7 +22,6 @@ from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
 from neurom.core import Morphology
 from tqdm import tqdm
-from typing import NamedTuple
 
 from morphology_workflows.clone import PlacementAnnotation
 from morphology_workflows.clone import apply_scaling
@@ -38,7 +38,7 @@ from morphology_workflows.curation import collect
 from morphology_workflows.utils import import_morph
 
 logger = logging.getLogger(__name__)
-Category = NamedTuple("Category", "mtype layer")
+Category = namedtuple("Category", "mtype layer")  # noqa: PYI024
 NEURONDB_XML = Path("neuronDB.xml")
 
 
@@ -478,7 +478,7 @@ class CloneMorphologies(SetValidationTask):
             json.dump(annotations, f, indent=2, sort_keys=True)
 
     @staticmethod
-    def validation_function(  # noqa: PLR0913
+    def validation_function(  # noqa: PLR0913, pylint:disable=arguments-differ
         df,
         data_dir,
         cross_mtypes,
@@ -613,7 +613,9 @@ class MakeCloneRelease(SetValidationTask):
         )
 
     @staticmethod
-    def validation_function(df, data_dir, clone_path, extensions, clone_data_path):  # noqa: ARG004
+    def validation_function(  # pylint: disable=arguments-differ; noqa: ARG004
+        df, data_dir, clone_path, extensions, clone_data_path
+    ):
         """Make a clone release."""
         df = MorphDB.from_neurondb(
             clone_data_path / "clone" / "neuronDB.xml",

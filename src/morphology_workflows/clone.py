@@ -9,10 +9,10 @@ import math
 import shutil
 import xml.etree.ElementTree as ET  # noqa: N817
 from collections import defaultdict
+from collections import namedtuple
 from collections.abc import MutableMapping
 from copy import deepcopy
 from pathlib import Path
-from typing import NamedTuple
 
 import lxml.etree
 import morphio
@@ -43,7 +43,7 @@ from morphology_workflows.utils import seed_from_name
 from morphology_workflows.utils import write_neuron
 
 L = logging.getLogger(__name__)
-Category = NamedTuple("Category", "mtype layer")
+Category = namedtuple("Category", "mtype layer")  # noqa: PYI024
 
 
 # ########################################################################## #
@@ -756,7 +756,9 @@ def _add_annotation(path, parent_annotation, y_scale, annotations_path):
 # exclusions is a set of morphology names to be excluded
 # expansions is a dictionary of from_ (mtype) -> list of[to (mtype)]
 # layer_copies: dictionary of tuples (mtype, layer) -> list of layers to expand
-MorphDBTransformRules = NamedTuple("MorphDBTransformRules", "exclusions expansions layer_copies")
+MorphDBTransformRules = namedtuple(  # noqa: PYI024
+    "MorphDBTransformRules", "exclusions expansions layer_copies"
+)
 
 
 def parse_morphdb_transform_rules(rules_path):

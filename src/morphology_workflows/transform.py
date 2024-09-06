@@ -204,6 +204,8 @@ def learn_diameter_transform(
 
     if method == "branch_order":
         func = branch_order
+    else:
+        raise NotImplementedError
     fits = pd.DataFrame(index=np.arange(0, max_x))
     for neurite_type in [
         nm.NeuriteType.axon,
