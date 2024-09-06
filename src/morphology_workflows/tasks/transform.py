@@ -3,10 +3,9 @@
 import logging
 
 import luigi
-from luigi_tools.parameter import BoolParameter
-
 from data_validation_framework.task import ElementValidationTask
 from data_validation_framework.task import SetValidationTask
+from luigi_tools.parameter import BoolParameter
 
 from morphology_workflows.curation import collect
 from morphology_workflows.repair import make_release
@@ -122,7 +121,6 @@ class LearnDiameterTransform(SetValidationTask):
         return {
             "target_dataset": self.extra_input()["report"].path,
             "method": self.method,
-            "per_mtype": self.per_mtype,
             "plot": self.plot,
             "max_x": self.max_x,
         }

@@ -2,19 +2,17 @@
 
 import copy
 import functools
-import glob
 import itertools
 import json
 import logging
 import math
-import os
 import shutil
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET  # noqa: N817
 from collections import defaultdict
-from collections import namedtuple
 from collections.abc import MutableMapping
 from copy import deepcopy
 from pathlib import Path
+from typing import NamedTuple
 
 import lxml.etree
 import morphio
@@ -22,6 +20,8 @@ import neurom
 import numpy as np
 from morph_tool.exceptions import MorphToolException
 from morph_tool.graft import graft_axon
+from morph_tool.morphdb import MorphDB
+from morph_tool.morphdb import MorphInfo
 from morphio import SectionType
 from neuroc.scale import RotationParameters
 from neuroc.scale import ScaleParameters
@@ -35,17 +35,15 @@ from neurom.core.types import NeuriteType
 from neurom.core.types import tree_type_checker
 from tqdm import tqdm
 
-from morph_tool.morphdb import MorphInfo
-from morph_tool.morphdb import MorphDB
+from morphology_workflows.utils import compare_lists
+from morphology_workflows.utils import get_points
 from morphology_workflows.utils import import_morph
 from morphology_workflows.utils import rng_from_name
 from morphology_workflows.utils import seed_from_name
 from morphology_workflows.utils import write_neuron
-from morphology_workflows.utils import compare_lists
-from morphology_workflows.utils import get_points
 
 L = logging.getLogger(__name__)
-Category = namedtuple("Category", "mtype layer")
+Category = NamedTuple("Category", "mtype layer")
 
 
 # ########################################################################## #
@@ -57,7 +55,7 @@ COL_Y = 1
 
 def _parse_recipe(recipe_filename):
     """Parse a BBP recipe and return the corresponding etree."""
-    # HACK: The XML parser does not handle the entity tag "&connectivityRecipe"
+    # HACK: The XML parser does not handle the entity tag "&connectivityRecipe"  # noqa: FIX004
     # Since we don't care about the tag (all we want from the recipe is the number of
     # morphologies for each mtype), let's just pretend the line does not exist...
     with open(recipe_filename, encoding="utf-8") as f:
@@ -100,7 +98,7 @@ def _clone_path(input_filename, output_path, clone_id):
     return Path(output_path, f"{input_filename.stem}_-_Clone_{clone_id}{input_filename.suffix}")
 
 
-def make_clones(
+def make_clones(  # noqa: PLR0913
     task,
     clone_counts,
     axon_hardlimit_name,
@@ -112,7 +110,7 @@ def make_clones(
     placement_rules,
     std_angle=10.0,
     std_scale=0.2,
-):  # pylint: disable=too-many-arguments
+):
     """Generate the clones.
 
     It also creates the clone annotations if placement_rules is not None.
@@ -155,7 +153,7 @@ def make_clones(
     ]
 
 
-def _make_clone(
+def _make_clone(  # noqa: PLR0913
     clone_path,
     clone_generator,
     placement_rules,
@@ -214,7 +212,7 @@ def _update_rules(clone_path, child_name, parent_annotation, rule_indices):
     """Recalculate the relevant annotation rules based on the new file."""
     child_annotation = copy.deepcopy(parent_annotation)
     child_annotation.name = child_name
-    for rule in child_annotation.keys():
+    for rule in child_annotation:
         if rule in rule_indices:
             indices = rule_indices[rule]
             y_min, y_max = _extract_y_extent(clone_path, indices)
@@ -316,11 +314,11 @@ def _filter_graft_inputs(df, neurondb, cross_mtypes):
     src_axons = to_dict(cross_morphs.loc[cross_morphs["has_axon"], "mtype"])
 
     if len(src_axons) == 0:
-        raise ValueError("No axons found to graft")
+        raise ValueError("No axons found to graft")  # noqa: TRY003
     return dict(to_cross), dict(src_axons), dict(morph_names_layers)
 
 
-def _create_graft_annotation(
+def _create_graft_annotation(  # noqa: PLR0913
     annotations_path,
     morph,
     morph_name,
@@ -352,7 +350,7 @@ def _create_graft_annotation(
     new_annotation.save(annotations_path)
 
 
-def _record_grafts(  # pylint: disable=too-many-arguments
+def _record_grafts(  # noqa: PLR0913
     morph,
     annotations_path,
     morph_name,
@@ -385,7 +383,7 @@ def _record_grafts(  # pylint: disable=too-many-arguments
         )
 
 
-def graft_axons(  # pylint: disable=too-many-arguments
+def graft_axons(
     df,
     output_path,
     input_neurondb,
@@ -397,6 +395,7 @@ def graft_axons(  # pylint: disable=too-many-arguments
     """Graft axons from donors to recipient morphologies, but only ones of cross_mtypes.
 
     Args:
+        df(DataFrame): input df
         input_path(str): path to input files
         output_path(str): path to output directory
         input_neurondb (MorphDB): the input (previous phase) morphdb
@@ -480,9 +479,9 @@ def filter_missing_perimeter_morphs(df):
         if len([v.perimeters for k, v in morph.sections.items() if len(v.perimeters) > 0]) > 0:
             df.loc[name, "is_valid"] = False
             df.loc[name, "ret_code"] = 1
-            df.loc[name, "comment"] = (
-                "The morphologies with perimeters can not be used for axon grafting"
-            )
+            df.loc[
+                name, "comment"
+            ] = "The morphologies with perimeters can not be used for axon grafting"
 
     L.info(
         "Removed the following morphologies because they miss perimeters: %s",
@@ -523,7 +522,7 @@ def convert_to_json_type(dict_):
                 dict_[k] = float(json_value)
             elif isinstance(json_value, list):
                 dict_[k] = json_value
-        except ValueError:
+        except ValueError:  # noqa: PERF203
             pass
     return dict_
 
@@ -576,23 +575,29 @@ class PlacementAnnotation(MutableMapping):
         assert isinstance(self._rules, dict)
 
     def __str__(self):
+        """Str."""
         ret = [self.name + ":"]
         ret.extend(f'\t"{k}": {v}' % (k, v) for k, v in self._rules.items())
         return "\n".join(ret)
 
     def __delitem__(self, key):
+        """Del."""
         del self._rules[key]
 
     def __getitem__(self, key):
+        """Get."""
         return self._rules[key]
 
     def __iter__(self):
+        """Iter."""
         return iter(self._rules)
 
     def __len__(self):
+        """Len."""
         return len(self._rules)
 
     def __setitem__(self, key, value):
+        """Set."""
         assert isinstance(value, dict)
         self._rules[key] = value
 
@@ -664,7 +669,7 @@ class PlacementAnnotation(MutableMapping):
         ret = cls(name)
         for rule in annotations:
             rule_name = rule.attrib["rule"]
-            properties = dict((k, v) for k, v in rule.attrib.items() if k != "rule")
+            properties = {k: v for k, v in rule.attrib.items() if k != "rule"}
             convert_to_json_type(properties)
             ret.add_rule(rule_name, properties)
         return ret
@@ -709,7 +714,7 @@ def apply_scaling(
     for y_scale in y_scales:
         outname = Path(output_path, _scaled_name(path.stem, y_scale))
         if outname.exists():
-            raise IOError(f"The file {outname} already exists!")
+            raise OSError(f"The file {outname} already exists!")  # noqa: TRY003
         morphology = morphio.mut.Morphology(original)
         scale_morphology(morphology, section_scaling=ScaleParameters(mean=y_scale, axis=1), rng=rng)
         write_neuron(morphology, outname)
@@ -751,7 +756,7 @@ def _add_annotation(path, parent_annotation, y_scale, annotations_path):
 # exclusions is a set of morphology names to be excluded
 # expansions is a dictionary of from_ (mtype) -> list of[to (mtype)]
 # layer_copies: dictionary of tuples (mtype, layer) -> list of layers to expand
-MorphDBTransformRules = namedtuple("MorphDBTransformRules", "exclusions expansions layer_copies")
+MorphDBTransformRules = NamedTuple("MorphDBTransformRules", "exclusions expansions layer_copies")
 
 
 def parse_morphdb_transform_rules(rules_path):
@@ -775,19 +780,21 @@ def parse_morphdb_transform_rules(rules_path):
     was re-used for continuity.
     """
     rules_xml = ET.parse(rules_path)
-    exclusions = set(rule.get("name") for rule in rules_xml.findall("exclude"))
+    exclusions = {rule.get("name") for rule in rules_xml.findall("exclude")}
     expansions = defaultdict(list)
     layer_copies = defaultdict(list)
 
     for rule in rules_xml.findall("substitute"):
-        from_, to = rule.get("from"), rule.get("to")
-        assert from_ and to, f"Need to have both from: '{from_}' and to: '{to}'"
+        from_ = rule.get("from")
+        to = rule.get("to")
+        assert from_ and to, f"Need to have both from: '{from_}' and to: '{to}'"  # noqa: PT018
         expansions[from_].append(to)
 
     for rule in rules_xml.findall("mtype_copy_to_layer"):
         mtype = rule.get("mtype")
-        src_layer, dst_layer = rule.get("src_layer"), rule.get("dst_layer")
-        assert (
+        src_layer = rule.get("src_layer")
+        dst_layer = rule.get("dst_layer")
+        assert (  # noqa: PT018
             src_layer and dst_layer and to and mtype
         ), f"Need mtype: '{mtype}' src_layer: '{src_layer}' and dst_layer '{dst_layer}'"
         layer_copies[(mtype, src_layer)].append(dst_layer)
@@ -819,7 +826,7 @@ def parse_annotations(filepath):
         attr = dict(elem.attrib)
         rule_id = attr.pop("rule")
         if rule_id in result:
-            raise ValueError(f"Duplicate annotation for rule '{rule_id}'")
+            raise ValueError(f"Duplicate annotation for rule '{rule_id}'")  # noqa: TRY003
         result[rule_id] = attr
     return result
 
@@ -832,7 +839,7 @@ def parse_annotations(filepath):
 def collect_annotations(annotation_dir):
     """Collect all annotations from a directory."""
     result = {}
-    for filepath in tqdm(glob.glob(os.path.join(annotation_dir, "*.xml"))):
-        morph, _ = os.path.splitext(os.path.basename(filepath))
+    for filepath in tqdm(Path(annotation_dir).rglob("*.xml")):
+        morph, _ = Path(filepath).stem
         result[morph] = parse_annotations(filepath)
     return result

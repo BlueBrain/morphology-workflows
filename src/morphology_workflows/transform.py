@@ -4,7 +4,7 @@ adapted from: /gpfs/bbp.cscs.ch/project/proj66/morphologies
 """
 from pathlib import Path
 
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import neurom as nm
 import numpy as np
@@ -20,7 +20,7 @@ from neurom.features.section import branch_order
 from scipy.optimize import curve_fit
 from tqdm import tqdm
 
-matplotlib.use("Agg")
+mpl.use("Agg")
 
 # pylint: disable=unused-argument
 
@@ -192,7 +192,6 @@ def learn_diameter_transform(
     df,
     data_dir,
     method="branch_order",
-    per_mtype=False,
     target_dataset="target_dataset.csv",
     plot=True,
     max_x=30,
@@ -319,7 +318,7 @@ def compare_transformed(df, data_dir, shift=300, target_dataset="target_dataset.
                 realistic_diameters=True,
             )
             view.plot_morph(
-                transformed_morph.transform(lambda p: p + [shift, 0, 0]),
+                transformed_morph.transform(lambda p: [*p, shift, 0, 0]),
                 ax,
                 soma_outline=False,
                 realistic_diameters=True,

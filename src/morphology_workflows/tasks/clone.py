@@ -4,7 +4,6 @@ import json
 import logging
 import math
 import pprint
-from collections import namedtuple
 from collections import defaultdict
 from functools import partial
 from multiprocessing.pool import Pool
@@ -20,9 +19,9 @@ from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
-from morphology_workflows.curation import collect
 from neurom.core import Morphology
 from tqdm import tqdm
+from typying import NamedTuple
 
 from morphology_workflows.clone import PlacementAnnotation
 from morphology_workflows.clone import apply_scaling
@@ -35,10 +34,11 @@ from morphology_workflows.clone import graft_axons
 from morphology_workflows.clone import make_clones
 from morphology_workflows.clone import parse_morphdb_transform_rules
 from morphology_workflows.clone import read_placement_rules
+from morphology_workflows.curation import collect
 from morphology_workflows.utils import import_morph
 
 logger = logging.getLogger(__name__)
-Category = namedtuple("Category", "mtype layer")
+Category = NamedTuple("Category", "mtype layer")
 NEURONDB_XML = Path("neuronDB.xml")
 
 
@@ -413,7 +413,7 @@ class CloneMorphologies(SetValidationTask):
         return transform_rules_db
 
     @staticmethod
-    def _clone_step(
+    def _clone_step(  # noqa: PLR0913
         data_dir,
         transform_rules_db,
         scale_dir,
@@ -426,7 +426,7 @@ class CloneMorphologies(SetValidationTask):
         std_angle,
         std_scale,
         parallel_mapper,
-    ):  # pylint: disable=too-many-arguments
+    ):
         """Clone morphologies."""
         logger.info("Clone morphologies with the following recipe: %s", builder_recipe_path)
 
@@ -443,7 +443,7 @@ class CloneMorphologies(SetValidationTask):
         clone_counts = {
             category: int(
                 math.ceil(clone_multiplier * count_mapping[category] / len(candidates[category]))
-            )  # noqa
+            )
             for category in get_category_overlap(count_mapping, candidates)
         }
 
@@ -478,7 +478,7 @@ class CloneMorphologies(SetValidationTask):
             json.dump(annotations, f, indent=2, sort_keys=True)
 
     @staticmethod
-    def validation_function(
+    def validation_function(  # noqa: PLR0913
         df,
         data_dir,
         cross_mtypes,
@@ -494,7 +494,7 @@ class CloneMorphologies(SetValidationTask):
         parallel_factory_type,
         nb_processes,
         morph_path_col,
-    ):  # pylint: disable=arguments-differ, too-many-arguments, too-many-locals
+    ):
         logger.warning(
             "THIS STEP WAS IMPORTED FROM morphology-repair-workflow BUT HAS NOT BEEN MUCH TESTED "
             "YET, BE CAREFUL WHEN YOU USE IT."
@@ -613,9 +613,7 @@ class MakeCloneRelease(SetValidationTask):
         )
 
     @staticmethod
-    def validation_function(
-        df, data_dir, clone_path, extensions, clone_data_path
-    ):  # pylint: disable=arguments-differ, unused-argument
+    def validation_function(df, data_dir, clone_path, extensions, clone_data_path):  # noqa: ARG004
         """Make a clone release."""
         df = MorphDB.from_neurondb(
             clone_data_path / "clone" / "neuronDB.xml",

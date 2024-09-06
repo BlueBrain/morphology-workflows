@@ -2,7 +2,6 @@
 
 import luigi
 from data_validation_framework.task import ValidationWorkflow
-from data_validation_framework.task import ElementValidationTask
 
 from morphology_workflows.tasks.annotation import ApicalPoint
 from morphology_workflows.tasks.annotation import CollectCurated
@@ -12,6 +11,10 @@ from morphology_workflows.tasks.annotation import MType
 from morphology_workflows.tasks.annotation import PlotApicalPoint
 from morphology_workflows.tasks.annotation import PlotCutLeaves
 from morphology_workflows.tasks.annotation import PlotHardLimit
+from morphology_workflows.tasks.clone import CloneMorphologies
+from morphology_workflows.tasks.clone import CollectAnnotations
+from morphology_workflows.tasks.clone import CollectRepaired
+from morphology_workflows.tasks.clone import MakeCloneRelease
 from morphology_workflows.tasks.curation import Align
 from morphology_workflows.tasks.curation import CheckNeurites
 from morphology_workflows.tasks.curation import Collect
@@ -35,10 +38,6 @@ from morphology_workflows.tasks.repair import PlotSmoothDiameters
 from morphology_workflows.tasks.repair import RepairNeurites
 from morphology_workflows.tasks.repair import SmoothDiameters
 from morphology_workflows.tasks.repair import Unravel
-from morphology_workflows.tasks.clone import CollectRepaired
-from morphology_workflows.tasks.clone import CollectAnnotations
-from morphology_workflows.tasks.clone import MakeCloneRelease
-from morphology_workflows.tasks.clone import CloneMorphologies
 from morphology_workflows.tasks.transform import ApplyTransformation
 from morphology_workflows.tasks.transform import CompareTransformed
 from morphology_workflows.tasks.transform import MakeTransformRelease
