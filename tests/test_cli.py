@@ -1,4 +1,5 @@
 """Tests for the morphology_workflows.cli module."""
+
 import re
 
 from morphology_workflows.tasks import cli
@@ -17,7 +18,7 @@ class TestCLI:
         assert (
             re.match(
                 r"usage: \S+ .*Run the workflow\n\npositional arguments:\s*"
-                r"{Initialize,Fetch,Placeholders,Curate,Annotate,Repair}\s*Possible workflows.*",
+                r"{Initialize,Fetch,Placeholders,Curate,Annotate,Repair,Clone,Transform}\s*Possible workflows.*", # noqa
                 captured.out,
                 flags=re.DOTALL,
             )
