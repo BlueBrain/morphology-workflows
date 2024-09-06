@@ -9,6 +9,7 @@ import pytest
 from dir_content_diff import assert_equal_trees
 
 from morphology_workflows.tasks import workflows
+from morphology_workflows.utils import silent_loggers
 
 
 @pytest.fixture()
@@ -122,6 +123,7 @@ def test_example_1_clone(example_1_clone, data_dir):
     }
 
     # Check the results
-    assert_equal_trees(
-        clone_expected_dir, example_1_clone / "out_clone", specific_args=clone_specific_args
-    )
+    with silent_loggers("dicttoxml"):
+        assert_equal_trees(
+            clone_expected_dir, example_1_clone / "out_clone", specific_args=clone_specific_args
+        )

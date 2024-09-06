@@ -14,8 +14,6 @@ from data_validation_framework.result import ValidationResultSet
 from diameter_synthesis.main import build_diameters
 from diameter_synthesis.main import build_model
 from matplotlib.backends.backend_pdf import PdfPages
-from morph_tool.converter import convert
-from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
 from morphio import Option
@@ -31,6 +29,7 @@ from tqdm import tqdm
 
 from morphology_workflows import MorphologyWorkflowsError
 from morphology_workflows.marker_helper import MarkerSet
+from morphology_workflows.utils import _convert
 from morphology_workflows.utils import silent_loggers
 
 L = logging.getLogger(__name__)
@@ -339,22 +338,6 @@ def make_collage(  # noqa: PLR0913
                 ax.set_aspect("equal")
                 pdf.savefig(bbox_inches="tight", dpi=dpi)
                 plt.close()
-
-
-@silent_loggers("morph_tool.converter")
-def _convert(input_file, output_file):
-    """Handles crashes in conversion of writing of morphologies."""
-    try:
-        L.debug("Converting %s into %s", input_file, output_file)
-        convert(input_file, output_file, nrn_order=True, sanitize=True)
-    except MorphToolException as exc:
-        return (
-            f"Could not convert the file '{input_file}' into '{output_file}' because of the "
-            f"following exception:\n{exc}"
-        )
-    except RuntimeError:  # This can happen if duplicates are being written at the same time
-        pass
-    return output_file
 
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):

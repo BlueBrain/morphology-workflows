@@ -21,7 +21,6 @@ import morphio
 import neurom
 import numpy as np
 import pandas as pd
-from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
 from morph_tool.graft import graft_axon
 from morph_tool.morphdb import MorphDB
@@ -39,6 +38,7 @@ from neurom.core.types import NeuriteType
 from neurom.core.types import tree_type_checker
 from tqdm import tqdm
 
+from morphology_workflows.utils import _convert
 from morphology_workflows.utils import compare_lists
 from morphology_workflows.utils import get_points
 from morphology_workflows.utils import import_morph
@@ -864,21 +864,6 @@ def _get_layer_mtype(data):
         if len(data["mtype"]) > 1:
             layer = data["mtype"][1]
     return mtype, layer
-
-
-def _convert(input_file, output_file):
-    """Handles crashes in conversion of writing of morphologies."""
-    try:
-        L.debug("Converting %s into %s", input_file, output_file)
-        convert(input_file, output_file, nrn_order=True, sanitize=True)
-    except MorphToolException as exc:
-        return (
-            f"Could not convert the file '{input_file}' into '{output_file}' because of the "
-            f"following exception:\n{exc}"
-        )
-    except RuntimeError:  # This can happen if duplicates are being written at the same time
-        pass
-    return output_file
 
 
 def _create_db_row(_data, clone_path, extension):

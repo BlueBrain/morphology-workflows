@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 from luigi_tools.util import configparser_to_dict
 from morph_tool.converter import convert
+from morph_tool.exceptions import MorphToolException
 from morphio import Option
 from morphio.mut import Morphology
 from pkg_resources import resource_filename
@@ -235,3 +236,19 @@ def get_points(input_file):
     m = Morphology(input_file)
     points = chain.from_iterable([[m.soma.points], [section.points for section in m.iter()]])
     return np.vstack(list(points))
+
+
+@silent_loggers("morph_tool.converter")
+def _convert(input_file, output_file):
+    """Handles crashes in conversion of writing of morphologies."""
+    try:
+        L.debug("Converting %s into %s", input_file, output_file)
+        convert(input_file, output_file, nrn_order=True, sanitize=True)
+    except MorphToolException as exc:
+        return (
+            f"Could not convert the file '{input_file}' into '{output_file}' because of the "
+            f"following exception:\n{exc}"
+        )
+    except RuntimeError:  # This can happen if duplicates are being written at the same time
+        pass
+    return output_file
