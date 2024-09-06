@@ -21,7 +21,7 @@ from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
 from neurom.core import Morphology
 from tqdm import tqdm
-from typying import NamedTuple
+from typing import NamedTuple
 
 from morphology_workflows.clone import PlacementAnnotation
 from morphology_workflows.clone import apply_scaling
