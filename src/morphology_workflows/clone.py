@@ -12,12 +12,16 @@ from collections import defaultdict
 from collections import namedtuple
 from collections.abc import MutableMapping
 from copy import deepcopy
+from functools import partial
+from multiprocessing.pool import Pool
 from pathlib import Path
 
 import lxml.etree
 import morphio
 import neurom
 import numpy as np
+import pandas as pd
+from morph_tool.converter import convert
 from morph_tool.exceptions import MorphToolException
 from morph_tool.graft import graft_axon
 from morph_tool.morphdb import MorphDB
@@ -845,3 +849,76 @@ def collect_annotations(annotation_dir):
         morph = Path(filepath).stem
         result[morph] = parse_annotations(filepath)
     return result
+
+
+def _get_layer_mtype(data):
+    """Helper to get layer from mtype, if mtype exists as a str."""
+    if "layer" in data:
+        return data["mtype"], data["layer"]
+
+    layer = "no_layer"
+    mtype = "no_mtype"
+
+    if isinstance(data["mtype"], str):
+        mtype = data["mtype"]
+        if len(data["mtype"]) > 1:
+            layer = data["mtype"][1]
+    return mtype, layer
+
+
+def _convert(input_file, output_file):
+    """Handles crashes in conversion of writing of morphologies."""
+    try:
+        L.debug("Converting %s into %s", input_file, output_file)
+        convert(input_file, output_file, nrn_order=True, sanitize=True)
+    except MorphToolException as exc:
+        return (
+            f"Could not convert the file '{input_file}' into '{output_file}' because of the "
+            f"following exception:\n{exc}"
+        )
+    except RuntimeError:  # This can happen if duplicates are being written at the same time
+        pass
+    return output_file
+
+
+def _create_db_row(_data, clone_path, extension):
+    """Create a db row and convert morphology."""
+    index, data = _data
+    mtype, layer = _get_layer_mtype(data)
+    m = MorphInfo(name=data["name"], mtype=mtype, layer=layer, use_dendrite=True, use_axon=True)
+
+    clone_release_path = str(clone_path / Path(data["morph_path"]).stem) + extension
+
+    data[f"clone_release_morph_path_{extension[1:]}"] = _convert(
+        data["morph_path"], clone_release_path
+    )
+    return index, data, m
+
+
+def clone_release(
+    df, data_dir, clone_path, extensions, clone_data_path  # noqa: ARG001
+):  # pylint: disable=unused-argument
+    """Make a clone release."""
+    df = MorphDB.from_neurondb(
+        clone_data_path / "clone" / "neuronDB.xml",
+        morphology_folder=str(clone_data_path / "clone"),
+    ).df.rename(columns={"path": "morph_path"})
+    for extension in extensions:
+        _clone_path = Path(f"{clone_path}/{extension[1:]}")
+        _clone_path.mkdir(exist_ok=True, parents=True)
+        __create_db_row = partial(
+            _create_db_row,
+            clone_path=_clone_path,
+            extension=extension,
+        )
+
+        _m = []
+        with Pool() as pool:
+            for index, row, m in tqdm(pool.imap(__create_db_row, df.iterrows()), total=len(df)):
+                df.loc[index] = pd.Series(row)
+                _m.append(m)
+
+        db = MorphDB(_m)
+
+        db.write(_clone_path / "neurondb.xml")
+        df[f"clone_morph_db_path_{extension[:1]}"] = _clone_path / "neurondb.xml"
