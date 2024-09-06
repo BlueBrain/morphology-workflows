@@ -842,6 +842,6 @@ def collect_annotations(annotation_dir):
     """Collect all annotations from a directory."""
     result = {}
     for filepath in tqdm(Path(annotation_dir).rglob("*.xml")):
-        morph, _ = Path(filepath).stem
+        morph = Path(filepath).stem
         result[morph] = parse_annotations(filepath)
     return result
