@@ -11,7 +11,7 @@ from dir_content_diff import assert_equal_trees
 from morphology_workflows.tasks import workflows
 
 
-@pytest.fixture()
+@pytest.fixture
 def example_transform(tmp_working_dir, examples_dir):
     """Setup the working directory."""
     shutil.copyfile(examples_dir / "transform" / "logging.conf", tmp_working_dir / "logging.conf")

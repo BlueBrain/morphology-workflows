@@ -7,7 +7,7 @@ import json
 import logging
 import math
 import shutil
-import xml.etree.ElementTree as ET  # noqa: N817
+import xml.etree.ElementTree as ET
 from collections import defaultdict
 from collections import namedtuple
 from collections.abc import MutableMapping

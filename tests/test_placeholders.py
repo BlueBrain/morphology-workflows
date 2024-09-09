@@ -1,4 +1,5 @@
 """Test download tasks."""
+
 # pylint: disable=redefined-outer-name
 import json
 import shutil
@@ -35,7 +36,7 @@ def build_metadata(input_dir):
     df.to_csv(str(input_dir / "metadata.csv"))
 
 
-@pytest.fixture()
+@pytest.fixture
 def prepare_dir(tmp_working_dir, examples_test_dir):
     """Setup the working directory."""
     shutil.copyfile(_TEMPLATES / "luigi.cfg", tmp_working_dir / "luigi.cfg")
@@ -54,7 +55,7 @@ def prepare_dir(tmp_working_dir, examples_test_dir):
     luigi_config.clear()
 
 
-@pytest.fixture()
+@pytest.fixture
 def default_config():
     """Setup the default config."""
     return [
@@ -65,7 +66,7 @@ def default_config():
     ]
 
 
-@pytest.fixture()
+@pytest.fixture
 def config_path(prepare_dir):
     """The path to the configuration file used in test."""
     return prepare_dir / "config.json"

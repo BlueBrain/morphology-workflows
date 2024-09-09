@@ -1,4 +1,5 @@
 """Tasks to fetch morphologies."""
+
 import copy
 import json
 import logging

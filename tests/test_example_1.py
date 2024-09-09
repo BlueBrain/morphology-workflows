@@ -1,4 +1,5 @@
 """Test the complete workflow on the example."""
+
 # pylint: disable=redefined-outer-name
 import shutil
 
@@ -18,7 +19,7 @@ from morphology_workflows.utils import EXTS
 from . import clean_exception
 
 
-@pytest.fixture()
+@pytest.fixture
 def example_1(tmp_working_dir, examples_test_dir):
     """Setup the working directory."""
     shutil.copyfile(examples_test_dir / "dataset.csv", tmp_working_dir / "dataset.csv")

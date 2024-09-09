@@ -1,4 +1,5 @@
 """CLI for validation workflows."""
+
 import argparse
 import inspect
 import logging

@@ -1,4 +1,5 @@
 """Test curation functions."""
+
 import json
 from pathlib import Path
 
@@ -501,14 +502,14 @@ class TestFixRootSections:
 class TestCheckNeurites:
     """Test the function curation.check_neurites()."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def res_path(self, tmpdir):
         """Result to which the result morphologies are exported."""
         path = tmpdir / "res"
         path.mkdir()
         return path
 
-    @pytest.fixture()
+    @pytest.fixture
     def simple_morph(self, tmpdir):
         """A simple morphology used for testing."""
         return create_morphology_file(
@@ -657,14 +658,14 @@ class TestCheckNeurites:
 class TestFixNeuritesInSoma:
     """Test the function curation.fix_neurites_in_soma()."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def res_path(self, tmpdir):
         """Result to which the result morphologies are exported."""
         path = tmpdir / "res"
         path.mkdir()
         return path
 
-    @pytest.fixture()
+    @pytest.fixture
     def simple_morph(self, tmpdir):
         """A simple morphology used for testing."""
         return create_morphology_file(
@@ -716,14 +717,14 @@ class TestFixNeuritesInSoma:
 class TestAlign:
     """Test the function curation.align()."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def res_path(self, tmpdir):
         """Result to which the result morphologies are exported."""
         path = tmpdir / "res"
         path.mkdir()
         return path
 
-    @pytest.fixture()
+    @pytest.fixture
     def simple_morph(self, tmpdir):
         """A simple morphology used for testing."""
         return create_morphology_file(

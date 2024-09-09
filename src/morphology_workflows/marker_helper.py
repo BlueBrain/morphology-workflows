@@ -1,4 +1,5 @@
 """Module to read/write/plot morphology markers."""
+
 import logging
 
 import numpy as np

@@ -152,14 +152,14 @@ target-version = "py38"
 #     "*test_*.py",
 # ]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 force-single-line = true
 known-first-party = ["morphology_workflows"]
 
-[tool.ruff.pylint]
+[tool.ruff.lint.pylint]
 # Maximum number of arguments for function / method
 max-args=8
 # Maximum number of return / yield for function / method body

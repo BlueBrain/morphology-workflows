@@ -1,4 +1,5 @@
 """Configuration for the pytest test suite."""
+
 from copy import deepcopy
 from pathlib import Path
 
@@ -15,32 +16,32 @@ EXAMPLES_TEST = Path(__file__).parent / "examples_test"
 dir_content_diff.comparators.pandas.register()
 
 
-@pytest.fixture()
+@pytest.fixture
 def tmp_working_dir(tmp_path, monkeypatch):
     """Change working directory before a test and change it back when the test is finished."""
     monkeypatch.chdir(tmp_path)
     return tmp_path
 
 
-@pytest.fixture()
+@pytest.fixture
 def data_dir():
     """The data directory."""
     return DATA
 
 
-@pytest.fixture()
+@pytest.fixture
 def examples_dir():
     """The examples directory."""
     return EXAMPLES
 
 
-@pytest.fixture()
+@pytest.fixture
 def examples_test_dir():
     """The examples directory."""
     return EXAMPLES_TEST
 
 
-@pytest.fixture()
+@pytest.fixture
 def WorkflowTask_exception_event():
     """Fixture to catch exception from tasks deriving from WorkflowTask.
 
