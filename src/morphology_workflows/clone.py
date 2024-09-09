@@ -483,9 +483,9 @@ def filter_missing_perimeter_morphs(df):
         if len([v.perimeters for k, v in morph.sections.items() if len(v.perimeters) > 0]) > 0:
             df.loc[name, "is_valid"] = False
             df.loc[name, "ret_code"] = 1
-            df.loc[
-                name, "comment"
-            ] = "The morphologies with perimeters can not be used for axon grafting"
+            df.loc[name, "comment"] = (
+                "The morphologies with perimeters can not be used for axon grafting"
+            )
 
     L.info(
         "Removed the following morphologies because they miss perimeters: %s",
@@ -846,8 +846,7 @@ def collect_annotations(annotation_dir):
     """Collect all annotations from a directory."""
     result = {}
     for filepath in tqdm(Path(annotation_dir).rglob("*.xml")):
-        morph = Path(filepath).stem
-        result[morph] = parse_annotations(filepath)
+        result[filepath.stem] = parse_annotations(filepath)
     return result
 
 
