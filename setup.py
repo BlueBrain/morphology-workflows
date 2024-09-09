@@ -44,6 +44,7 @@ test_reqs = [
     "dictdiffer>=0.8",
     "diff-pdf-visually>=1.7",
     "dir-content-diff>=1.9",
+    "morph_tool>=2.11.1,<3.0",
     "pytest>=7",
     "pytest-console-scripts>=1.4",
     "pytest-cov>=3",
