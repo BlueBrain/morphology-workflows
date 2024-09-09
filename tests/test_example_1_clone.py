@@ -3,6 +3,7 @@
 # pylint: disable=redefined-outer-name
 import shutil
 
+import dir_content_diff
 import luigi
 import numpy as np
 import pytest
@@ -12,7 +13,7 @@ from morphology_workflows.tasks import workflows
 from morphology_workflows.utils import silent_loggers
 
 
-@pytest.fixture()
+@pytest.fixture
 def example_1_clone(tmp_working_dir, examples_dir):
     """Setup the working directory."""
     shutil.copyfile(examples_dir / "clone" / "logging.conf", tmp_working_dir / "logging.conf")
@@ -51,6 +52,14 @@ def test_example_1_clone(example_1_clone, data_dir):
     # Define post-processes to check the results
     clone_expected_dir = data_dir / "test_example_1_clone" / "out_clone"
     clone_specific_args = {
+        "all neuronDB.dat files": {
+            "patterns": [r".*/neuronDB\.dat"],
+            "comparator": dir_content_diff.comparators.pandas.CsvComparator(),
+            "load_kwargs": {
+                "header": None,
+                "names": ["morphology_name"],
+            },
+        },
         "clone_dataset.csv": {
             "format_data_kwargs": {
                 "replace_pattern": {

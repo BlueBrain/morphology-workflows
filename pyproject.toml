@@ -51,14 +51,14 @@ filterwarnings = [
 # Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
-# select = ["ALL"]
-# ignore = [
+# lint.select = ["ALL"]
+# lint.ignore = [
 #     "ANN",
 #     "D401",
 #     "N803",
 # ]
-select = ["ALL"]
-ignore = [
+lint.select = ["ALL"]
+lint.ignore = [
     # ignore the following flake8-annotations errors:
     "ANN",
     # ignore the following flake8-unused-arguments errors:
@@ -117,11 +117,11 @@ ignore = [
 ]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["ALL"]
-unfixable = []
+lint.fixable = ["ALL"]
+lint.unfixable = []
 
 # Exclude a variety of commonly ignored directories.
-exclude = [
+lint.exclude = [
     ".eggs",
     ".git",
     ".mypy_cache",
@@ -135,7 +135,7 @@ exclude = [
     "dist",
     "venv",
 ]
-per-file-ignores = {}
+lint.per-file-ignores = {}
 
 # Same as Black.
 line-length = 100
