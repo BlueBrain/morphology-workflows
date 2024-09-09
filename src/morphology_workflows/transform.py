@@ -2,6 +2,7 @@
 
 adapted from: /gpfs/bbp.cscs.ch/project/proj66/morphologies
 """
+
 from pathlib import Path
 
 import matplotlib as mpl
@@ -320,7 +321,7 @@ def compare_transformed(df, data_dir, shift=300, target_dataset="target_dataset.
                 realistic_diameters=True,
             )
             view.plot_morph(
-                transformed_morph.transform(lambda p: [*p, shift, 0, 0]),
+                transformed_morph.transform(lambda p: p + [shift, 0, 0]),
                 ax,
                 soma_outline=False,
                 realistic_diameters=True,
