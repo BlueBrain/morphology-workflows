@@ -1,4 +1,5 @@
 """CLI for validation workflows."""
+
 import argparse
 import inspect
 import logging
@@ -28,6 +29,8 @@ WORKFLOW_TASKS = {
     "Curate": workflows.Curate,
     "Annotate": workflows.Annotate,
     "Repair": workflows.Repair,
+    "Clone": workflows.Clone,
+    "Transform": workflows.Transform,
 }
 
 LOGGING_LEVELS = ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]

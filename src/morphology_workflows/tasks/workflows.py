@@ -1,4 +1,5 @@
 """Workflow tasks."""
+
 import luigi
 from data_validation_framework.task import ValidationWorkflow
 
@@ -10,6 +11,10 @@ from morphology_workflows.tasks.annotation import MType
 from morphology_workflows.tasks.annotation import PlotApicalPoint
 from morphology_workflows.tasks.annotation import PlotCutLeaves
 from morphology_workflows.tasks.annotation import PlotHardLimit
+from morphology_workflows.tasks.clone import CloneMorphologies
+from morphology_workflows.tasks.clone import CollectAnnotations
+from morphology_workflows.tasks.clone import CollectRepaired
+from morphology_workflows.tasks.clone import MakeCloneRelease
 from morphology_workflows.tasks.curation import Align
 from morphology_workflows.tasks.curation import CheckNeurites
 from morphology_workflows.tasks.curation import Collect
@@ -33,6 +38,9 @@ from morphology_workflows.tasks.repair import PlotSmoothDiameters
 from morphology_workflows.tasks.repair import RepairNeurites
 from morphology_workflows.tasks.repair import SmoothDiameters
 from morphology_workflows.tasks.repair import Unravel
+from morphology_workflows.tasks.transform import ApplyTransformation
+from morphology_workflows.tasks.transform import CompareTransformed
+from morphology_workflows.tasks.transform import MakeTransformRelease
 from morphology_workflows.utils import StrIndexMixin
 
 
@@ -213,5 +221,84 @@ class Repair(StrIndexMixin, ValidationWorkflow):
                 ext = extension[1:]
                 mapping.update({f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders})
             inputs[MakeRelease] = mapping
+
+        return inputs
+
+
+class Clone(ValidationWorkflow):
+    """Run Clone phase.
+
+    The complete phase has the following dependency graph:
+
+    .. graphviz:: Clone.dot
+    """
+
+    __specifications__ = "Run the Clone phase."
+
+    input_index_col = luigi.Parameter(default="morph_name")
+    make_release = luigi.BoolParameter(
+        default=True,
+        description=":bool: Set to True to make a morpology release with neurondb.xml.",
+    )
+    args = ["clone_dataset.csv", 2]
+
+    validation_function = staticmethod(save_reduced_df)
+
+    def inputs(self):
+        inputs = {
+            CollectRepaired: {"morph_path": "morph_path"},
+            CollectAnnotations: {"annotation_path": "annotation_path"},
+            CloneMorphologies: {},
+            MakeCloneRelease: {},
+        }
+        if self.make_release:
+            folders = ["clone_morph_db_path", "clone_release_morph_path"]
+            inputs[MakeCloneRelease] = {}
+            for extension in MakeCloneRelease().extensions:
+                ext = extension[1:]
+                inputs[MakeCloneRelease].update(
+                    {f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders}
+                )
+
+        return inputs
+
+
+class Transform(ValidationWorkflow):
+    """Run Transform phase.
+
+    The complete phase has the following dependency graph:
+
+    .. graphviz:: Transform.dot
+    """
+
+    __specifications__ = "Run the Transform phase."
+
+    make_release = luigi.BoolParameter(
+        default=True,
+        description=":bool: Set to True to make a morpology release with neurondb.xml.",
+    )
+    compare_transform = luigi.BoolParameter(
+        default=True, description=":bool: Set to True to plot morphologies to compare."
+    )
+
+    input_index_col = luigi.Parameter(default="morph_name")
+
+    args = ["transformed_dataset.csv", 2]
+
+    validation_function = staticmethod(save_reduced_df)
+
+    def inputs(self):
+        inputs = {ApplyTransformation: {"morph_path": "morph_path"}}
+
+        if self.compare_transform:
+            inputs[CompareTransformed] = {}
+        if self.make_release:
+            folders = ["repair_morph_db_path", "repair_release_morph_path"]
+            inputs[MakeTransformRelease] = {}
+            for extension in MakeTransformRelease().extensions:
+                ext = extension[1:]
+                inputs[MakeTransformRelease].update(
+                    {f"{folder}_{ext}": f"{folder}_{ext}" for folder in folders}
+                )
 
         return inputs

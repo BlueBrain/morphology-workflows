@@ -161,7 +161,7 @@ The inputs should consist in:
 The [examples](https://github.com/BlueBrain/morphology-workflows/tree/main/examples) folder contains
 examples for the ``luigi.cfg`` and ``logging.conf`` files.
 
-These inputs can be created using the **Fetch** workflow that downloads morphlogies from online
+These inputs can be created using the **Fetch** workflow that downloads morphologies from online
 databases and create the dataset in the correct format.
 
 

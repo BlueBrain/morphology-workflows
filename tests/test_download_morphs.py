@@ -1,4 +1,5 @@
 """Test download tasks."""
+
 # pylint: disable=redefined-outer-name
 import configparser
 import sys
@@ -13,7 +14,7 @@ from morphology_workflows.tasks import _TEMPLATES
 from morphology_workflows.tasks.fetch import Fetch
 
 
-@pytest.fixture()
+@pytest.fixture
 def prepare_dir(tmp_working_dir):
     """Setup the working directory."""
     config = configparser.ConfigParser()

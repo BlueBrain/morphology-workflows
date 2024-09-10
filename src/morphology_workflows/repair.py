@@ -1,4 +1,5 @@
 """Process functions."""
+
 import logging
 import shutil
 from functools import partial
@@ -14,8 +15,6 @@ from data_validation_framework.result import ValidationResultSet
 from diameter_synthesis.main import build_diameters
 from diameter_synthesis.main import build_model
 from matplotlib.backends.backend_pdf import PdfPages
-from morph_tool.converter import convert
-from morph_tool.exceptions import MorphToolException
 from morph_tool.morphdb import MorphDB
 from morph_tool.morphdb import MorphInfo
 from morphio import Option
@@ -31,6 +30,7 @@ from tqdm import tqdm
 
 from morphology_workflows import MorphologyWorkflowsError
 from morphology_workflows.marker_helper import MarkerSet
+from morphology_workflows.utils import _convert
 from morphology_workflows.utils import silent_loggers
 
 L = logging.getLogger(__name__)
@@ -167,9 +167,10 @@ def plot_repair(row, data_dir, with_plotly=True):
         if markers is not None:
             points = markers.markers[0].data.T
 
-        with silent_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(
-            plot_path
-        ) as pdf:
+        with (
+            silent_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"),
+            PdfPages(plot_path) as pdf,
+        ):
             for plane in ["xy", "xz", "yz"]:
                 plt.figure()
                 ax = plt.gca()
@@ -273,9 +274,10 @@ def make_collage(  # noqa: PLR0913
     top_panel_shift += layer_boundaries[-1]
 
     mtypes = sorted(df.mtype.unique())
-    with silent_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"), PdfPages(
-        data_dir.parent.parent / collage_path
-    ) as pdf:
+    with (
+        silent_loggers("matplotlib.font_manager", "matplotlib.backends.backend_pdf"),
+        PdfPages(data_dir.parent.parent / collage_path) as pdf,
+    ):
         for mtype in tqdm(mtypes):
             _df = df[df.mtype == mtype]
             name_batches = np.array_split(_df.index, max(1, len(_df.index) / n_morph_per_page))
@@ -339,22 +341,6 @@ def make_collage(  # noqa: PLR0913
                 ax.set_aspect("equal")
                 pdf.savefig(bbox_inches="tight", dpi=dpi)
                 plt.close()
-
-
-@silent_loggers("morph_tool.converter")
-def _convert(input_file, output_file):
-    """Handles crashes in conversion of writing of morphologies."""
-    try:
-        L.debug("Converting %s into %s", input_file, output_file)
-        convert(input_file, output_file, nrn_order=True, sanitize=True)
-    except MorphToolException as exc:
-        return (
-            f"Could not convert the file '{input_file}' into '{output_file}' because of the "
-            f"following exception:\n{exc}"
-        )
-    except RuntimeError:  # This can happen if duplicates are being written at the same time
-        pass
-    return output_file
 
 
 def _create_db_row(_data, zero_diameter_path, unravel_path, repair_path, extension):

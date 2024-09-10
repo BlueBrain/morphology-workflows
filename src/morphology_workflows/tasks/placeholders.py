@@ -1,4 +1,5 @@
 """Placeholders tasks."""
+
 import json
 import logging
 

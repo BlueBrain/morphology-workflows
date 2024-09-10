@@ -1,4 +1,5 @@
 """Setup for the morphology-workflows package."""
+
 from pathlib import Path
 
 from setuptools import find_namespace_packages
@@ -11,7 +12,7 @@ reqs = [
     "luigi-tools>=0.3.3",
     "matplotlib>=3.4",
     "morphapi>=0.3",
-    "morph_tool>=2.10.1,<3.0",
+    "morph_tool>=2.11.2,<3.0",
     "morphio>=3.3.6,<4.0",
     "neurom>=3.2.10,<4.0",
     "neuror>=1.6.3,<2.0",
@@ -22,6 +23,11 @@ reqs = [
     "rst2pdf>=0.99",
     "scipy>=1.8",
     "tqdm>=4.44",
+    "urllib3>=1.26,<2; python_version < '3.9'",
+    "bluepyparallel>=0.2.2",
+    "lxml>=4.8",
+    "neuroc>=0.3.0,<1.0",
+    "seaborn>=0.11",
 ]
 
 doc_reqs = [
@@ -37,7 +43,8 @@ doc_reqs = [
 test_reqs = [
     "dictdiffer>=0.8",
     "diff-pdf-visually>=1.7",
-    "dir-content-diff>=1.9",
+    "dir-content-diff>=1.10",
+    "morph_tool>=2.11.1,<3.0",
     "pytest>=7",
     "pytest-console-scripts>=1.4",
     "pytest-cov>=3",
@@ -68,8 +75,8 @@ setup(
     extras_require={
         "docs": doc_reqs,
         "graphviz": ["graphviz"],
-        "test": test_reqs,
         "mouselight": ["brainglobe_atlasapi>=2"],
+        "test": test_reqs,
     },
     entry_points={
         "console_scripts": [

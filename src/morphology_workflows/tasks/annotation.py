@@ -1,4 +1,5 @@
 """Annotation tasks."""
+
 import logging
 
 import luigi

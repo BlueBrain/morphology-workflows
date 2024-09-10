@@ -1,14 +1,21 @@
 """Util functions."""
+
+import hashlib
 import logging
 import re
 import shutil
 import warnings
 from contextlib import contextmanager
+from itertools import chain
 from pathlib import Path
 
 import luigi
+import numpy as np
 import pandas as pd
 from luigi_tools.util import configparser_to_dict
+from morph_tool.converter import convert
+from morph_tool.exceptions import MorphToolException
+from morphio import Option
 from morphio.mut import Morphology
 from pkg_resources import resource_filename
 from tqdm import tqdm
@@ -185,3 +192,63 @@ def placeholders_to_nested_dict(df: pd.DataFrame) -> dict:
             target = target.setdefault(k, {})
         target[key[-1]] = value
     return result
+
+
+def import_morph(morph_path, new_morph_path, annotation_path, new_annotation_path):
+    """Copy a morphology and an annotation."""
+    if Path(morph_path).suffix != Path(new_morph_path).suffix:
+        convert(morph_path, new_morph_path)
+    else:
+        shutil.copy(morph_path, new_morph_path)
+    shutil.copy(annotation_path, new_annotation_path)
+    return Morphology(new_morph_path, options=Option.nrn_order)
+
+
+def seed_from_name(name):
+    """Build a seed from the name hash."""
+    return int(hashlib.md5(name.encode("ascii")).hexdigest(), 16) % (2**32 - 1)
+
+
+def rng_from_name(name):
+    """Build a random number generator from the name hash."""
+    return np.random.default_rng(seed_from_name(name))
+
+
+def write_neuron(neuron: Morphology, filename):
+    """Write a NEURON ordered version of the morphology."""
+    Morphology(neuron, options=Option.nrn_order).write(filename)
+
+
+def compare_lists(l0, l1):
+    """Compare two sets of lists, returns sets of overlap, only in l0, and only in l1."""
+    l0_set = set(l0)
+    l1_set = set(l1)
+
+    overlap = l0_set & l1_set
+    only_in_l0 = l0_set - l1_set
+    only_in_l1 = l1_set - l0_set
+
+    return overlap, only_in_l0, only_in_l1
+
+
+def get_points(input_file):
+    """Get all points (soma, then neurites) from morphology."""
+    m = Morphology(input_file)
+    points = chain.from_iterable([[m.soma.points], [section.points for section in m.iter()]])
+    return np.vstack(list(points))
+
+
+@silent_loggers("morph_tool.converter")
+def _convert(input_file, output_file):
+    """Handles crashes in conversion of writing of morphologies."""
+    try:
+        L.debug("Converting %s into %s", input_file, output_file)
+        convert(input_file, output_file, nrn_order=True, sanitize=True)
+    except MorphToolException as exc:
+        return (
+            f"Could not convert the file '{input_file}' into '{output_file}' because of the "
+            f"following exception:\n{exc}"
+        )
+    except RuntimeError:  # This can happen if duplicates are being written at the same time
+        pass
+    return output_file

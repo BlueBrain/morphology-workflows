@@ -22,7 +22,7 @@ max-line-length=100
 # with leading underscore
 ignored-argument-names=_.*
 # Maximum number of locals for function / method body
-max-locals=15
+max-locals=30
 # Maximum number of parents for a class (see R0901).
 max-parents=9
 # Maximum number of attributes for a class (see R0902).
@@ -49,4 +49,4 @@ ignore-docstrings=yes
 # (useful for classes with attributes dynamically set).
 
 # as of numpy 1.8.0, name resolution seems to be a problem. Ignore lookups in numpy
-# ignored-classes=numpy,list
+ignored-classes=lxml.etree

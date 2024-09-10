@@ -1,0 +1,13 @@
+,morph_path,morph_name,brain_region
+0,morphologies/DS3_030701.CNG.swc,DS3_030701,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+1,morphologies/DS3_100101_wL.CNG.swc,DS3_100101_wL,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+2,morphologies/IF1_030400.CNG.swc,IF1_030400,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+3,morphologies/IF1_190301.CNG.swc,IF1_190301,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+4,morphologies/IF1_210301.CNG.swc,IF1_210301,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+5,morphologies/IF1_300300.CNG.swc,IF1_300300,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+6,morphologies/IF2_080501.CNG.swc,IF2_080501,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+7,morphologies/IF3_040400.CNG.swc,IF3_040400,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+8,morphologies/IF3_150300.CNG.swc,IF3_150300,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+9,morphologies/IF3_221199.CNG.swc,IF3_221199,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+10,morphologies/IF3_261199.CNG.swc,IF3_261199,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"
+11,morphologies/IF4_140201.CNG.swc,IF4_140201,"['neocortex', 'somatosensory', 'barrel', 'layer 4']"

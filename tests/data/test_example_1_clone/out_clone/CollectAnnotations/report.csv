@@ -1,0 +1,24 @@
+__index_label__,is_valid,ret_code,comment,exception,annotation_path
+C060114A5,True,2,The annotation was not found for C060114A5. A new annotation is created.,,out_clone/CollectAnnotations/data/C060114A5.xml
+C270106A,True,2,The annotation was not found for C270106A. A new annotation is created.,,out_clone/CollectAnnotations/data/C270106A.xml
+astrocyte,True,2,The annotation was not found for astrocyte. A new annotation is created.,,out_clone/CollectAnnotations/data/astrocyte.xml
+circle_contour,True,2,The annotation was not found for circle_contour. A new annotation is created.,,out_clone/CollectAnnotations/data/circle_contour.xml
+complexe,True,2,The annotation was not found for complexe. A new annotation is created.,,out_clone/CollectAnnotations/data/complexe.xml
+disconnected_neurite,True,2,The annotation was not found for disconnected_neurite. A new annotation is created.,,out_clone/CollectAnnotations/data/disconnected_neurite.xml
+iterators,True,2,The annotation was not found for iterators. A new annotation is created.,,out_clone/CollectAnnotations/data/iterators.xml
+mono-type,True,2,The annotation was not found for mono-type. A new annotation is created.,,out_clone/CollectAnnotations/data/mono-type.xml
+multiple_point_section,True,2,The annotation was not found for multiple_point_section. A new annotation is created.,,out_clone/CollectAnnotations/data/multiple_point_section.xml
+nested_single_children,True,2,The annotation was not found for nested_single_children. A new annotation is created.,,out_clone/CollectAnnotations/data/nested_single_children.xml
+neurite_wrong_root_point,True,2,The annotation was not found for neurite_wrong_root_point. A new annotation is created.,,out_clone/CollectAnnotations/data/neurite_wrong_root_point.xml
+nrn-order-already-sorted,True,2,The annotation was not found for nrn-order-already-sorted. A new annotation is created.,,out_clone/CollectAnnotations/data/nrn-order-already-sorted.xml
+nrn_ordering,True,2,The annotation was not found for nrn_ordering. A new annotation is created.,,out_clone/CollectAnnotations/data/nrn_ordering.xml
+pia,True,2,The annotation was not found for pia. A new annotation is created.,,out_clone/CollectAnnotations/data/pia.xml
+reversed_NRN_neurite_order,True,2,The annotation was not found for reversed_NRN_neurite_order. A new annotation is created.,,out_clone/CollectAnnotations/data/reversed_NRN_neurite_order.xml
+rp100427-123_idC,True,2,The annotation was not found for rp100427-123_idC. A new annotation is created.,,out_clone/CollectAnnotations/data/rp100427-123_idC.xml
+sections-block,True,2,The annotation was not found for sections-block. A new annotation is created.,,out_clone/CollectAnnotations/data/sections-block.xml
+simple,True,2,The annotation was not found for simple. A new annotation is created.,,out_clone/CollectAnnotations/data/simple.xml
+simple-with-font,True,2,The annotation was not found for simple-with-font. A new annotation is created.,,out_clone/CollectAnnotations/data/simple-with-font.xml
+simple-with-image-coord,True,2,The annotation was not found for simple-with-image-coord. A new annotation is created.,,out_clone/CollectAnnotations/data/simple-with-image-coord.xml
+simple2,True,2,The annotation was not found for simple2. A new annotation is created.,,out_clone/CollectAnnotations/data/simple2.xml
+spine,True,2,The annotation was not found for spine. A new annotation is created.,,out_clone/CollectAnnotations/data/spine.xml
+three_point_soma,True,2,The annotation was not found for three_point_soma. A new annotation is created.,,out_clone/CollectAnnotations/data/three_point_soma.xml
