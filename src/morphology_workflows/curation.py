@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from data_validation_framework.result import ValidationResult
 from matplotlib.backends.backend_pdf import PdfPages
+from morph_tool import convert
 from morph_tool import transform
 from morph_tool.resampling import resample_linear_density
 from morph_tool.transform import align_morphology
@@ -457,6 +458,7 @@ def _remove_dummy_neurites(morph):
             morph.delete_section(root_section)
 
 
+@silent_loggers("morph_tool.converter")
 def check_neurites(  # noqa: PLR0913
     row,
     data_dir,
@@ -486,8 +488,7 @@ def check_neurites(  # noqa: PLR0913
         _remove_dummy_neurites(morph)
 
     fix_root_section(morph, min_length_first_section)
-    morph.remove_unifurcations()
-    morph.write(new_morph_path)
+    convert(morph, new_morph_path, sanitize=True)
     has_axon = row.get("use_axon", _has_axon(new_morph_path, n_section_min=axon_n_section_min))
     has_basal = row.get("use_dendrites", _has_basal(new_morph_path))
     has_apical = row.get("use_dendrites", _has_apical(new_morph_path))
