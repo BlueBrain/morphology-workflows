@@ -228,36 +228,25 @@ def generate_images(*args, **kwargs):  # noqa: ARG001
     # Export dependency graphs
     cur_cwd = Path(__file__).parent
     with set_luigi_config(dict_config):
-        cli.main(
-            ["-dg", str(cur_cwd / "autoapi/tasks/workflows/Curate.dot"), "-dgdpi", "100", "Curate"]
-        )
-        cli.main(
-            ["-dg", str(cur_cwd / "autoapi/tasks/workflows/Curate.png"), "-dgdpi", "100", "Curate"]
-        )
-        cli.main(
-            [
-                "-dg",
-                str(cur_cwd / "autoapi/tasks/workflows/Annotate.dot"),
-                "-dgdpi",
-                "100",
-                "Annotate",
-            ]
-        )
-        cli.main(
-            [
-                "-dg",
-                str(cur_cwd / "autoapi/tasks/workflows/Annotate.png"),
-                "-dgdpi",
-                "100",
-                "Annotate",
-            ]
-        )
-        cli.main(
-            ["-dg", str(cur_cwd / "autoapi/tasks/workflows/Repair.dot"), "-dgdpi", "100", "Repair"]
-        )
-        cli.main(
-            ["-dg", str(cur_cwd / "autoapi/tasks/workflows/Repair.png"), "-dgdpi", "100", "Repair"]
-        )
+        for workflow in ["Curate", "Annotate", "Repair", "Clone", "Transform"]:
+            cli.main(
+                [
+                    "-dg",
+                    str(cur_cwd / f"autoapi/tasks/workflows/{workflow}.dot"),
+                    "-dgdpi",
+                    "100",
+                    workflow,
+                ]
+            )
+            cli.main(
+                [
+                    "-dg",
+                    str(cur_cwd / f"autoapi/tasks/workflows/{workflow}.png"),
+                    "-dgdpi",
+                    "100",
+                    workflow,
+                ]
+            )
 
 
 def setup(app):
