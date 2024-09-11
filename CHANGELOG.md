@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.12.0](https://github.com/BlueBrain/morphology-workflows/compare/0.11.0..0.12.0)
+
+> 11 September 2024
+
+### Build
+
+- Drop support for Python 3.8 and Python 3.9 (Adrien Berchet - [#157](https://github.com/BlueBrain/morphology-workflows/pull/157))
+
+### New Features
+
+- Use `morph_tool.converter.convert()` in `check_neurites()` (Adrien Berchet - [#159](https://github.com/BlueBrain/morphology-workflows/pull/159))
+- Add Clone/Transform workflows (Alexis Arnaudon - [#156](https://github.com/BlueBrain/morphology-workflows/pull/156))
+
+### Documentation Changes
+
+- Fix doc generation for the Clone and Transform workflows (Adrien Berchet - [#160](https://github.com/BlueBrain/morphology-workflows/pull/160))
+
+### Changes to Test Assests
+
+- Compute mean() only on numeric columns (Adrien Berchet - [#155](https://github.com/BlueBrain/morphology-workflows/pull/155))
+
 ## [0.11.0](https://github.com/BlueBrain/morphology-workflows/compare/0.10.1..0.11.0)
 
 > 26 April 2024
