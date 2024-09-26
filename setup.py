@@ -47,8 +47,8 @@ test_reqs = [
     "morph_tool>=2.11.1,<3.0",
     "pytest>=7",
     "pytest-console-scripts>=1.4",
-    "pytest-cov>=3",
-    "pytest-html>=2",
+    "pytest-cov>=4.1",
+    "pytest-html>=3.2",
     "pytest-xdist>=2",
 ]
 
