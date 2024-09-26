@@ -24,6 +24,12 @@ This project contains several workflows for processing morphologies:
 - **Repair:** process morphologies to correct for artifacts of in-vitro reconstruction (click on
   the image for more details).
   [![](autoapi/tasks/workflows/Repair.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Repair)
+- **Clone:** clone morphologies and apply some variability (click on
+  the image for more details).
+  [![](autoapi/tasks/workflows/Clone.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Clone)
+- **Transform:** transform morphologies by rescaling the soma, the sections and their diameters (click on
+  the image for more details).
+  [![](autoapi/tasks/workflows/Transform.png)](autoapi/tasks/workflows/index.html#tasks.workflows.Transform)
 
 
 In a nutshell, the user provides a list of morphologies in a ``.csv`` file, with their names and
