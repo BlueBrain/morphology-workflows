@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.12.1](https://github.com/BlueBrain/morphology-workflows/compare/0.12.0..0.12.1)
+
+> 26 September 2024
+
+### Documentation Changes
+
+- Update README for Clone and Transform workflows (Adrien Berchet - [#162](https://github.com/BlueBrain/morphology-workflows/pull/162))
+- Fix RTD (Adrien Berchet - [#161](https://github.com/BlueBrain/morphology-workflows/pull/161))
+
 ## [0.12.0](https://github.com/BlueBrain/morphology-workflows/compare/0.11.0..0.12.0)
 
 > 11 September 2024
