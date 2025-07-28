@@ -7,6 +7,9 @@
 [![Documentation status](https://readthedocs.org/projects/morphology-workflows/badge/?version=latest)](https://morphology-workflows.readthedocs.io/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10809196.svg)](https://doi.org/10.5281/zenodo.10809196)
 
+# Warning
+
+The Blue Brain Project concluded in December 2024, so development has ceased under the BlueBrain GitHub organization. Future development will take place at: https://github.com/openbraininstitute/morphology-workflows
 
 # Morphology Workflows
 
